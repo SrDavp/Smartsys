@@ -6,12 +6,17 @@ using System.Web.Mvc;
 
 namespace SmartSys.Controllers
 {
-    public class HomeController : Controller
+    public class AccountController : Controller
     {
-        public ActionResult Index()
+        // GET: Account
+        public ActionResult Login()
         {
             return View();
         }
 
+        public ActionResult Registro()
+        {
+            return View();
+        }
     }
 }
