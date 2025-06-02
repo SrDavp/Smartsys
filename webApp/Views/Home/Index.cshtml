@@ -1,33 +1,82 @@
 ﻿@{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "Prueba Tailwind";
 }
 
-<main>
-    <section class="row" aria-labelledby="aspnetTitle">
-        <h1 id="title">ASP.NET</h1>
-        <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-        <p><a href="https://asp.net" class="btn btn-primary btn-md">Learn more &raquo;</a></p>
-    </section>
-
-    <div class="row">
-        <section class="col-md-4" aria-labelledby="gettingStartedTitle">
-            <h2 id="gettingStartedTitle">Getting started</h2>
-            <p>
-                ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-                enables a clean separation of concerns and gives you full control over markup
-                for enjoyable, agile development.
-            </p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-        </section>
-        <section class="col-md-4" aria-labelledby="librariesTitle">
-            <h2 id="librariesTitle">Get more libraries</h2>
-            <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-        </section>
-        <section class="col-md-4" aria-labelledby="hostingTitle">
-            <h2 id="hostingTitle">Web Hosting</h2>
-            <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-        </section>
+<!-- Hero Section -->
+<div class="bg-gradient-to-br from-purple-600 via-blue-600 to-teal-500 text-white py-20 px-6 rounded-xl mb-8">
+    <div class="max-w-4xl mx-auto text-center">
+        <h1 class="text-5xl font-bold mb-4 animate-pulse">🚀 Tailwind funciona!</h1>
+        <p class="text-xl opacity-90 mb-8">ASP.NET + Tailwind CSS = Magia pura</p>
+        <button class="bg-white text-purple-600 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transform hover:scale-105 transition duration-300 shadow-lg">
+            ¡Empezar ahora!
+        </button>
     </div>
-</main>
+</div>
+
+<!-- Cards Grid -->
+<div class="grid md:grid-cols-3 gap-6 mb-8">
+    <!-- Card 1 -->
+    <div class="bg-white p-6 rounded-lg shadow-xl hover:shadow-2xl transition duration-300 border border-gray-100">
+        <div class="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center mb-4">
+            <span class="text-white text-xl font-bold">🎨</span>
+        </div>
+        <h3 class="text-xl font-bold text-gray-800 mb-2">Diseño</h3>
+        <p class="text-gray-600 text-sm leading-relaxed">
+            Diseños modernos y responsivos con clases utilitarias.
+        </p>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="bg-white p-6 rounded-lg shadow-xl hover:shadow-2xl transition duration-300 border border-gray-100">
+        <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mb-4">
+            <span class="text-white text-xl font-bold">⚡</span>
+        </div>
+        <h3 class="text-xl font-bold text-gray-800 mb-2">Velocidad</h3>
+        <p class="text-gray-600 text-sm leading-relaxed">
+            Desarrollo rápido sin escribir CSS personalizado.
+        </p>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="bg-white p-6 rounded-lg shadow-xl hover:shadow-2xl transition duration-300 border border-gray-100">
+        <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mb-4">
+            <span class="text-white text-xl font-bold">📱</span>
+        </div>
+        <h3 class="text-xl font-bold text-gray-800 mb-2">Responsive</h3>
+        <p class="text-gray-600 text-sm leading-relaxed">
+            Se adapta perfectamente a cualquier pantalla.
+        </p>
+    </div>
+</div>
+
+<!-- Stats Section -->
+<div class="bg-gray-900 text-white p-8 rounded-xl mb-8">
+    <h2 class="text-3xl font-bold text-center mb-8">Estadísticas impresionantes</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+        <div>
+            <div class="text-4xl font-bold text-yellow-400 mb-2">100%</div>
+            <div class="text-gray-300 text-sm">Funcionando</div>
+        </div>
+        <div>
+            <div class="text-4xl font-bold text-green-400 mb-2">∞</div>
+            <div class="text-gray-300 text-sm">Posibilidades</div>
+        </div>
+        <div>
+            <div class="text-4xl font-bold text-blue-400 mb-2">0</div>
+            <div class="text-gray-300 text-sm">CSS personalizado</div>
+        </div>
+        <div>
+            <div class="text-4xl font-bold text-purple-400 mb-2">24/7</div>
+            <div class="text-gray-300 text-sm">Disponible</div>
+        </div>
+    </div>
+</div>
+
+<!-- Interactive Buttons -->
+<div class="flex flex-wrap gap-4 justify-center">
+    <button class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg transition">Rojo</button>
+    <button class="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-2 rounded-lg transition">Amarillo</button>
+    <button class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg transition">Verde</button>
+    <button class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg transition">Azul</button>
+    <button class="bg-purple-500 hover:bg-purple-600 text-white px-6 py-2 rounded-lg transition">Morado</button>
+</div>

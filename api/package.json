@@ -5,18 +5,28 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dep": "npm install mssql mysql express cors nodemon axios",
+    "dep": "npm install mssql mysql express cors nodemon axios npm install -D tailwindcss npx tailwindcss init",
+    "build": "tailwindcss -i ./src/input.css -o ./src/output.css",
+    "diseño": "copy src\\output.css ..\\webApp\\Content\\tailwind.css",
+    
+    "css": "tailwindcss -i ./src/input.css -o ./src/output.css --watch",
+    "funes": "nodemon --watch src/output.css --exec \"npm run diseño\"",
+
     "dev": "nodemon app.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@tailwindcss/cli": "^4.1.8",
     "axios": "^1.9.0",
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "mssql": "^11.0.1",
     "mysql": "^2.18.1",
     "nodemon": "^3.1.10"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.0"
   }
 }
