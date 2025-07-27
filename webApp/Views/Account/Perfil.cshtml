@@ -1,0 +1,77 @@
+﻿@model SmartSys.Models.Usuario
+
+@{
+    ViewBag.Title = "Mi Perfil";
+}
+
+<h2 class="text-2xl font-bold mb-4">Editar Perfil</h2>
+
+@using (Html.BeginForm("Perfil", "Account", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.HiddenFor(m => m.IdUsuario)
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Nombre)
+        @Html.TextBoxFor(m => m.Nombre, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Apellido)
+        @Html.TextBoxFor(m => m.Apellido, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.CorreoElectronico)
+        @Html.TextBoxFor(m => m.CorreoElectronico, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Telefono)
+        @Html.TextBoxFor(m => m.Telefono, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Biografia)
+        @Html.TextAreaFor(m => m.Biografia, new { @class = "form-control" })
+    </div>
+    {
+        string base64Image = Model.Foto_perfil != null
+            ? "data:image/png;base64," + Convert.ToBase64String(Model.Foto_perfil)
+            : null;
+
+        if (base64Image != null)
+        {
+            <text>
+                <div class="mb-4">
+                    <label class="block text-gray-700">Imagen de perfil actual:</label>
+                    <img id="previewImagen" src="@base64Image" alt="Foto de perfil" class="rounded-full w-32 h-32 object-cover border" />
+                </div>
+            </text>
+        }
+        else
+        {
+            <text>
+                <p class="text-sm text-gray-500">No has subido ninguna imagen aún.</p>
+            </text>
+        }
+    }
+
+    <div class="form-group">
+        @Html.Label("Foto de Perfil")
+        <input type="file" name="FotoPerfil" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Guardar cambios</button>
+}
+<script>
+    document.querySelector('input[name="FotoPerfil"]').addEventListener('change', function (event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById('previewImagen').src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+</script>

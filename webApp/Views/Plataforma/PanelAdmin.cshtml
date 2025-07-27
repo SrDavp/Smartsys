@@ -1,0 +1,20 @@
+﻿@model SmartSys.Models.Plataforma
+@{
+    ViewBag.Title = "Panel de Administración";
+}
+
+<h2 class="text-2xl font-bold mb-4">Panel de Administración: @Model.nombrePlataforma</h2>
+
+<div class="mb-4">
+    <h3 class="text-lg font-semibold">Información General</h3>
+    <p><strong>Nombre:</strong> @Model.nombrePlataforma</p>
+    <p><strong>Descripción:</strong> @Model.descripcionPlataforma</p>
+    <p><strong>Capacidad:</strong> @Model.capacidadMiembros_plataforma miembros</p>
+    <p><strong>Privacidad:</strong> @Model.privacidadPlataforma</p>
+    <p><strong>Código:</strong> @Model.codigoPlataforma</p>
+    <p><strong>Estado:</strong> @Model.estadoPlataforma</p>
+
+    <a href="@Url.Action("EditarPlataforma", "Plataforma", new { id = Model.idPlataforma })" class="btn btn-primary mt-2">Editar Plataforma</a>
+    <a href="@Url.Action("GestionMiembros", "Plataforma", new { id = Model.idPlataforma })" class="btn btn-outline-primary">Gestionar Miembro</a>
+    <a href="@Url.Action("Contenido", "Plataforma", new { id = Model.idPlataforma })" class="btn btn-outline-primary">Ver Contenido de la Plataforma </a>
+</div>

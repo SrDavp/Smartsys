@@ -1,0 +1,27 @@
+﻿@model IEnumerable<SmartSys.Models.Plataforma>
+@{
+    ViewBag.Title = "Plataformas del Usuario";
+}
+<h2 class="text-2xl font-bold mb-4">Plataformas de @ViewBag.NombreUsuario</h2>
+<a href="@Url.Action("Index")" class="btn btn-secondary mb-3">Volver al listado de usuarios</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Privacidad</th>
+            <th>Estado</th>
+            <th>Capacidad</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var p in Model)
+        {
+            <tr>
+                <td>@p.nombrePlataforma</td>
+                <td>@p.privacidadPlataforma</td>
+                <td>@p.estadoPlataforma</td>
+                <td>@p.capacidadMiembros_plataforma</td>
+            </tr>
+        }
+    </tbody>
+</table>

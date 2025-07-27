@@ -1,0 +1,24 @@
+﻿@model SmartSys.Models.Publicaciones
+@{
+    ViewBag.Title = "Detalle de Publicación";
+}
+
+<h2 class="text-xl font-bold mb-4">@Model.titulo</h2>
+
+<p><strong>Tipo:</strong> @Model.tipoPublicacion</p>
+<p><strong>Contenido:</strong></p>
+<div class="border p-2 bg-light rounded">@Html.Raw(Model.contenido)</div>
+
+@if (Model.fechaLimite != null)
+{
+    <p><strong>Fecha límite:</strong> @Model.fechaLimite.Value.ToShortDateString()</p>
+}
+
+@if (Model.archivoAdjunto != null)
+{
+    var base64 = Convert.ToBase64String(Model.archivoAdjunto);
+    var mimeType = "data:image/png;base64";
+    <p><strong>Archivo:</strong></p>
+    <img src="data:@mimeType;base64,@base64" class="max-w-md rounded shadow" alt="Imagen Adjunta" />
+}
+

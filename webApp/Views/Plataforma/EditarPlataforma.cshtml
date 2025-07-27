@@ -1,0 +1,43 @@
+﻿@model SmartSys.Models.Plataforma
+@{
+    ViewBag.Title = "Editar Plataforma";
+}
+
+<h2 class="text-xl font-bold mb-4">Editar Plataforma</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.idPlataforma)
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.nombrePlataforma)
+        @Html.TextBoxFor(m => m.nombrePlataforma, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.descripcionPlataforma)
+        @Html.TextAreaFor(m => m.descripcionPlataforma, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.capacidadMiembros_plataforma)
+        @Html.TextBoxFor(m => m.capacidadMiembros_plataforma, new { @class = "form-control", type = "number" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.privacidadPlataforma)
+        @Html.DropDownListFor(m => m.privacidadPlataforma, new SelectList(new[] { "Público", "Privado" }), new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.codigoPlataforma)
+        @Html.TextBoxFor(m => m.codigoPlataforma, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.estadoPlataforma)
+        @Html.DropDownListFor(m => m.estadoPlataforma, new SelectList(new[] { "Activo", "Inactivo", "Suspendido" }), new { @class = "form-control" })
+    </div>
+
+    <button type="submit" class="btn btn-success mt-3">Guardar Cambios</button>
+}

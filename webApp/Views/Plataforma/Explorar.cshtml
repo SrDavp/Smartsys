@@ -1,0 +1,29 @@
+﻿@model List<SmartSys.Models.Plataforma>
+@{
+    ViewBag.Title = "Explorar Plataformas";
+}
+
+<h2 class="text-2xl font-bold mb-4">Explorar Plataformas</h2>
+
+<form method="get" action="@Url.Action("Explorar", "Plataforma")" class="mb-4">
+    <input type="text" name="busqueda" value="@ViewBag.Busqueda" placeholder="Buscar plataformas..."
+           class="border rounded px-3 py-2 w-full sm:w-1/2" />
+    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded mt-2 sm:mt-0 sm:ml-2">Buscar</button>
+</form>
+@foreach (var p in Model)
+{
+    <div class="border rounded p-4 mb-4 bg-white shadow">
+        <h3 class="text-xl font-semibold">@p.nombrePlataforma</h3>
+        <p>@p.descripcionPlataforma</p>
+        <p class="text-sm text-gray-500">Privacidad: @p.privacidadPlataforma</p>
+
+        @if (p.privacidadPlataforma == "Privado")
+        {
+            <a href="@Url.Action("UnirsePrivado", "Plataforma", new { id = p.idPlataforma })" class="text-blue-500 hover:underline">Unirse con código</a>
+        }
+        else
+        {
+            <a href="@Url.Action("UnirsePublico", "Plataforma", new { id = p.idPlataforma })" class="text-green-500 hover:underline">Unirse</a>
+        }
+    </div>
+}

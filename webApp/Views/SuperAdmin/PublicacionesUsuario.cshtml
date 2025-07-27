@@ -1,0 +1,37 @@
+﻿@model IEnumerable<SmartSys.Models.Publicaciones>
+@{
+    ViewBag.Title = "Publicaciones del Usuario";
+}
+<h2 class="text-2xl font-bold mb-4">Publicaciones de @ViewBag.NombreUsuario</h2>
+<a href="@Url.Action("Index")" class="btn btn-secondary mb-3">Volver al listado de usuarios</a>
+<form method="get" class="mb-4">
+    <input type="hidden" name="id" value="@Request["id"]" />
+    <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+        <input type="text" name="titulo" value="@ViewBag.Titulo" placeholder="Buscar por título" class="form-control" />
+        <input type="text" name="tipo" value="@ViewBag.Tipo" placeholder="Tipo de publicación" class="form-control" />
+        <input type="text" name="estado" value="@ViewBag.Estado" placeholder="Estado" class="form-control" />
+        <input type="date" name="fecha" value="@ViewBag.Fecha" class="form-control" />
+    </div>
+    <button type="submit" class="mt-2 btn btn-primary">Buscar</button>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Título</th>
+            <th>Tipo</th>
+            <th>Fecha</th>
+            <th>Estado</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var pub in Model)
+        {
+            <tr>
+                <td>@pub.titulo</td>
+                <td>@pub.tipoPublicacion</td>
+                <td>@(pub.fechaPublicacion?.ToShortDateString())</td>
+                <td>@pub.estado</td>
+            </tr>
+        }
+    </tbody>
+</table>

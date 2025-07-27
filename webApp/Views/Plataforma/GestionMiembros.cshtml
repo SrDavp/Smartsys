@@ -1,0 +1,36 @@
+﻿@model List<SmartSys.Models.MiembroViewModel>
+
+@{
+    ViewBag.Title = "Gestión de Miembros";
+    var plataformaId = ViewBag.PlataformaId;
+}
+
+<h2 class="text-2xl font-bold mb-4">Miembros de la Plataforma</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Correo</th>
+            <th>Rol</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Usuario.Nombre @item.Usuario.Apellido</td>
+                <td>@item.Usuario.CorreoElectronico</td>
+                <td>@item.Relacion.rolUsuarioPlataforma</td>
+                <td>
+                    @if (item.Relacion.rolUsuarioPlataforma != "Admin")
+                    {
+                        <a href="@Url.Action("CambiarRol", "Plataforma", new { idUsuario = item.Usuario.IdUsuario, idPlataforma = plataformaId })" class="btn btn-sm btn-primary">Hacer Admin</a>
+                        <a href="@Url.Action("Expulsar", "Plataforma", new { idUsuario = item.Usuario.IdUsuario, idPlataforma = plataformaId })" class="btn btn-sm btn-danger">Expulsar</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

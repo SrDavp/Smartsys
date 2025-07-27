@@ -1,7 +1,156 @@
-﻿
+﻿@model SmartSys.Models.Usuario
+
 @{
     ViewBag.Title = "Login";
 }
 
-<h2>Login</h2>
+<div class="container mx-auto mt-8 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-700 p-8 max-w-md mx-auto">
+    @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { @class = "space-y-6" }))
+    {
+        <div>
+            <p class="text-5xl text-purple-900 dark:text-purple-400">Bienvenido de Nuevo</p>
+            <p class="text-l mt-2 text-purple-900 dark:text-purple-400">Usa tus credenciales para iniciar sesión</p>
+        </div>
+        <!-- Manejo de errores -->
+        if (ViewBag.Error != null)
+        {
+            <div class="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-xl p-4 mb-6">
+                <div class="flex items-center">
+                    <i class="fa-solid fa-exclamation-triangle text-red-500 mr-3"></i>
+                    <div>
+                        <h3 class="text-sm font-medium text-red-800 dark:text-red-200">Error de autenticación</h3>
+                        <p class="text-sm text-red-700 dark:text-red-300 mt-1">@ViewBag.Error</p>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <!-- Campo Email -->
+        <div class="space-y-2">
+            @Html.LabelFor(m => m.CorreoElectronico, new { @class = "block text-sm font-semibold text-gray-700 dark:text-gray-200" })
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <i class="fa-solid fa-envelope text-gray-400 dark:text-gray-500"></i>
+                </div>
+                @Html.TextBoxFor(m => m.CorreoElectronico, new
+                {
+                    @class = "w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-all duration-200 placeholder-gray-400 dark:placeholder-gray-500",
+                    @placeholder = "tu@email.com",
+                    @type = "email",
+                    @autocomplete = "email",
+                    @required = "required",
+                    @id = "CorreoElectronico"
+                })
+            </div>
+        </div>
+
+        <!-- Campo Contraseña -->
+        <div class="space-y-2">
+            @Html.LabelFor(m => m.Contrasena, new { @class = "block text-sm font-semibold text-gray-700 dark:text-gray-200" })
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <i class="fa-solid fa-lock text-gray-400 dark:text-gray-500"></i>
+                </div>
+                @Html.PasswordFor(m => m.Contrasena, new
+                {
+                    @class = "w-full pl-10 pr-12 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-all duration-200 placeholder-gray-400 dark:placeholder-gray-500",
+                    @placeholder = "Ingresa tu contraseña",
+                    @id = "password-field",
+                    @autocomplete = "current-password",
+                    @required = "required"
+                })
+                <button type="button" id="toggle-password" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors duration-200">
+                    <i class="fa-solid fa-eye" id="eye-icon"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Recordar sesión y link -->
+        @*<div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <input type="checkbox" id="remember-me" class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded dark:border-gray-600 dark:bg-gray-700" />
+                    <label for="remember-me" class="ml-2 block text-sm text-gray-700 dark:text-gray-300">Recordar sesión</label>
+                </div>
+                <a href="#" class="text-sm text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300 font-medium transition-colors duration-200">¿Olvidaste tu contraseña?</a>
+            </div>*@
+
+        <!-- Botón de iniciar sesión -->
+        <button type="submit" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 shadow-lg">
+            <div class="flex items-center justify-center">
+                <i class="fa-solid fa-sign-in-alt mr-2"></i>
+                Iniciar Sesión
+            </div>
+        </button>
+    }
+</div>
+
+<!-- Registro -->
+<div class="text-center mt-8 mb-8">
+    <p class="text-gray-600 dark:text-gray-400">
+        ¿No tienes una cuenta?
+        <a href="@Url.Action("Registro", "Account")" class="text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300 font-semibold transition-colors duration-200">
+            Regístrate gratis
+        </a>
+    </p>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Funcionalidad para mostrar/ocultar contraseña
+        const togglePassword = document.getElementById('toggle-password');
+        const passwordField = document.getElementById('password-field');
+        const eyeIcon = document.getElementById('eye-icon');
+
+        togglePassword.addEventListener('click', function () {
+            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordField.setAttribute('type', type);
+
+            // Cambiar el icono
+            if (type === 'password') {
+                eyeIcon.className = 'fa-solid fa-eye';
+            } else {
+                eyeIcon.className = 'fa-solid fa-eye-slash';
+            }
+        });
+
+        // Animación de carga al enviar formulario
+        const form = document.querySelector('form');
+        const loadingOverlay = document.getElementById('loading-overlay');
+
+        form.addEventListener('submit', function () {
+            loadingOverlay.classList.remove('hidden');
+        });
+
+        // Animaciones de entrada
+        const loginContainer = document.querySelector('.max-w-md');
+        loginContainer.style.opacity = '0';
+        loginContainer.style.transform = 'translateY(20px)';
+
+        setTimeout(() => {
+            loginContainer.style.transition = 'all 0.6s ease-out';
+            loginContainer.style.opacity = '1';
+            loginContainer.style.transform = 'translateY(0)';
+        }, 100);
+    });
+
+    // Añadir efecto de partículas de fondo (opcional)
+    function createParticle() {
+        const particle = document.createElement('div');
+        particle.className = 'absolute rounded-full opacity-10 bg-purple-400 dark:bg-purple-600 pointer-events-none';
+        particle.style.width = Math.random() * 6 + 2 + 'px';
+        particle.style.height = particle.style.width;
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.top = '100%';
+        particle.style.animation = `float-up ${Math.random() * 3 + 4}s linear`;
+
+        document.body.appendChild(particle);
+
+        particle.addEventListener('animationend', () => {
+            particle.remove();
+        });
+    }
+
+    // Crear partículas periódicamente
+    setInterval(createParticle, 2000);
+</script>
+
 

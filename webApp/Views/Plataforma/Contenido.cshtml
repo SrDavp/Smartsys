@@ -1,0 +1,50 @@
+﻿@model List<SmartSys.Models.Publicaciones>
+@{
+    ViewBag.Title = "Contenido";
+    var plataformaId = ViewBag.PlataformaId;
+}
+
+<h2 class="text-2xl font-bold mb-4">Contenido de la Plataforma</h2>
+
+<a href="@Url.Action("CrearPublicacion", new { id = plataformaId })" class="btn btn-success mb-3">+ Nueva Publicación</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Título</th>
+            <th>Tipo</th>
+            <th>Fecha</th>
+            <th>Archivo</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var p in Model)
+        {
+            <tr>
+                <td>@p.titulo</td>
+                <td>@p.tipoPublicacion</td>
+                <td>@p.fechaPublicacion</td>
+                <td>
+                    @if (p.archivoAdjunto != null)
+                    {
+                        var base64 = Convert.ToBase64String(p.archivoAdjunto);
+                        var mimeType = "data:image/png;base64"; 
+
+                        <img src="data:@mimeType;base64,@base64" alt="Adjunto" style="max-width: 100px; max-height: 100px;" class="rounded shadow" />
+                    }
+                    else
+                    {
+                        <span class="text-muted">Sin archivo</span>
+                    }
+                </td>
+
+                <td>
+                    <a href="@Url.Action("VerPublicacion", new { id = p.idPublicacion })" class="btn btn-sm btn-info">Ver</a>
+                    <a href="@Url.Action("EditarPublicacion", new { id = p.idPublicacion })" class="btn-warning">Editar</a>
+                    <a href="@Url.Action("EliminarPublicacion", new { id = p.idPublicacion, idPlataforma = plataformaId })" class="btn btn-sm btn-danger">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

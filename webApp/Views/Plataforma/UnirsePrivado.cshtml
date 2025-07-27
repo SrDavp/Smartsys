@@ -1,0 +1,22 @@
+﻿@{
+    ViewBag.Title = "Unirse a Plataforma Privada";
+}
+
+<h2 class="text-xl font-bold mb-4">Unirse a Plataforma Privada</h2>
+
+@if (ViewBag.Error != null)
+{
+    <p class="text-red-500">@ViewBag.Error</p>
+}
+
+@using (Html.BeginForm("UnirsePrivado", "Plataforma", FormMethod.Post))
+{
+    <input type="hidden" name="id" value="@ViewBag.PlataformaId" />
+
+    <div class="form-group">
+        <label for="codigo">Código de acceso:</label>
+        <input type="text" name="codigo" class="form-control" required />
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Unirse</button>
+}

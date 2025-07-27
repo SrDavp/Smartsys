@@ -1,0 +1,72 @@
+﻿@model SmartSys.Models.Plataforma
+
+@{
+    ViewBag.Title = "Detalles de Plataforma";
+}
+
+<div class="max-w-4xl mx-auto bg-white p-6 rounded shadow">
+    <h2 class="text-2xl font-bold mb-4 text-blue-700">Detalles de la Plataforma</h2>
+
+    <dl class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+            <dt class="font-semibold">Nombre:</dt>
+            <dd>@Model.nombrePlataforma</dd>
+        </div>
+        <div>
+            <dt class="font-semibold">Código:</dt>
+            <dd>@Model.codigoPlataforma</dd>
+        </div>
+        <div>
+            <dt class="font-semibold">Privacidad:</dt>
+            <dd>@Model.privacidadPlataforma</dd>
+        </div>
+        <div>
+            <dt class="font-semibold">Capacidad:</dt>
+            <dd>@Model.capacidadMiembros_plataforma</dd>
+        </div>
+        <div>
+            <dt class="font-semibold">Estado:</dt>
+            <dd>@Model.estadoPlataforma</dd>
+        </div>
+        <div>
+            <dt class="font-semibold">Descripción:</dt>
+            <dd>@Model.descripcionPlataforma</dd>
+        </div>
+        <div>
+            <dt class="font-semibold">Fecha de creación:</dt>
+            <dd>@Model.fechaCreacion</dd>
+        </div>
+        <div>
+            <dt class="font-semibold">Ícono:</dt>
+            <dd>
+                @if (Model.iconoPlataforma != null)
+                {
+                    var base64Icon = "data:image/png;base64," + Convert.ToBase64String(Model.iconoPlataforma);
+                    <img src="@base64Icon" alt="Ícono" class="w-20 h-20 rounded" />
+                }
+                else
+                {
+                    <span class="text-sm text-gray-500">No hay ícono.</span>
+                }
+            </dd>
+        </div>
+        <div>
+            <dt class="font-semibold">Fondo:</dt>
+            <dd>
+                @if (Model.fondoPlataforma != null)
+                {
+                    var base64Fondo = "data:image/png;base64," + Convert.ToBase64String(Model.fondoPlataforma);
+                    <img src="@base64Fondo" alt="Fondo" class="w-full h-32 object-cover mt-2 rounded" />
+                }
+                else
+                {
+                    <span class="text-sm text-gray-500">No hay imagen de fondo.</span>
+                }
+            </dd>
+        </div>
+    </dl>
+
+    <div class="mt-6">
+        <a href="@Url.Action("MisPlataformas", "Plataforma")" class="">Volver</a>
+    </div>
+</div>

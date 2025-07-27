@@ -1,0 +1,29 @@
+﻿@model SmartSys.Models.Publicaciones
+@{
+    ViewBag.Title = "Crear Publicación";
+}
+<h2 class="text-2xl font-bold mb-4">Crear Nueva Publicación</h2>
+@using (Html.BeginForm("CrearPublicacion", "SuperAdmin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+<input type="hidden" name="idPlataforma" value="@ViewBag.idPlataforma" />    <div class="form-group">
+        @Html.LabelFor(m => m.titulo)
+        @Html.TextBoxFor(m => m.titulo, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.contenido)
+        @Html.TextAreaFor(m => m.contenido, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.tipoPublicacion)
+        @Html.DropDownListFor(m => m.tipoPublicacion, new SelectList(new[] { "Publicacion", "Tarea", "Anuncio" }), new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Archivo Adjunto")
+        <input type="file" name="Archivo" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-success mt-3">Crear Publicación</button>
+}
