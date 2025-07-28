@@ -18,6 +18,5 @@ namespace SmartSys.Models
         public DbSet<plataforma_publicacion> plataforma_publicacion { get; set; }
         public DbSet<usuario_publicaciones> usuario_publicaciones { get; set; } 
         public DbSet<usuario_plataforma> usuario_plataforma { get; set; }
-
     }
 }

@@ -150,7 +150,7 @@ namespace SmartSys.Controllers
                 }
 
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Perfil");
             }
             return View(u);
         }
