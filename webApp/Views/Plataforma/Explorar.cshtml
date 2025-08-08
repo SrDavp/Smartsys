@@ -3,27 +3,64 @@
     ViewBag.Title = "Explorar Plataformas";
 }
 
-<h2 class="text-2xl font-bold mb-4">Explorar Plataformas</h2>
+<!-- TÍTULO -->
+<div class="text-center py-8 mb-8">
+    <h2 class="text-3xl font-bold text-gray-900 dark:text-white">Explorar Plataformas</h2>
+</div>
 
-<form method="get" action="@Url.Action("Explorar", "Plataforma")" class="mb-4">
-    <input type="text" name="busqueda" value="@ViewBag.Busqueda" placeholder="Buscar plataformas..."
-           class="border rounded px-3 py-2 w-full sm:w-1/2" />
-    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded mt-2 sm:mt-0 sm:ml-2">Buscar</button>
-</form>
-@foreach (var p in Model)
-{
-    <div class="border rounded p-4 mb-4 bg-white shadow">
-        <h3 class="text-xl font-semibold">@p.nombrePlataforma</h3>
-        <p>@p.descripcionPlataforma</p>
-        <p class="text-sm text-gray-500">Privacidad: @p.privacidadPlataforma</p>
+<!-- FORMULARIO DE BÚSQUEDA -->
+<div class="flex justify-center mb-8">
+    <form method="get" action="@Url.Action("Explorar", "Plataforma")" class="w-full max-w-md">
+        <div class="flex flex-col sm:flex-row gap-2">
+            <input type="text" name="busqueda" value="@ViewBag.Busqueda" placeholder="Buscar plataformas..."
+                   class="border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 flex-1 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-300" />
+            <button type="submit" class="bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white px-4 py-3 rounded-lg font-semibold transition-colors duration-300 whitespace-nowrap">
+                <i class="fa-solid fa-search"></i>
+            </button>
+        </div>
+    </form>
+</div>
 
-        @if (p.privacidadPlataforma == "Privado")
-        {
-            <a href="@Url.Action("UnirsePrivado", "Plataforma", new { id = p.idPlataforma })" class="text-blue-500 hover:underline">Unirse con código</a>
-        }
-        else
-        {
-            <a href="@Url.Action("UnirsePublico", "Plataforma", new { id = p.idPlataforma })" class="text-green-500 hover:underline">Unirse</a>
-        }
+<!-- MENSAJE DE NO RESULTADOS -->
+<section class="flex items-center justify-center h-96 w-full bg-gray-100 dark:bg-gray-800 transition-colors duration-300">
+    <div class="text-center px-4 py-8">
+        <div class="mb-16 text-blue-500 dark:text-blue-400 font-bold" style="font-size: 10rem; line-height: 1;">:(</div>
+        <h3 class="text-2xl font-semibold mb-2 text-gray-800 dark:text-white">No se han encontrado plataformas</h3>
+        <p class="text-base text-gray-600 dark:text-gray-300">Revisa que lo hayas escribido correctamente</p>
     </div>
-}
+</section>
+
+<!-- TARJETAS DE PLATAFORMAS -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    @foreach (var p in Model)
+    {
+        <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">@p.nombrePlataforma</h3>
+            <p class="text-gray-600 dark:text-gray-300 mb-4 leading-relaxed">@p.descripcionPlataforma</p>
+
+            <div class="flex items-center justify-between mb-4">
+                <span class="text-sm text-gray-500 dark:text-gray-400">Privacidad:</span>
+                <span class="text-sm font-medium px-2 py-1 rounded-lg @(p.privacidadPlataforma == "Público" ? "text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900" : "text-orange-600 dark:text-orange-400 bg-orange-100 dark:bg-orange-900")">
+                    @p.privacidadPlataforma
+                </span>
+            </div>
+
+            @if (p.privacidadPlataforma == "Privado")
+            {
+                <a href="@Url.Action("UnirsePrivado", "Plataforma", new { id = p.idPlataforma })"
+                   class="w-full bg-orange-500 hover:bg-orange-600 dark:bg-orange-600 dark:hover:bg-orange-700 text-white text-center py-3 px-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-md block">
+                    <i class="fa-solid fa-key mr-2"></i>
+                    Unirse con código
+                </a>
+            }
+            else
+            {
+                <a href="@Url.Action("UnirsePublico", "Plataforma", new { id = p.idPlataforma })"
+                   class="w-full bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white text-center py-3 px-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-md block">
+                    <i class="fa-solid fa-users mr-2"></i>
+                    Unirse
+                </a>
+            }
+        </div>
+    }
+</div>

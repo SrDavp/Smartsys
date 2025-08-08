@@ -1,26 +1,36 @@
 ﻿@model List<SmartSys.Models.Plataforma>
-
 @{
     var adminIds = ViewBag.PlataformasAdmin as List<long>;
-
 }
 
-<h2 class="text-2xl font-bold mb-4">Mis Plataformas</h2>
+<!-- TÍTULO -->
+<div class="text-center py-8 mb-8">
+    <h2 class="text-3xl font-bold text-gray-900 dark:text-white">Mis Plataformas</h2>
+</div>
 
+<!-- MENSAJE DE NO RESULTADOS -->
+<section class="flex items-center justify-center h-96 w-full bg-gray-100 dark:bg-gray-800 transition-colors duration-300">
+    <div class="text-center px-4 py-8">
+        <div class="mb-16 text-blue-500 dark:text-blue-400 font-bold" style="font-size: 10rem; line-height: 1;">:(</div>
+        <h3 class="text-2xl font-semibold mb-2 text-gray-800 dark:text-white">No tienes plataformas activas</h3>
+        <p class="text-base text-gray-600 dark:text-gray-300">¡Comencemos a crear una!</p>
+    </div>
+</section>
+
+<!-- TARJETAS DE PLATAFORMAS -->
 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
     @foreach (var p in Model)
     {
-        <div class="p-4 bg-white rounded shadow">
+        <div class="p-4 bg-white dark:bg-gray-800 rounded shadow text-gray-900 dark:text-white transition-colors duration-300">
             <h3 class="text-lg font-bold">@p.nombrePlataforma</h3>
-            <p> Descripcion @p.descripcionPlataforma</p>
-            <p class="text-sm text-gray-500">Código: @p.codigoPlataforma</p>
-            <p class="text-sm">Privacidad: @p.privacidadPlataforma</p>
-
-            <a href="@Url.Action("Detalles", "Plataforma", new { id = p.idPlataforma })" class="text-blue-500 hover:underline">Ver más</a>
+            <p class="dark:text-gray-300">@p.descripcionPlataforma</p>
+            <p class="text-sm text-gray-500 dark:text-gray-400">Código: @p.codigoPlataforma</p>
+            <p class="text-sm dark:text-gray-300">Privacidad: @p.privacidadPlataforma</p>
+            <a href="@Url.Action("Detalles", "Plataforma", new { id = p.idPlataforma })" class="text-blue-500 dark:text-blue-400 hover:underline">Ver más</a>
             <br />
             @if (adminIds != null && adminIds.Contains(p.idPlataforma))
             {
-                <a href="@Url.Action("PanelAdmin", "Plataforma", new { id = p.idPlataforma })" class="text-green-500 hover:underline">Panel Admin</a>
+                <a href="@Url.Action("PanelAdmin", "Plataforma", new { id = p.idPlataforma })" class="text-green-500 dark:text-green-400 hover:underline">Panel Admin</a>
             }
         </div>
     }
