@@ -1,0 +1,9 @@
+Descargar dependencias:
+npm run dep
+
+Correr tailwind de forma nativa:
+npm run funes
+npm run build
+
+Correr tailwind nativa (ambas):
+npm run dev-tailwind
