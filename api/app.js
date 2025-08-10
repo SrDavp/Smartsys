@@ -10,9 +10,11 @@ app.use(express.urlencoded({ extended: true }));
 
 const PORT = 3000;
 
-// Rutas
-const rutas = require('./routes/rutas');
-const apiPython = require('./routes/PythonApi');
+// Rutas nodejs
+const rutas = require('./routes/flutter/sesionf');
+//rutas python
+const apiPython = require('./routes/python/PythonApi');
+//rutas asp
 const aspapi = require('./routes/AspApi');
 
 app.use('/', rutas);
