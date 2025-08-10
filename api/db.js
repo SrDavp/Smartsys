@@ -6,8 +6,8 @@ const sql = require('mssql');
 const config = {
   user: 'sa',
   password: 'root',
-  server: '192.168.56.1', // o tu IP local, ej. '192.168.1.100'
-  database: 'pruebanode',
+  server: '192.168.1.6', // o tu IP local, ej. '192.168.1.100'
+  database: 'SmartSys',
   options: {
     encrypt: false,
     trustServerCertificate: true
