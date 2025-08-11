@@ -10,26 +10,18 @@
     "diseño": "copy src\\output.css ..\\webApp\\Content\\tailwind.css",
     "css": "tailwindcss -i ./src/input.css -o ./src/output.css --watch",
     "funes": "nodemon --watch src/output.css --exec \"npm run diseño\"",
-<<<<<<< HEAD
-    "dev": "nodemon app.js"
-=======
     "dev": "nodemon app.js",
     "dev-tailwind": "concurrently \"npm run css\" \"npm run funes\""
->>>>>>> 06edfebb8a25cc55f7c5055029cc1a0e290d5e6a
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-<<<<<<< HEAD
     "@tailwindcss/cli": "^4.1.8"
-=======
-    "@tailwindcss/cli": "^4.1.8",
-    "bcrypt": "^6.0.0"
->>>>>>> 06edfebb8a25cc55f7c5055029cc1a0e290d5e6a
   },
   "devDependencies": {
     "axios": "^1.11.0",
+    "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "init": "^0.1.2",

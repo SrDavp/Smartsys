@@ -1,0 +1,49 @@
+﻿@model IEnumerable<SmartSys.Models.Usuario>
+@{
+    ViewBag.Title = "Chat";
+}
+
+<nav class="flex border-b">
+    <a href="@Url.Action("Index", "Chat")" class="flex-grow text-center py-3 hover:bg-gray-100 font-semibold border-b-4 border-blue-500">Todos</a>
+    <a href="@Url.Action("Grupos", "Chat")" class="flex-grow text-center py-3 hover:bg-gray-100 font-semibold">Grupos</a>
+</nav>
+<form method="get" action="@Url.Action("Index", "Chat")" class=" flex justify-center items-center  p-3 border-b">
+    <input type="text"
+           name="busqueda"
+           value="@ViewBag.Busqueda"
+           placeholder="Buscar Chat"
+           class="w-full px-3 py-2 border rounded "/>
+</form>
+<div class="flex h-screen max-h-[700px] border rounded shadow overflow-hidden">
+
+    <div class="flex-grow overflow-y-auto">
+        @foreach (var u in Model)
+        {
+            var fotoBase64 = u.Foto_perfil != null
+                ? "data:image/png;base64," + Convert.ToBase64String(u.Foto_perfil)
+                : null;
+            <a href="@Url.Action("ChatWithUser", "Chat", new { id = u.IdUsuario })"
+               class="flex items-center px-4 py-3 hover:bg-gray-100 cursor-pointer border-b">
+
+                <div class="flex-shrink-0 w-14 h-14 rounded-full overflow-hidden border border-gray-300">
+                    @if (fotoBase64 != null)
+                    {
+                        <img src="@fotoBase64" alt="Foto perfil" class="w-full h-full object-cover" />
+                    }
+                    else
+                    {
+                        <div class="flex items-center justify-center w-full h-full bg-gray-200 text-gray-400 text-xl font-semibold">
+                            <span>@(u.Nombre.Substring(0,1).ToUpper())</span>
+                        </div>
+                    }
+                </div>
+
+                <div class="ml-4 flex flex-col">
+                    <span class="font-semibold text-gray-900">@u.Nombre @u.Apellido</span>
+                    <span class="text-sm text-gray-500">Mensaje o estado (opcional)</span>
+                </div>
+            </a>
+        }
+    </div>
+
+</div>
