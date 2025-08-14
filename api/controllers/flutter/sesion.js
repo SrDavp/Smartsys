@@ -1,6 +1,11 @@
 // Conexion a MySQL Server
 const { poolPromise, sql } = require('../../db');
 const bcrypt = require('bcrypt');
+const multer = require("multer")
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage: multer.memoryStorage() });
+
 
 // <---------- inicio login -------------->
 async function login(req, res) {
@@ -140,10 +145,53 @@ async function actualizarPerfil(req, res) {
     });
   }
 }
-// <---------- fin actualizar perfil -------->// ...agrega a module.exports...
+// <---------- fin actualizar perfil -------->//
+// <---------- inicio actualizar perfil imagen -------->//
+async function actualizarPerfilImg(req, res) {
+  try {
+    const { idUsuario } = req.body;
+    let foto_perfil = null;
+
+    if (req.file) {
+      foto_perfil = req.file.buffer; // Los bytes correctos de la imagen
+    }
+
+    const pool = await poolPromise;
+    await pool.request()
+      .input('idUsuario', sql.BigInt, idUsuario)
+      .input('foto_perfil', sql.VarBinary, foto_perfil)
+      .query(`
+        UPDATE Usuarios SET 
+          foto_perfil = ISNULL(@foto_perfil, foto_perfil)
+        WHERE idUsuario = @idUsuario
+      `);
+
+    const consulta = await pool.request()
+      .input('idUsuario', sql.BigInt, idUsuario)
+      .query(`
+        SELECT idUsuario, nombre, apellido, correoElectronico, telefono, tipoUsuario, estadoCuenta, fechaCreacion, foto_perfil, biografia 
+        FROM Usuarios WHERE idUsuario = @idUsuario
+      `);
+
+    res.status(200).json({
+      ok: true,
+      message: 'Perfil con foto actualizado exitosamente',
+      data: consulta.recordset[0]
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      ok: false,
+      message: 'Error al actualizar perfil con foto'
+    });
+  }
+}
+
+// <---------- FIN actualizar perfil imagen -------->//
 
 module.exports = {
   registro,
   login,
-  actualizarPerfil
+  actualizarPerfil,
+  actualizarPerfilImg
 };
