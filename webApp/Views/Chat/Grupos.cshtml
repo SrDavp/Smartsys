@@ -1,10 +1,114 @@
-﻿
+﻿@model IEnumerable<SmartSys.Models.Grupos>
 @{
     ViewBag.Title = "Grupos";
 }
 
 <nav class="flex border-b">
-    <a href="@Url.Action("Index", "Chat")" class="flex-grow text-center py-3 hover:bg-gray-100 font-semibold border-b-4 border-blue-500">Todos</a>
-    <a href="@Url.Action("Grupos", "Chat")" class="flex-grow text-center py-3 hover:bg-gray-100 font-semibold">Grupos</a>
+    <a href="@Url.Action("Index", "Chat")" class="flex-grow text-center py-3 hover:bg-gray-100 font-semibold">Todos</a>
+    <a href="@Url.Action("Grupos", "Chat")" class="flex-grow text-center py-3 hover:bg-gray-100 font-semibold border-b-4 border-blue-500">Grupos</a>
 </nav>
 
+<!-- Botón para crear grupo -->
+<div class="p-3 border-b bg-gray-50">
+    <button onclick="mostrarFormularioGrupo()" class="w-full px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
+        + Crear Nuevo Grupo
+    </button>
+</div>
+
+<!-- Formulario para crear grupo (inicialmente oculto) -->
+<div id="formularioGrupo" class="hidden p-4 border-b bg-yellow-50">
+    @using (Html.BeginForm("CrearGrupo", "Chat", FormMethod.Post))
+    {
+        <div class="space-y-3">
+            <input type="text"
+                   name="nombreGrupo"
+                   placeholder="Nombre del grupo"
+                   required
+                   class="w-full px-3 py-2 border rounded" />
+            <textarea name="descripcionGrupo"
+                      placeholder="Descripción del grupo (opcional)"
+                      rows="2"
+                      class="w-full px-3 py-2 border rounded"></textarea>
+            <div class="flex space-x-2">
+                <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                    Crear Grupo
+                </button>
+                <button type="button" onclick="ocultarFormularioGrupo()" class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">
+                    Cancelar
+                </button>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="flex h-screen max-h-[700px] border rounded shadow overflow-hidden">
+    <div class="flex-grow overflow-y-auto">
+        @if (Model.Any())
+        {
+            foreach (var grupo in Model)
+            {
+                var fotoBase64 = grupo.imagenGrupo != null
+                    ? "data:image/png;base64," + Convert.ToBase64String(grupo.imagenGrupo)
+                    : null;
+
+                var ultimoMensaje = grupo.Mensajes.OrderByDescending(m => m.fechaHora).FirstOrDefault();
+
+                <a href="@Url.Action("ChatGrupo", "Chat", new { idGrupo = grupo.idGrupo })"
+                   class="flex items-center px-4 py-3 hover:bg-gray-100 cursor-pointer border-b">
+                    <div class="flex-shrink-0 w-14 h-14 rounded-full overflow-hidden border border-gray-300">
+                        @if (fotoBase64 != null)
+                        {
+                            <img src="@fotoBase64" alt="Foto grupo" class="w-full h-full object-cover" />
+                        }
+                        else
+                        {
+                            <div class="flex items-center justify-center w-full h-full bg-green-200 text-green-600 text-xl font-semibold">
+                                <span>@(grupo.nombreGrupo.Substring(0,1).ToUpper())</span>
+                            </div>
+                        }
+                    </div>
+                    <div class="ml-4 flex flex-col flex-grow">
+                        <span class="font-semibold text-gray-900">@grupo.nombreGrupo</span>
+                        @if (ultimoMensaje != null)
+                        {
+                            <span class="text-sm text-gray-500">
+                                @ultimoMensaje.Usuario.Nombre: @(ultimoMensaje.contenidoMensaje.Length > 40
+                                    ? ultimoMensaje.contenidoMensaje.Substring(0, 40) + "..."
+                                    : ultimoMensaje.contenidoMensaje)
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="text-sm text-gray-500">@grupo.descripcionGrupo</span>
+                        }
+                    </div>
+                    @if (ultimoMensaje != null)
+                    {
+                        <div class="text-xs text-gray-400">
+                            @ultimoMensaje.fechaHora.ToString("HH:mm")
+                        </div>
+                    }
+                </a>
+            }
+        }
+        else
+        {
+            <div class="flex items-center justify-center h-full text-gray-500">
+                <div class="text-center">
+                    <p class="text-lg mb-2">No perteneces a ningún grupo</p>
+                    <p class="text-sm">Crea un grupo para empezar</p>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+function mostrarFormularioGrupo() {
+    document.getElementById('formularioGrupo').classList.remove('hidden');
+}
+
+function ocultarFormularioGrupo() {
+    document.getElementById('formularioGrupo').classList.add('hidden');
+}
+</script>

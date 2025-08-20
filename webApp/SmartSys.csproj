@@ -152,11 +152,15 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Grupos.cs" />
+    <Compile Include="Models\Mensajes.cs" />
     <Compile Include="Models\Plataforma.cs" />
     <Compile Include="Models\plataforma_publicacion.cs" />
     <Compile Include="Models\Publicaciones.cs" />
     <Compile Include="Models\SmartSysDbContext.cs" />
     <Compile Include="Models\Usuario.cs" />
+    <Compile Include="Models\usuario_grupos.cs" />
+    <Compile Include="Models\usuario_mensajes.cs" />
     <Compile Include="Models\usuario_plataforma.cs" />
     <Compile Include="Models\usuario_publicaciones.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

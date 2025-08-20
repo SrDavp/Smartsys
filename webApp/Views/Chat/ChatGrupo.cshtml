@@ -1,7 +1,116 @@
-﻿
+﻿@model SmartSys.Models.Grupos
 @{
-    ViewBag.Title = "ChatGrupo";
+    ViewBag.Title = "Grupo: " + Model.nombreGrupo;
+    var idUsuarioActual = Convert.ToInt64(Session["idUsuario"]);
+    var miembros = ViewBag.Miembros as IEnumerable<SmartSys.Models.usuario_grupos>;
 }
 
-<h2>ChatGrupo</h2>
+<div class="flex h-screen max-h-[800px] flex-col border rounded shadow overflow-hidden">
+    <!-- Header del grupo -->
+    <div class="flex items-center px-4 py-3 border-b bg-gray-50">
+        <a href="@Url.Action("Grupos", "Chat")" class="mr-3 text-blue-500 hover:text-blue-700">
+            ← Volver
+        </a>
+        <div class="flex-shrink-0 w-10 h-10 rounded-full overflow-hidden border border-gray-300">
+            @{
+                var fotoBase64 = Model.imagenGrupo != null
+                    ? "data:image/png;base64," + Convert.ToBase64String(Model.imagenGrupo)
+                    : null;
+            }
+            @if (fotoBase64 != null)
+            {
+                <img src="@fotoBase64" alt="Foto grupo" class="w-full h-full object-cover" />
+            }
+            else
+            {
+                <div class="flex items-center justify-center w-full h-full bg-green-200 text-green-600 text-sm font-semibold">
+                    <span>@(Model.nombreGrupo.Substring(0,1).ToUpper())</span>
+                </div>
+            }
+        </div>
+        <div class="ml-3 flex-grow">
+            <h2 class="font-semibold text-gray-900">@Model.nombreGrupo</h2>
+            <p class="text-sm text-gray-500">@miembros.Count() miembros</p>
+        </div>
+        <button onclick="mostrarMiembros()" class="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600">
+            Miembros
+        </button>
+    </div>
 
+    <!-- Lista de miembros (inicialmente oculta) -->
+    <div id="listaMiembros" class="hidden border-b bg-gray-50 p-3 max-h-32 overflow-y-auto">
+        <h3 class="font-semibold mb-2">Miembros del grupo:</h3>
+        <div class="space-y-1">
+            @foreach (var miembro in miembros)
+            {
+                <div class="flex items-center text-sm">
+                    <span class="font-medium">@miembro.Usuario.Nombre @miembro.Usuario.Apellido</span>
+                    @if (miembro.rolUsuarioGrupo == "Administrador")
+                    {
+                        <span class="ml-2 px-2 py-1 bg-yellow-200 text-yellow-800 rounded text-xs">Admin</span>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Área de mensajes -->
+    <div class="flex-grow overflow-y-auto p-4 space-y-3" id="mensajesContainer">
+        @if (Model.Mensajes.Any())
+        {
+            foreach (var mensaje in Model.Mensajes.OrderBy(m => m.fechaHora))
+            {
+                var esPropio = mensaje.idUsuario == idUsuarioActual;
+                <div class="flex @(esPropio ? "justify-end" : "justify-start")">
+                    <div class="max-w-xs lg:max-w-md">
+                        @if (!esPropio)
+                        {
+                            <p class="text-xs text-gray-500 mb-1">@mensaje.Usuario.Nombre @mensaje.Usuario.Apellido</p>
+                        }
+                        <div class="px-4 py-2 rounded-lg @(esPropio ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-900")">
+                            <p class="text-sm">@mensaje.contenidoMensaje</p>
+                            <p class="text-xs mt-1 @(esPropio ? "text-blue-100" : "text-gray-500")">
+                                @mensaje.fechaHora.ToString("HH:mm")
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="flex items-center justify-center h-full text-gray-500">
+                <p>No hay mensajes en el grupo. ¡Inicia la conversación!</p>
+            </div>
+        }
+    </div>
+
+    <!-- Formulario para enviar mensaje -->
+    <div class="border-t p-4">
+        @using (Html.BeginForm("EnviarMensajeGrupo", "Chat", FormMethod.Post, new { @class = "flex space-x-2" }))
+        {
+            @Html.Hidden("idGrupo", Model.idGrupo)
+            <input type="text"
+                   name="contenido"
+                   placeholder="Escribe tu mensaje..."
+                   required
+                   class="flex-grow px-3 py-2 border rounded-l focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-r hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                Enviar
+            </button>
+        }
+    </div>
+</div>
+
+<script>
+// Auto-scroll al final de los mensajes
+document.addEventListener('DOMContentLoaded', function() {
+    var container = document.getElementById('mensajesContainer');
+    container.scrollTop = container.scrollHeight;
+});
+
+function mostrarMiembros() {
+    var lista = document.getElementById('listaMiembros');
+    lista.classList.toggle('hidden');
+}
+</script>

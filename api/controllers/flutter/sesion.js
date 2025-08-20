@@ -106,6 +106,53 @@ async function registro(req, res) {
   }
 }
 // <---------- fin registro -------->
+// <---------- inicio actualizar perfil imagen -------->//
+async function actualizarPerfilImg(req, res) {
+  try {
+    const { idUsuario } = req.body;
+    let foto_perfil = null;
+
+    if (req.file) {
+      foto_perfil = req.file.buffer; // Los bytes correctos de la imagen
+    }
+
+    const pool = await poolPromise;
+
+    if (req.file) {
+      // Solo actualiza la foto si hay archivo
+      await pool.request()
+        .input('idUsuario', sql.BigInt, idUsuario)
+        .input('foto_perfil', sql.VarBinary, req.file.buffer)
+        .query(`
+      UPDATE Usuarios SET 
+        foto_perfil = @foto_perfil
+      WHERE idUsuario = @idUsuario
+    `);
+    }
+
+
+    const consulta = await pool.request()
+      .input('idUsuario', sql.BigInt, idUsuario)
+      .query(`
+        SELECT idUsuario, nombre, apellido, correoElectronico, telefono, tipoUsuario, estadoCuenta, fechaCreacion, foto_perfil, biografia 
+        FROM Usuarios WHERE idUsuario = @idUsuario
+      `);
+
+    res.status(200).json({
+      ok: true,
+      message: 'Perfil con foto actualizado exitosamente',
+      data: consulta.recordset[0]
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      ok: false,
+      message: 'Error al actualizar perfil con foto'
+    });
+  }
+}
+
+// <---------- FIN actualizar perfil imagen -------->//
 // <---------- inicio actualizar perfil -------->
 async function actualizarPerfil(req, res) {
   try {
@@ -146,52 +193,109 @@ async function actualizarPerfil(req, res) {
   }
 }
 // <---------- fin actualizar perfil -------->//
-// <---------- inicio actualizar perfil imagen -------->//
-async function actualizarPerfilImg(req, res) {
+// <---------- inicio explorar plataformas ---------->
+
+// Función para explorar plataformas con búsqueda
+async function explorar(req, res) {
   try {
-    const { idUsuario } = req.body;
-    let foto_perfil = null;
+    console.log('Endpoint explorar llamado con query:', req.query);
 
-    if (req.file) {
-      foto_perfil = req.file.buffer; // Los bytes correctos de la imagen
-    }
-
+    const { busqueda = "" } = req.query;
     const pool = await poolPromise;
-    await pool.request()
-      .input('idUsuario', sql.BigInt, idUsuario)
-      .input('foto_perfil', sql.VarBinary, foto_perfil)
+
+    // Log para debug
+    console.log('Buscando plataformas con término:', busqueda);
+
+    // Consulta SQL con LIKE y filtros
+    const consulta = await pool.request()
+      .input("busqueda", sql.NVarChar, `%${busqueda}%`)
       .query(`
-        UPDATE Usuarios SET 
-          foto_perfil = ISNULL(@foto_perfil, foto_perfil)
-        WHERE idUsuario = @idUsuario
+        SELECT 
+          idPlataforma, 
+          nombrePlataforma, 
+          descripcionPlataforma, 
+          privacidadPlataforma, 
+          estadoPlataforma, 
+          capacidadMiembros_plataforma, 
+          codigoPlataforma, 
+          iconoPlataforma, 
+          fondoPlataforma,
+          fechaCreacion
+        FROM Plataforma
+        WHERE privacidadPlataforma IN ('Público','Privado','Public','Private')
+          AND (nombrePlataforma LIKE @busqueda OR descripcionPlataforma LIKE @busqueda)
+        ORDER BY fechaCreacion DESC
       `);
 
-    const consulta = await pool.request()
-      .input('idUsuario', sql.BigInt, idUsuario)
-      .query(`
-        SELECT idUsuario, nombre, apellido, correoElectronico, telefono, tipoUsuario, estadoCuenta, fechaCreacion, foto_perfil, biografia 
-        FROM Usuarios WHERE idUsuario = @idUsuario
-      `);
+    console.log('Resultados encontrados:', consulta.recordset.length);
 
     res.status(200).json({
       ok: true,
-      message: 'Perfil con foto actualizado exitosamente',
-      data: consulta.recordset[0]
+      mensaje: "Plataformas encontradas",
+      data: consulta.recordset,
+      totalResultados: consulta.recordset.length
     });
+
   } catch (error) {
-    console.error(error);
+    console.error('Error en explorar:', error);
     res.status(500).json({
       ok: false,
-      message: 'Error al actualizar perfil con foto'
+      mensaje: "Error al buscar plataformas",
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
 }
 
-// <---------- FIN actualizar perfil imagen -------->//
+// Función para obtener plataformas activas
+async function explorarActivas(req, res) {
+  try {
+    console.log('Endpoint explorarActivas llamado');
+
+    const pool = await poolPromise;
+
+    const consulta = await pool.request()
+      .query(`
+        SELECT 
+          idPlataforma, 
+          nombrePlataforma, 
+          descripcionPlataforma, 
+          privacidadPlataforma, 
+          estadoPlataforma, 
+          capacidadMiembros_plataforma, 
+          codigoPlataforma, 
+          iconoPlataforma, 
+          fondoPlataforma,
+          fechaCreacion
+        FROM Plataforma
+        WHERE estadoPlataforma = 'Activo'
+        ORDER BY fechaCreacion DESC
+      `);
+
+    console.log('Plataformas activas encontradas:', consulta.recordset.length);
+
+    res.status(200).json({
+      ok: true,
+      mensaje: "Plataformas activas encontradas",
+      data: consulta.recordset,
+      totalResultados: consulta.recordset.length
+    });
+
+  } catch (error) {
+    console.error('Error en explorarActivas:', error);
+    res.status(500).json({
+      ok: false,
+      mensaje: "Error al obtener plataformas activas",
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+}
+// <---------- fin explorar plataformas ---------->
 
 module.exports = {
   registro,
   login,
+  actualizarPerfilImg,
   actualizarPerfil,
-  actualizarPerfilImg
+  explorar,
+  explorarActivas
 };
