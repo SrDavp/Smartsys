@@ -290,12 +290,200 @@ async function explorarActivas(req, res) {
   }
 }
 // <---------- fin explorar plataformas ---------->
+// <---------- inicio unirse a plataforma ---------->
 
+async function unirsePublico(req, res) {
+  try {
+    const { idUsuario, idPlataforma } = req.body;
+
+    if (!idUsuario || !idPlataforma) {
+      return res.status(400).json({
+        ok: false,
+        mensaje: "Faltan datos (idUsuario o idPlataforma)."
+      });
+    }
+
+    const pool = await poolPromise;
+
+    // Verificar si ya está unido
+    const existe = await pool.request()
+      .input('idUsuario', sql.BigInt, idUsuario)
+      .input('idPlataforma', sql.BigInt, idPlataforma)
+      .query(`
+        SELECT * FROM usuario_plataforma 
+        WHERE idUsuario4 = @idUsuario AND idPlataforma1 = @idPlataforma
+      `);
+
+    if (existe.recordset.length > 0) {
+      return res.status(200).json({
+        ok: true,
+        mensaje: "El usuario ya está unido a esta plataforma"
+      });
+    }
+
+    // Insertar nueva relación
+    await pool.request()
+      .input('idUsuario', sql.BigInt, idUsuario)
+      .input('idPlataforma', sql.BigInt, idPlataforma)
+      .input('rolUsuarioPlataforma', sql.NVarChar, "Miembro")
+      .query(`
+        INSERT INTO usuario_plataforma (idUsuario4, idPlataforma1, rolUsuarioPlataforma) 
+        VALUES (@idUsuario, @idPlataforma, @rolUsuarioPlataforma)
+      `);
+
+    res.status(201).json({
+      ok: true,
+      mensaje: "Unido a la plataforma (pública) correctamente"
+    });
+
+  } catch (error) {
+    console.error("Error en unirsePublico:", error);
+    res.status(500).json({
+      ok: false,
+      mensaje: "Error al unirse a la plataforma pública"
+    });
+  }
+}
+
+async function unirsePrivado(req, res) {
+  try {
+    const { idUsuario, idPlataforma, codigo } = req.body;
+
+    if (!idUsuario || !idPlataforma || !codigo) {
+      return res.status(400).json({
+        ok: false,
+        mensaje: "Faltan datos (idUsuario, idPlataforma o código)."
+      });
+    }
+
+    const pool = await poolPromise;
+
+    // Buscar plataforma
+    const plataforma = await pool.request()
+      .input('idPlataforma', sql.BigInt, idPlataforma)
+      .query(`SELECT * FROM Plataforma WHERE idPlataforma = @idPlataforma`);
+
+    if (plataforma.recordset.length === 0) {
+      return res.status(404).json({
+        ok: false,
+        mensaje: "Plataforma no encontrada"
+      });
+    }
+
+    const datosPlataforma = plataforma.recordset[0];
+
+    // Validar código
+    if (datosPlataforma.codigoPlataforma !== codigo) {
+      return res.status(401).json({
+        ok: false,
+        mensaje: "Código incorrecto"
+      });
+    }
+
+    // Verificar si ya está unido
+    const existe = await pool.request()
+      .input('idUsuario', sql.BigInt, idUsuario)
+      .input('idPlataforma', sql.BigInt, idPlataforma)
+      .query(`
+        SELECT * FROM usuario_plataforma 
+        WHERE idUsuario4 = @idUsuario AND idPlataforma1 = @idPlataforma
+      `);
+
+    if (existe.recordset.length > 0) {
+      return res.status(200).json({
+        ok: true,
+        mensaje: "El usuario ya está unido a esta plataforma"
+      });
+    }
+
+    // Insertar nueva relación
+    await pool.request()
+      .input('idUsuario', sql.BigInt, idUsuario)
+      .input('idPlataforma', sql.BigInt, idPlataforma)
+      .input('rolUsuarioPlataforma', sql.NVarChar, "Miembro")
+      .query(`
+        INSERT INTO usuario_plataforma (idUsuario4, idPlataforma1, rolUsuarioPlataforma) 
+        VALUES (@idUsuario, @idPlataforma, @rolUsuarioPlataforma)
+      `);
+
+    res.status(201).json({
+      ok: true,
+      mensaje: "Unido a la plataforma (privada) correctamente"
+    });
+
+  } catch (error) {
+    console.error("Error en unirsePrivado:", error);
+    res.status(500).json({
+      ok: false,
+      mensaje: "Error al unirse a la plataforma privada"
+    });
+  }
+}
+
+// <---------- inicio unirse a plataforma ---------->
+async function misPlataformas(req, res) {
+  try {
+    const { idUsuario } = req.query; 
+    if (!idUsuario) {
+      return res.status(400).json({
+        ok: false,
+        mensaje: "Se requiere el ID del usuario"
+      });
+    }
+
+    const pool = await poolPromise;
+
+    
+    const consulta = await pool.request()
+      .input('idUsuario', sql.BigInt, idUsuario)
+      .query(`
+        SELECT 
+          p.idPlataforma,
+          p.nombrePlataforma,
+          p.descripcionPlataforma,
+          p.privacidadPlataforma,
+          p.estadoPlataforma,
+          p.capacidadMiembros_plataforma,
+          p.codigoPlataforma,
+          p.iconoPlataforma,
+          p.fondoPlataforma,
+          p.fechaCreacion,
+          up.rolUsuarioPlataforma,
+          up.fechaUnion
+        FROM usuario_plataforma up
+        INNER JOIN Plataforma p ON up.idPlataforma1 = p.idPlataforma
+        WHERE up.idUsuario4 = @idUsuario
+        ORDER BY up.fechaUnion DESC
+      `);
+
+    console.log('Plataformas del usuario encontradas:', consulta.recordset.length);
+
+    res.status(200).json({
+      ok: true,
+      mensaje: "Plataformas del usuario obtenidas exitosamente",
+      data: consulta.recordset,
+      totalPlataformas: consulta.recordset.length
+    });
+
+  } catch (error) {
+    console.error('Error en misPlataformas:', error);
+    res.status(500).json({
+      ok: false,
+      mensaje: "Error al obtener las plataformas del usuario",
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+}
+
+// <---------- fin unirse a plataforma ---------->
 module.exports = {
   registro,
   login,
   actualizarPerfilImg,
   actualizarPerfil,
   explorar,
-  explorarActivas
+  explorarActivas,
+  unirsePublico,
+  unirsePrivado,
+  misPlataformas
 };

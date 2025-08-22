@@ -14,5 +14,8 @@ router.post("/actualizarPerfilImg", upload.single('fotoPerfil'), sesion.actualiz
 //Rutas plataforma
 router.get("/explorar", sesion.explorar); 
 router.get("/explorarActivas", sesion.explorarActivas);
+router.post("/unirsePublico", sesion.unirsePublico);
+router.post("/unirsePrivado", sesion.unirsePrivado);
+router.get("/misPlataformas", sesion.misPlataformas);
 
 module.exports = router
