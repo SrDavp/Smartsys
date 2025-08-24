@@ -8,7 +8,6 @@ ELMER EDUARDO RIVAS AVILES
 JONATHAN ISAIAS ROSALES ELIAS
 CHRISTOPHER ENRIQUE VILLACORTA MOLINA
 */
-
 CREATE DATABASE SmartSys;
 USE SmartSys;
 
@@ -27,12 +26,16 @@ Tablas principales de donde salen las demas tablas foraneas,consta de las siguie
 9 - Publicaciones
 */
 /*Consultas*/
+
 Select * from Usuarios;
 Select * from Plataforma;
 Select * from usuario_plataforma;
 Select * from Publicaciones
 Select * from plataforma_publicacion
-Select * from  usuario_publicaciones
+Select * from  usuario_publicaciones;
+
+
+
 
 CREATE TABLE Usuarios(
 	idUsuario BIGINT IDENTITY(1,1) PRIMARY KEY,
@@ -61,6 +64,29 @@ CREATE TABLE Plataforma (
 	iconoPlataforma VARBINARY(MAX),
 	fondoPlataforma VARBINARY(MAX)
 );
+
+CREATE TABLE Grupos (
+    idGrupo BIGINT IDENTITY(1,1) PRIMARY KEY,
+    nombreGrupo NVARCHAR(200) NOT NULL,
+    descripcionGrupo NVARCHAR(MAX) NULL,
+    fechaCreacion DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
+    imagenGrupo VARBINARY(MAX) NULL, -- Foto de grupo
+    fondoGrupo VARBINARY(MAX) NULL   -- Opcional, fondo del chat
+);
+
+CREATE TABLE Mensajes (
+    idMensaje BIGINT IDENTITY(1,1) PRIMARY KEY,
+    idUsuario BIGINT NOT NULL,
+    idGrupo BIGINT NULL, -- NULL si es mensaje privado
+    contenidoMensaje NVARCHAR(MAX) NULL, 
+    archivoMensaje VARBINARY(MAX) NULL,
+    estadoMensaje NVARCHAR(20) NOT NULL DEFAULT 'Enviado',
+    fechaHora DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
+    CONSTRAINT FK_Mensajes_Usuarios FOREIGN KEY (idUsuario) REFERENCES Usuarios(idUsuario),
+    CONSTRAINT FK_Mensajes_Grupos FOREIGN KEY (idGrupo) REFERENCES Grupos(idGrupo)
+);
+
+
 
 
 CREATE TABLE Plantillas(
@@ -113,34 +139,6 @@ CREATE TABLE SistemaInterno(
 	biografia NVARCHAR (MAX) NULL
 );*/
 
-CREATE TABLE Grupos(
-    idGrupo BIGINT IDENTITY(1,1) PRIMARY KEY,
-    nombreGrupo NVARCHAR(200) NOT NULL,
-    descripcionGrupo NVARCHAR(MAX) NULL,
-    fechaGrupo DATE NOT NULL DEFAULT CAST(GETDATE() AS DATE),
-    horaGrupo TIME(0) NOT NULL DEFAULT CAST(GETDATE() AS TIME),
-    imagenGrupo VARBINARY(MAX) NULL,
-    imagePerfilGrupo VARBINARY(MAX) NULL,
-    propietarioGrupo BIGINT NOT NULL,
-    archivosGrupo NVARCHAR(MAX) NULL,
-    privacidadGrupo NVARCHAR(50) NOT NULL DEFAULT 'Público',
-    capacidadMiembrosGrupo INT NOT NULL DEFAULT 50,
-    estadoGrupo NVARCHAR(20) NOT NULL DEFAULT 'Activo',
-    fechaCreacion DATETIME2 DEFAULT SYSDATETIME()
-);
-
-CREATE TABLE Mensajes(
-    idMensaje BIGINT IDENTITY(1,1) PRIMARY KEY,
-    idUsuario BIGINT NOT NULL,
-    idGrupo BIGINT NOT NULL,
-    contenidoMensaje NVARCHAR(MAX) NULL, 
-    archivoMensaje VARBINARY(MAX) NULL,
-    estadoMensaje NVARCHAR(20) NOT NULL DEFAULT 'Enviado',
-    opcionesMensaje NVARCHAR(200) NULL,
-    fechaMensaje DATE NOT NULL DEFAULT CAST(GETDATE() AS DATE),
-    horaMensaje TIME(0) NOT NULL DEFAULT CAST(GETDATE() AS TIME),
-    fechaCreacion DATETIME2 DEFAULT SYSDATETIME()
-);
 
 CREATE TABLE Publicaciones (
     idPublicacion BIGINT IDENTITY(1,1) PRIMARY KEY,
@@ -169,24 +167,27 @@ CREATE TABLE usuario_publicaciones(
 	CONSTRAINT FK_usuario_publicaciones_Publicaciones FOREIGN KEY (idPublicacion1) REFERENCES Publicaciones(idPublicacion)
 );
 
-CREATE TABLE usuario_mensajes(
-	idUsuario2 BIGINT NOT NULL,
-	idMensaje1 BIGINT NOT NULL,
-	fechaCreacion DATETIME2 DEFAULT SYSDATETIME(),
-	PRIMARY KEY (idUsuario2, idMensaje1),
-	CONSTRAINT FK_usuario_mensajes_Usuarios FOREIGN KEY (idUsuario2) REFERENCES Usuarios(idUsuario),
-	CONSTRAINT FK_usuario_mensajes_Mensajes FOREIGN KEY (idMensaje1) REFERENCES Mensajes(idMensaje)
+
+CREATE TABLE usuario_mensajes (
+    idUsuarioEmisor BIGINT NOT NULL,
+    idUsuarioReceptor BIGINT NOT NULL,
+    idMensaje BIGINT NOT NULL,
+    fechaCreacion DATETIME2 DEFAULT SYSDATETIME(),
+    PRIMARY KEY (idUsuarioEmisor, idUsuarioReceptor, idMensaje),
+    CONSTRAINT FK_um_Usuarios_Emisor FOREIGN KEY (idUsuarioEmisor) REFERENCES Usuarios(idUsuario),
+    CONSTRAINT FK_um_Usuarios_Receptor FOREIGN KEY (idUsuarioReceptor) REFERENCES Usuarios(idUsuario),
+    CONSTRAINT FK_um_Mensajes FOREIGN KEY (idMensaje) REFERENCES Mensajes(idMensaje)
 );
 
-CREATE TABLE usuario_grupos(
-	idUsuario3 BIGINT NOT NULL,
-	idGrupo2 BIGINT NOT NULL,
-	rolUsuarioGrupo NVARCHAR(50) DEFAULT 'Miembro',
-	fechaUnion DATETIME2 DEFAULT SYSDATETIME(),
-	estadoMiembro NVARCHAR(20) DEFAULT 'Activo',
-	PRIMARY KEY (idUsuario3, idGrupo2),
-	CONSTRAINT FK_usuario_grupos_Usuarios FOREIGN KEY (idUsuario3) REFERENCES Usuarios(idUsuario),
-	CONSTRAINT FK_usuario_grupos_Grupos FOREIGN KEY (idGrupo2) REFERENCES Grupos(idGrupo)
+CREATE TABLE usuario_grupos (
+    idUsuario BIGINT NOT NULL,
+    idGrupo BIGINT NOT NULL,
+    rolUsuarioGrupo NVARCHAR(50) DEFAULT 'Miembro',
+    fechaUnion DATETIME2 DEFAULT SYSDATETIME(),
+    estadoMiembro NVARCHAR(20) DEFAULT 'Activo',
+    PRIMARY KEY (idUsuario, idGrupo),
+    CONSTRAINT FK_ug_Usuarios FOREIGN KEY (idUsuario) REFERENCES Usuarios(idUsuario),
+    CONSTRAINT FK_ug_Grupos FOREIGN KEY (idGrupo) REFERENCES Grupos(idGrupo)
 );
 
 CREATE TABLE usuario_plataforma(
@@ -199,16 +200,6 @@ CREATE TABLE usuario_plataforma(
 	CONSTRAINT FK_usuario_plataforma_Usuarios FOREIGN KEY (idUsuario4) REFERENCES Usuarios(idUsuario),
 	CONSTRAINT FK_usuario_plataforma_Plataforma FOREIGN KEY (idPlataforma1) REFERENCES Plataforma(idPlataforma)
 	);
-
-/* ------------- Mensajes en Grupos ---------------- */
-CREATE TABLE mensajes_grupos(
-	idMensaje2 BIGINT NOT NULL,
-	idGrupo2 BIGINT NOT NULL,
-	fechaCreacion DATETIME2 DEFAULT SYSDATETIME(),
-	PRIMARY KEY (idMensaje2, idGrupo2),
-	CONSTRAINT FK_mensajes_grupos_Mensajes FOREIGN KEY (idMensaje2) REFERENCES Mensajes(idMensaje),
-	CONSTRAINT FK_mensajes_grupos_Grupos FOREIGN KEY (idGrupo2) REFERENCES Grupos(idGrupo)
-);
 
 /* --------------- Plataforma General ----------------- */
 CREATE TABLE plataforma_publicacion(
