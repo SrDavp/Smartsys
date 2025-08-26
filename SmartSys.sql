@@ -29,6 +29,7 @@ Tablas principales de donde salen las demas tablas foraneas,consta de las siguie
 
 Select * from Usuarios;
 Select * from Plataforma;
+select * from Publicaciones;
 Select * from usuario_plataforma;
 Select * from Publicaciones
 Select * from plataforma_publicacion
@@ -169,7 +170,8 @@ CREATE TABLE Publicaciones (
     horaPublicacion TIME NULL,
     estado NVARCHAR(20) DEFAULT 'Activo'
 );
-select * from Publicaciones;
+
+
 
 /* ---------------------- FIN TABLAS PRINCIPALES --------------------*/
 
