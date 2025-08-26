@@ -2,34 +2,88 @@
     ViewBag.Title = "SmartSys";
 }
 
+<style>
+    .fade-in-up {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.8s ease-out;
+    }
+
+        .fade-in-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+    .phone-hover {
+        transition: transform 0.3s ease;
+    }
+
+        .phone-hover:hover {
+            transform: translateY(-8px);
+        }
+
+    .pulse-element {
+        animation: pulse 2s infinite;
+    }
+
+    .bounce-element {
+        animation: bounce 1s infinite;
+    }
+
+    .spin-slow {
+        animation: spin 3s linear infinite;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function (entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in-up').forEach(el => {
+            observer.observe(el);
+        });
+    });
+</script>
+
 <div class="min-h-screen dark:bg-gray-900">
     <!-- Hero Section -->
-    <section class="flex flex-wrap min-h-screen bg-gradient-to-br from-purple-50 to-white dark:from-gray-900 dark:to-gray-800">
+    <section class="flex flex-wrap min-h-screen bg-gray-50 dark:bg-gray-900">
         <div class="ml-10 w-full lg:w-1/2 py-12 px-6">
             <div class="animate-fade-in">
-                <h1 class="text-purple-900 text-6xl lg:text-7xl mb-6 font-bold dark:text-purple-300 leading-tight">
-                    Bienvenido a <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600">SmartSys</span>
+                <h1 class="text-gray-800 text-6xl lg:text-7xl mb-6 font-bold dark:text-white leading-tight">
+                    Bienvenido a <span class="text-blue-600">SmartSys</span>
                 </h1>
-                <p class="text-purple-700 text-xl lg:text-2xl mb-8 dark:text-purple-100 font-medium">
-                    El espacio para crear sin límites
+                <p class="text-gray-700 text-xl lg:text-2xl mb-8 dark:text-gray-200 font-medium">
+                    Tu plataforma para crear cualquier espacio digital
                 </p>
                 <p class="text-gray-600 text-lg mb-10 dark:text-gray-300 leading-relaxed">
-                    Transforma tus ideas en realidad digital. Crea sitios web profesionales, aplicaciones y experiencias únicas con la potencia de SmartSys.
+                    Crea tu propia plataforma digital para cualquier propósito. Desde negocios, emprendimientos, tiendas hasta instituciones, construye comunidades y conecta con tu audiencia de manera profesional.
                 </p>
 
                 <!-- Call to Action Card -->
-                <div class="mb-15 max-w-md border-2 rounded-2xl border-gray-200 bg-white dark:bg-gray-800 dark:border-gray-600 shadow-xl hover:shadow-2xl transition-all duration-300">
+                <div class="mb-15 max-w-md border rounded-2xl border-gray-200 bg-white dark:bg-gray-800 dark:border-gray-600 shadow-lg hover:shadow-xl transition-all duration-300">
                     <div class="p-6">
                         <div class="flex items-center mb-4">
-                            <i class="fa-solid fa-rocket text-2xl text-purple-600 mr-3"></i>
-                            <h3 class="text-gray-800 font-semibold text-lg dark:text-white">¿Listo para comenzar?</h3>
+                            <i class="fa-solid fa-store text-2xl text-blue-600 mr-3"></i>
+                            <h3 class="text-gray-800 font-semibold text-lg dark:text-white">Comienza tu plataforma</h3>
                         </div>
                         <p class="text-gray-600 mb-6 dark:text-gray-300">
-                            Únete a miles de creadores que ya están construyendo el futuro con SmartSys. Sin límites, sin complicaciones.
+                            Únete a emprendedores, creadores y profesionales que ya están construyendo sus espacios digitales únicos.
                         </p>
-                        <a class="w-full h-12 rounded-xl text-white bg-gradient-to-r from-purple-600 to-indigo-600 flex justify-center items-center hover:from-purple-700 hover:to-indigo-700 transition-all duration-300 font-semibold shadow-lg transform hover:scale-105" href="">
-                            <i class="fa-solid fa-play mr-2"></i>
-                            Comenzar Gratis
+                        <a class="w-full h-12 rounded-xl text-white bg-blue-600 flex justify-center items-center hover:bg-blue-700 transition-all duration-300 font-semibold shadow-lg" href="">
+                            <i class="fa-solid fa-arrow-right mr-2"></i>
+                            Crear mi espacio
                         </a>
                     </div>
                 </div>
@@ -40,400 +94,313 @@
         <div class="flex-1 flex flex-col justify-center items-center p-6">
             <div class="text-center max-w-lg">
                 <div class="mb-8 relative">
-                    <div class="absolute inset-0 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-full opacity-20 blur-3xl"></div>
-                    <img src="~/Content/img/fondo-home.png" alt="SmartSys Platform" class="max-w-full h-auto mx-auto relative z-10 rounded-2xl shadow-2xl" />
+                    <img src="~/Content/img/fondo-home.png" alt="SmartSys Platform" class="max-w-full h-auto mx-auto rounded-2xl shadow-2xl" />
                 </div>
                 <h2 class="text-2xl lg:text-3xl font-bold text-gray-800 mb-6 dark:text-white">
-                    Crear un sitio web nunca ha sido tan <span class="text-purple-600">intuitivo</span>
+                    Crear tu espacio digital nunca ha sido tan <span class="text-blue-600">sencillo</span>
                 </h2>
                 <p class="text-gray-600 leading-relaxed dark:text-gray-300 text-lg">
-                    Ya seas emprendedor, creador de contenido, artista o comunidad, SmartSys te da las herramientas para construir un espacio digital profesional en minutos.
+                    Ya seas emprendedor, profesional independiente, creador de contenido o cualquier tipo de negocio, SmartSys te permite crear plataformas personalizadas donde tu comunidad puede interactuar y crecer.
                 </p>
             </div>
         </div>
     </section>
 
-    <!-- Features Section -->
+    <!-- Features Section with Scroll Animation -->
     <section class="py-20 bg-white dark:bg-gray-800">
         <div class="container mx-auto px-6">
-            <div class="text-center mb-16">
+            <div class="text-center mb-16 fade-in-up">
                 <h2 class="text-4xl font-bold text-gray-800 dark:text-white mb-4">
-                    ¿Por qué elegir SmartSys?
+                    ¿De qué trata SmartSys?
                 </h2>
                 <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-                    Descubre las características que hacen de SmartSys la plataforma preferida por miles de usuarios
+                    ¡Utiliza las herramientas para crear tus instituciones y emprendimientos!
                 </p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
                 <!-- Feature 1 -->
-                <div class="bg-gradient-to-br from-purple-50 to-indigo-50 dark:from-gray-700 dark:to-gray-600 rounded-2xl border border-purple-100 dark:border-gray-500 p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                <div class="fade-in-up bg-gray-50 dark:bg-gray-700 rounded-2xl border border-gray-200 dark:border-gray-500 p-8 shadow-lg hover:shadow-xl transition-all duration-300">
                     <div class="flex items-center mb-6">
-                        <div class="w-14 h-14 bg-purple-600 rounded-xl flex items-center justify-center mr-4">
-                            <i class="fa-solid fa-pencil text-2xl text-white"></i>
+                        <div class="w-14 h-14 bg-blue-600 rounded-xl flex items-center justify-center mr-4">
+                            <i class="fa-solid fa-palette text-2xl text-white"></i>
                         </div>
-                        <h3 class="text-gray-800 dark:text-white text-xl font-bold">Diseño Personalizado</h3>
+                        <h3 class="text-gray-800 dark:text-white text-xl font-bold">Espacios Personalizados</h3>
                     </div>
                     <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
-                        Personaliza cada detalle de tu proyecto con nuestro editor visual intuitivo. Miles de plantillas y elementos listos para usar.
+                        Crea plataformas únicas para cualquier propósito. Desde tiendas online hasta comunidades profesionales, personaliza cada detalle según tu visión.
                     </p>
                 </div>
 
                 <!-- Feature 2 -->
-                <div class="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-gray-700 dark:to-gray-600 rounded-2xl border border-green-100 dark:border-gray-500 p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                <div class="fade-in-up bg-gray-50 dark:bg-gray-700 rounded-2xl border border-gray-200 dark:border-gray-500 p-8 shadow-lg hover:shadow-xl transition-all duration-300">
                     <div class="flex items-center mb-6">
                         <div class="w-14 h-14 bg-green-600 rounded-xl flex items-center justify-center mr-4">
-                            <i class="fa-solid fa-rocket text-2xl text-white"></i>
+                            <i class="fa-solid fa-comments text-2xl text-white"></i>
                         </div>
-                        <h3 class="text-gray-800 dark:text-white text-xl font-bold">Lanzamiento Rápido</h3>
+                        <h3 class="text-gray-800 dark:text-white text-xl font-bold">Comunicación Directa</h3>
                     </div>
                     <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
-                        Pon en marcha tu empresa en tiempo récord. Hosting integrado, dominio gratuito y SSL incluido desde el primer día.
+                        Conecta con tu comunidad en tiempo real. Chat integrado para resolver dudas, realizar ventas y mantener comunicación entre tu institucion.
                     </p>
                 </div>
 
                 <!-- Feature 3 -->
-                <div class="bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-gray-700 dark:to-gray-600 rounded-2xl border border-blue-100 dark:border-gray-500 p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                <div class="fade-in-up bg-gray-50 dark:bg-gray-700 rounded-2xl border border-gray-200 dark:border-gray-500 p-8 shadow-lg hover:shadow-xl transition-all duration-300">
                     <div class="flex items-center mb-6">
-                        <div class="w-14 h-14 bg-blue-600 rounded-xl flex items-center justify-center mr-4">
-                            <i class="fa-solid fa-shield-halved text-2xl text-white"></i>
+                        <div class="w-14 h-14 bg-orange-600 rounded-xl flex items-center justify-center mr-4">
+                            <i class="fa-solid fa-bullhorn text-2xl text-white"></i>
                         </div>
-                        <h3 class="text-gray-800 dark:text-white text-xl font-bold">Seguridad Total</h3>
+                        <h3 class="text-gray-800 dark:text-white text-xl font-bold">Publicaciones</h3>
                     </div>
                     <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
-                        Protección avanzada 24/7, backups automáticos y monitoreo constante para mantener tu sitio siempre seguro.
+                        Mantén a los miembros informados con actualizaciones, promociones y noticias sobre tu negocio o institucion.
                     </p>
                 </div>
 
                 <!-- Feature 4 -->
-                <div class="bg-gradient-to-br from-orange-50 to-red-50 dark:from-gray-700 dark:to-gray-600 rounded-2xl border border-orange-100 dark:border-gray-500 p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                <div class="fade-in-up bg-gray-50 dark:bg-gray-700 rounded-2xl border border-gray-200 dark:border-gray-500 p-8 shadow-lg hover:shadow-xl transition-all duration-300">
                     <div class="flex items-center mb-6">
-                        <div class="w-14 h-14 bg-orange-600 rounded-xl flex items-center justify-center mr-4">
-                            <i class="fa-solid fa-chart-line text-2xl text-white"></i>
+                        <div class="w-14 h-14 bg-purple-600 rounded-xl flex items-center justify-center mr-4">
+                            <i class="fa-solid fa-id-card text-2xl text-white"></i>
                         </div>
-                        <h3 class="text-gray-800 dark:text-white text-xl font-bold">Analytics Avanzados</h3>
+                        <h3 class="text-gray-800 dark:text-white text-xl font-bold">Perfiles Profesionales</h3>
                     </div>
                     <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
-                        Métricas detalladas y reportes en tiempo real para optimizar el rendimiento de tu sitio web.
+                        Crea tu identidad digital profesional. Muestra tu experiencia en tu biografía, añade tus datos de contacto y construye tu identidad.
                     </p>
                 </div>
 
                 <!-- Feature 5 -->
-                <div class="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-gray-700 dark:to-gray-600 rounded-2xl border border-indigo-100 dark:border-gray-500 p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                <div class="fade-in-up bg-gray-50 dark:bg-gray-700 rounded-2xl border border-gray-200 dark:border-gray-500 p-8 shadow-lg hover:shadow-xl transition-all duration-300">
                     <div class="flex items-center mb-6">
-                        <div class="w-14 h-14 bg-indigo-600 rounded-xl flex items-center justify-center mr-4">
-                            <i class="fa-solid fa-mobile-alt text-2xl text-white"></i>
+                        <div class="w-14 h-14 bg-red-600 rounded-xl flex items-center justify-center mr-4">
+                            <i class="fa-solid fa-layer-group text-2xl text-white"></i>
                         </div>
-                        <h3 class="text-gray-800 dark:text-white text-xl font-bold">Responsive Design</h3>
+                        <h3 class="text-gray-800 dark:text-white text-xl font-bold">Múltiples Propósitos</h3>
                     </div>
                     <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
-                        Tu sitio se verá perfecto en cualquier dispositivo. Optimización automática para móviles y tablets.
+                        Utiliza nuestra versatilidad. Una plataforma versátil adaptada a cualquier tipo de institucion o emprendimiento.
                     </p>
                 </div>
 
                 <!-- Feature 6 -->
-                <div class="bg-gradient-to-br from-pink-50 to-rose-50 dark:from-gray-700 dark:to-gray-600 rounded-2xl border border-pink-100 dark:border-gray-500 p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                <div class="fade-in-up bg-gray-50 dark:bg-gray-700 rounded-2xl border border-gray-200 dark:border-gray-500 p-8 shadow-lg hover:shadow-xl transition-all duration-300">
                     <div class="flex items-center mb-6">
-                        <div class="w-14 h-14 bg-pink-600 rounded-xl flex items-center justify-center mr-4">
-                            <i class="fa-solid fa-headset text-2xl text-white"></i>
+                        <div class="w-14 h-14 bg-teal-600 rounded-xl flex items-center justify-center mr-4">
+                            <i class="fa-solid fa-lock text-2xl text-white"></i>
                         </div>
-                        <h3 class="text-gray-800 dark:text-white text-xl font-bold">Soporte 24/7</h3>
+                        <h3 class="text-gray-800 dark:text-white text-xl font-bold">Personaliza la privacidad</h3>
                     </div>
                     <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
-                        Nuestro equipo de expertos está disponible las 24 horas para ayudarte cuando lo necesites.
+                        Conecta con clientes y miembros de manera publica o privada. Utiliza los codigos para convertir tu plataforma en privada o publica.
                     </p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Statistics Section -->
-    <section class="py-20 bg-gradient-to-r from-purple-600 to-indigo-600 text-white">
+    <!-- How it Works Section -->
+    <section class="py-20 bg-gray-50 dark:bg-gray-800">
         <div class="container mx-auto px-6">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold mb-4">SmartSys en Números</h2>
-                <p class="text-xl opacity-90">La confianza de miles de usuarios nos respalda</p>
+            <div class="text-center mb-16 fade-in-up">
+                <h2 class="text-4xl font-bold text-gray-800 dark:text-white mb-4">Cómo funciona SmartSys</h2>
+                <p class="text-xl text-gray-600 dark:text-gray-300">
+                    Sigue los pasos para comenzar tu plataforma digital
+                </p>
             </div>
 
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
-                <div class="text-center">
-                    <div class="text-4xl lg:text-5xl font-bold mb-2">50K+</div>
-                    <div class="text-lg opacity-80">Sitios Creados</div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <div class="text-center fade-in-up">
+                    <div class="w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <span class="text-2xl font-bold text-white">1</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-4">Crea tu plataforma</h3>
+                    <p class="text-gray-600 dark:text-gray-300">
+                        Registra tu cuenta y configura tu perfil digital según el propósito de tu institucion o emprendimiento.
+                    </p>
                 </div>
-                <div class="text-center">
-                    <div class="text-4xl lg:text-5xl font-bold mb-2">99.9%</div>
-                    <div class="text-lg opacity-80">Uptime Garantizado</div>
+                <div class="text-center fade-in-up">
+                    <div class="w-20 h-20 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <span class="text-2xl font-bold text-white">2</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-4">Invita a tu comunidad</h3>
+                    <p class="text-gray-600 dark:text-gray-300">
+                        Comparte el enlace de tu plataforma para que clientes, miembros o colaboradores se unan a tu espacio.
+                    </p>
                 </div>
-                <div class="text-center">
-                    <div class="text-4xl lg:text-5xl font-bold mb-2">24/7</div>
-                    <div class="text-lg opacity-80">Soporte Técnico</div>
-                </div>
-                <div class="text-center">
-                    <div class="text-4xl lg:text-5xl font-bold mb-2">150+</div>
-                    <div class="text-lg opacity-80">Países Activos</div>
+                <div class="text-center fade-in-up">
+                    <div class="w-20 h-20 bg-orange-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <span class="text-2xl font-bold text-white">3</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-4">Haz crecer tu plataforma</h3>
+                    <p class="text-gray-600 dark:text-gray-300">
+                        Publica contenido, interactúa con los miembros y desarrolla tu comunidad alrededor de tus productos o servicios.
+                    </p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Testimonials Section -->
-    <section class="py-20 bg-gray-50 dark:bg-gray-800">
+    <!-- Mobile App Section -->
+    <section class="py-20 bg-white dark:bg-gray-900">
         <div class="container mx-auto px-6">
-            <div class="text-center mb-16">
+            <div class="flex flex-wrap items-center">
+                <div class="w-full lg:w-1/2 mb-12 lg:mb-0">
+                    <div class="fade-in-up">
+                        <h2 class="text-4xl font-bold text-gray-800 dark:text-white mb-6">
+                            Lleva siempre contigo tus instituciones con la app móvil
+                        </h2>
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8">
+                            Accede a SmartSys desde tu dispositivo móvil. Gestiona tu negocio sin límites de ubicación.
+                        </p>
+                        <div class="space-y-4">
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center mr-4">
+                                    <i class="fa-solid fa-mobile-alt text-white"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-800 dark:text-white">Responsive Design</h4>
+                                    <p class="text-gray-600 dark:text-gray-300">Perfecto en cualquier dispositivo</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center mr-4">
+                                    <i class="fa-solid fa-wifi text-white"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-800 dark:text-white">Sincronización</h4>
+                                    <p class="text-gray-600 dark:text-gray-300">Todos tus datos siempre actualizados</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-full lg:w-1/2 flex justify-center">
+                    <div class="relative phone-hover">
+                        <!-- Phone Frame -->
+                        <div class="w-80 h-[600px] bg-gray-900 rounded-[3rem] p-4 shadow-2xl">
+                            <!-- Screen -->
+                            <div class="w-full h-full bg-white dark:bg-gray-800 rounded-[2.5rem] overflow-hidden relative">
+                                <!-- Status Bar -->
+                                <div class="bg-blue-600 h-12 flex items-center justify-center">
+                                    <span class="text-white font-semibold">SmartSys</span>
+                                </div>
+
+                                <!-- App Content -->
+                                <div class="p-4 space-y-4">
+                                    <!-- Elements with different effects -->
+                                    <div class="pulse-element bg-blue-100 dark:bg-blue-900 rounded-lg p-3">
+                                        <div class="flex items-center">
+                                            <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center mr-3">
+                                                <i class="fa-solid fa-box text-white text-sm"></i>
+                                            </div>
+                                            <span class="text-gray-800 dark:text-white font-medium">Nuevo inventario</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="bounce-element bg-green-100 dark:bg-green-900 rounded-lg p-3">
+                                        <div class="flex items-center">
+                                            <div class="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center mr-3 spin-slow">
+                                                <i class="fa-solid fa-comments text-white text-sm"></i>
+                                            </div>
+                                            <span class="text-gray-800 dark:text-white font-medium">5 mensajes nuevos</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="pulse-element bg-orange-100 dark:bg-orange-900 rounded-lg p-3">
+                                        <div class="flex items-center">
+                                            <div class="w-8 h-8 bg-orange-600 rounded-full flex items-center justify-center mr-3">
+                                                <i class="fa-solid fa-users text-white text-sm"></i>
+                                            </div>
+                                            <span class="text-gray-800 dark:text-white font-medium">23 miembros</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="bounce-element bg-purple-100 dark:bg-purple-900 rounded-lg p-3">
+                                        <div class="flex items-center">
+                                            <div class="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center mr-3 spin-slow">
+                                                <i class="fa-solid fa-bullhorn text-white text-sm"></i>
+                                            </div>
+                                            <span class="text-gray-800 dark:text-white font-medium">Nueva publicación</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Use Cases Section -->
+    <section class="py-20 bg-white dark:bg-gray-800">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16 fade-in-up">
                 <h2 class="text-4xl font-bold text-gray-800 dark:text-white mb-4">
-                    Lo que dicen nuestros usuarios
+                    Para todo tipo de instituciones
                 </h2>
                 <p class="text-xl text-gray-600 dark:text-gray-300">
-                    Historias reales de éxito con SmartSys
+                    SmartSys es versátil a cualquier emprendimiento que tengas
                 </p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-                <!-- Testimonial 1 -->
-                <div class="bg-white dark:bg-gray-700 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow">
-                    <div class="flex items-center mb-4">
-                        <div class="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center text-white font-bold mr-4">
-                            MA
+                <!-- Use Case 1 -->
+                <div class="fade-in-up bg-white dark:bg-gray-700 rounded-2xl p-8 shadow-lg border border-gray-100 dark:border-gray-600 hover:shadow-xl transition-all duration-300">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center text-white font-bold mr-4">
+                            <i class="fa-solid fa-book"></i>
                         </div>
                         <div>
-                            <h4 class="font-semibold text-gray-800 dark:text-white">María Alvarado</h4>
-                            <p class="text-gray-500 dark:text-gray-400 text-sm">Emprendedora</p>
+                            <h4 class="font-semibold text-gray-800 dark:text-white">Cursos Personalizados</h4>
+                            <p class="text-gray-500 dark:text-gray-400 text-sm">Comparte tu conocimiento</p>
                         </div>
                     </div>
-                    <p class="text-gray-600 dark:text-gray-300 italic">
-                        "SmartSys transformó mi idea en una tienda online profesional en solo 2 horas. ¡Increíble!"
+                    <p class="text-gray-600 dark:text-gray-300">
+                        "Ideal para profesionales que quieren enseñar sus habilidades. Crea cursos sobre cualquier tema y construye una comunidad de aprendizaje alrededor de tu expertise."
                     </p>
-                    <div class="flex text-yellow-400 mt-4">
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                    </div>
                 </div>
 
-                <!-- Testimonial 2 -->
-                <div class="bg-white dark:bg-gray-700 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow">
-                    <div class="flex items-center mb-4">
-                        <div class="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center text-white font-bold mr-4">
-                            CR
+                <!-- Use Case 2 -->
+                <div class="fade-in-up bg-white dark:bg-gray-700 rounded-2xl p-8 shadow-lg border border-gray-100 dark:border-gray-600 hover:shadow-xl transition-all duration-300">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold mr-4">
+                            <i class="fa-solid fa-store"></i>
                         </div>
                         <div>
-                            <h4 class="font-semibold text-gray-800 dark:text-white">Carlos Ruiz</h4>
-                            <p class="text-gray-500 dark:text-gray-400 text-sm">Diseñador</p>
+                            <h4 class="font-semibold text-gray-800 dark:text-white">Tiendas y Negocios</h4>
+                            <p class="text-gray-500 dark:text-gray-400 text-sm">Venta y atención al cliente</p>
                         </div>
                     </div>
-                    <p class="text-gray-600 dark:text-gray-300 italic">
-                        "La facilidad de uso es impresionante. Mis clientes están encantados con los resultados."
+                    <p class="text-gray-600 dark:text-gray-300">
+                        "Perfecto para mostrar productos, gestionar inventarios y mantener comunicación directa con clientes. Desde restaurantes hasta tiendas de ropa."
                     </p>
-                    <div class="flex text-yellow-400 mt-4">
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                    </div>
                 </div>
 
-                <!-- Testimonial 3 -->
-                <div class="bg-white dark:bg-gray-700 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow">
-                    <div class="flex items-center mb-4">
-                        <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold mr-4">
-                            LG
+                <!-- Use Case 3 -->
+                <div class="fade-in-up bg-white dark:bg-gray-700 rounded-2xl p-8 shadow-lg border border-gray-100 dark:border-gray-600 hover:shadow-xl transition-all duration-300">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white font-bold mr-4">
+                            <i class="fa-solid fa-chart-line"></i>
                         </div>
                         <div>
-                            <h4 class="font-semibold text-gray-800 dark:text-white">Laura García</h4>
-                            <p class="text-gray-500 dark:text-gray-400 text-sm">Blogger</p>
+                            <h4 class="font-semibold text-gray-800 dark:text-white">Emprendedores de Productos</h4>
+                            <p class="text-gray-500 dark:text-gray-400 text-sm">Venta y gestión de productos</p>
                         </div>
                     </div>
-                    <p class="text-gray-600 dark:text-gray-300 italic">
-                        "Perfecto para mi blog. Las herramientas de SEO me ayudaron a triplicar mi tráfico."
-                    </p>
-                    <div class="flex text-yellow-400 mt-4">
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Pricing Section -->
-    <section class="py-20 bg-white dark:bg-gray-900">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold text-gray-800 dark:text-white mb-4">
-                    Planes para cada necesidad
-                </h2>
-                <p class="text-xl text-gray-600 dark:text-gray-300">
-                    Comienza gratis y escala según crezcas
-                </p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-                <!-- Basic Plan -->
-                <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl p-8 border border-gray-200 dark:border-gray-600 hover:shadow-lg transition-shadow">
-                    <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-2">Básico</h3>
-                    <div class="text-4xl font-bold text-purple-600 mb-4">Gratis</div>
-                    <p class="text-gray-600 dark:text-gray-300 mb-6">Perfecto para comenzar</p>
-                    <ul class="space-y-3 mb-8">
-                        <li class="flex items-center text-gray-600 dark:text-gray-300">
-                            <i class="fa-solid fa-check text-green-500 mr-3"></i>
-                            1 sitio web
-                        </li>
-                        <li class="flex items-center text-gray-600 dark:text-gray-300">
-                            <i class="fa-solid fa-check text-green-500 mr-3"></i>
-                            Subdominio gratuito
-                        </li>
-                        <li class="flex items-center text-gray-600 dark:text-gray-300">
-                            <i class="fa-solid fa-check text-green-500 mr-3"></i>
-                            SSL incluido
-                        </li>
-                        <li class="flex items-center text-gray-600 dark:text-gray-300">
-                            <i class="fa-solid fa-check text-green-500 mr-3"></i>
-                            Soporte por email
-                        </li>
-                    </ul>
-                    <button class="w-full h-12 bg-gray-600 text-white rounded-xl hover:bg-gray-700 transition-colors font-semibold">
-                        Comenzar Gratis
-                    </button>
-                </div>
-
-                <!-- Pro Plan -->
-                <div class="bg-gradient-to-br from-purple-50 to-indigo-50 dark:from-purple-900 dark:to-indigo-900 rounded-2xl p-8 border-2 border-purple-500 transform scale-105 shadow-xl relative">
-                    <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-purple-600 text-white px-4 py-1 rounded-full text-sm font-semibold">
-                        Más Popular
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-2">Pro</h3>
-                    <div class="text-4xl font-bold text-purple-600 mb-4">$19<span class="text-lg text-gray-500">/mes</span></div>
-                    <p class="text-gray-600 dark:text-gray-300 mb-6">Para profesionales</p>
-                    <ul class="space-y-3 mb-8">
-                        <li class="flex items-center text-gray-600 dark:text-gray-300">
-                            <i class="fa-solid fa-check text-green-500 mr-3"></i>
-                            10 sitios web
-                        </li>
-                        <li class="flex items-center text-gray-600 dark:text-gray-300">
-                            <i class="fa-solid fa-check text-green-500 mr-3"></i>
-                            Dominio personalizado
-                        </li>
-                        <li class="flex items-center text-gray-600 dark:text-gray-300">
-                            <i class="fa-solid fa-check text-green-500 mr-3"></i>
-                            Analytics avanzados
-                        </li>
-                        <li class="flex items-center text-gray-600 dark:text-gray-300">
-                            <i class="fa-solid fa-check text-green-500 mr-3"></i>
-                            Soporte prioritario
-                        </li>
-                    </ul>
-                    <button class="w-full h-12 bg-purple-600 text-white rounded-xl hover:bg-purple-700 transition-colors font-semibold">
-                        Empezar Prueba
-                    </button>
-                </div>
-
-                <!-- Enterprise Plan -->
-                <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl p-8 border border-gray-200 dark:border-gray-600 hover:shadow-lg transition-shadow">
-                    <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-2">Enterprise</h3>
-                    <div class="text-4xl font-bold text-purple-600 mb-4">$99<span class="text-lg text-gray-500">/mes</span></div>
-                    <p class="text-gray-600 dark:text-gray-300 mb-6">Para empresas</p>
-                    <ul class="space-y-3 mb-8">
-                        <li class="flex items-center text-gray-600 dark:text-gray-300">
-                            <i class="fa-solid fa-check text-green-500 mr-3"></i>
-                            Sitios ilimitados
-                        </li>
-                        <li class="flex items-center text-gray-600 dark:text-gray-300">
-                            <i class="fa-solid fa-check text-green-500 mr-3"></i>
-                            Dominio + email
-                        </li>
-                        <li class="flex items-center text-gray-600 dark:text-gray-300">
-                            <i class="fa-solid fa-check text-green-500 mr-3"></i>
-                            API completa
-                        </li>
-                        <li class="flex items-center text-gray-600 dark:text-gray-300">
-                            <i class="fa-solid fa-check text-green-500 mr-3"></i>
-                            Soporte 24/7
-                        </li>
-                    </ul>
-                    <button class="w-full h-12 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-colors font-semibold">
-                        Contactar Ventas
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- FAQ Section -->
-    <section class="py-20 bg-gray-50 dark:bg-gray-800">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold text-gray-800 dark:text-white mb-4">
-                    Preguntas Frecuentes
-                </h2>
-                <p class="text-xl text-gray-600 dark:text-gray-300">
-                    Resolvemos tus dudas más comunes
-                </p>
-            </div>
-
-            <div class="max-w-4xl mx-auto space-y-6">
-                <div class="bg-white dark:bg-gray-700 rounded-xl p-6 shadow-sm">
-                    <h3 class="font-semibold text-lg text-gray-800 dark:text-white mb-3">
-                        ¿Necesito conocimientos técnicos para usar SmartSys?
-                    </h3>
                     <p class="text-gray-600 dark:text-gray-300">
-                        No, SmartSys está diseñado para ser intuitivo. Nuestro editor visual te permite crear sitios profesionales sin escribir código.
-                    </p>
-                </div>
-
-                <div class="bg-white dark:bg-gray-700 rounded-xl p-6 shadow-sm">
-                    <h3 class="font-semibold text-lg text-gray-800 dark:text-white mb-3">
-                        ¿Puedo cambiar de plan en cualquier momento?
-                    </h3>
-                    <p class="text-gray-600 dark:text-gray-300">
-                        Sí, puedes actualizar o reducir tu plan cuando gustes. Los cambios se aplican inmediatamente y solo pagas la diferencia.
-                    </p>
-                </div>
-
-                <div class="bg-white dark:bg-gray-700 rounded-xl p-6 shadow-sm">
-                    <h3 class="font-semibold text-lg text-gray-800 dark:text-white mb-3">
-                        ¿Incluye hosting y dominio?
-                    </h3>
-                    <p class="text-gray-600 dark:text-gray-300">
-                        Sí, todos nuestros planes incluyen hosting seguro y rápido. Los planes Pro y Enterprise incluyen dominio personalizado gratuito.
-                    </p>
-                </div>
-
-                <div class="bg-white dark:bg-gray-700 rounded-xl p-6 shadow-sm">
-                    <h3 class="font-semibold text-lg text-gray-800 dark:text-white mb-3">
-                        ¿Hay garantía de satisfacción?
-                    </h3>
-                    <p class="text-gray-600 dark:text-gray-300">
-                        Ofrecemos 30 días de garantía de devolución completa. Si no estás satisfecho, te devolvemos tu dinero sin preguntas.
+                        "Excelente para vendedores independientes, consultores y prestadores de servicios que necesitan una plataforma profesional para gestionar su negocio."
                     </p>
                 </div>
             </div>
         </div>
     </section>
 </div>
-<!-- Final CTA Section -->
-<section class="w-full py-20 bg-gradient-to-r from-purple-600 to-indigo-600 text-white">
-    <div class="container mx-auto px-6 text-center">
-        <h2 class="text-4xl lg:text-5xl font-bold mb-6">
-            ¿Listo para crear algo increíble?
-        </h2>
-        <p class="text-xl mb-10 opacity-90 max-w-2xl mx-auto">
-            Únete a la revolución digital con SmartSys. Comienza gratis hoy y descubre por qué somos la plataforma preferida por miles de creadores.
-        </p>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <a href="" class="bg-white text-purple-600 px-8 py-4 rounded-xl font-bold text-lg hover:bg-gray-100 transition-colors shadow-lg transform hover:scale-105">
-                <i class="fa-solid fa-rocket mr-2"></i>
-                Comenzar Gratis
-            </a>
-            <a href="" class="border-2 border-white text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-white hover:text-purple-600 transition-colors">
-                <i class="fa-solid fa-play mr-2"></i>
-                Ver Demo
-            </a>
-        </div>
-    </div>
-</section>
+
+<!-- Footer space placeholder -->
+<div class="h-20 bg-gray-100 dark:bg-gray-900 flex items-center justify-center">
+    <p class="text-gray-500 dark:text-gray-400"><!-- Aquí va tu footer --></p>
+</div>

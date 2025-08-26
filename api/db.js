@@ -1,26 +1,37 @@
 //Dependencias
 const sql = require('mssql');
 
-// CONFIGURA ESTO CON SUS USUARIO Y BD DE SMARTSYS
-// SA ROOT DEFAULT DE MYSQL SERVER
+// Configuración simple con SA habilitado
 const config = {
   user: 'sa',
   password: 'root',
-  server: '192.168.1.6', // o tu IP local, ej. '192.168.1.100'
+  server: 'localhost',
   database: 'SmartSys',
+  port: 1433,
   options: {
     encrypt: false,
-    trustServerCertificate: true
+    trustServerCertificate: true,
+    enableArithAbort: true
+  },
+  pool: {
+    max: 10,
+    min: 0,
+    idleTimeoutMillis: 30000
   }
 };
+
+console.log('🔄 Conectando con SA habilitado...');
 
 const poolPromise = new sql.ConnectionPool(config)
   .connect()
   .then(pool => {
-    console.log('Conectado a SQL Server');
+    console.log('✅ ¡CONEXIÓN EXITOSA con SA!');
     return pool;
   })
-  .catch(err => console.log('Error de conexión:', err));
+  .catch(err => {
+    console.log('❌ Error:', err.message);
+    return null;
+  });
 
 module.exports = {
   sql,
