@@ -50,6 +50,8 @@ CREATE TABLE Usuarios(
 	codigoUnico NVARCHAR(50) UNIQUE
 );
 
+
+
 CREATE TABLE ChatMsj (
     idChat BIGINT IDENTITY(1,1) PRIMARY KEY,
     idUsuarioEmisor BIGINT NOT NULL,
