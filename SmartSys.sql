@@ -34,9 +34,6 @@ Select * from Publicaciones
 Select * from plataforma_publicacion
 Select * from  usuario_publicaciones;
 
-
-
-
 CREATE TABLE Usuarios(
 	idUsuario BIGINT IDENTITY(1,1) PRIMARY KEY,
 	nombre NVARCHAR (200) NOT NULL,
@@ -48,9 +45,34 @@ CREATE TABLE Usuarios(
 	estadoCuenta NVARCHAR (20) NOT NULL DEFAULT 'Activo', /* EStado de la cuenta si esta activa o baneada */
 	fechaCreacion DATETIME2 DEFAULT SYSDATETIME(),
 	foto_perfil VARBINARY(MAX),
-	biografia NVARCHAR (MAX) NULL
+	biografia NVARCHAR (MAX) NULL,
+	codigoUnico NVARCHAR(50) UNIQUE
 );
 
+CREATE TABLE ChatMsj (
+    idChat BIGINT IDENTITY(1,1) PRIMARY KEY,
+    idUsuarioEmisor BIGINT NOT NULL,
+    idUsuarioReceptor BIGINT NOT NULL,
+    mensaje NVARCHAR(MAX) NULL,
+    estadoChat NVARCHAR(20) NOT NULL DEFAULT 'Activo',
+    fechaCreacion DATETIME2 DEFAULT SYSDATETIME(),
+    fechamensaje DATETIME2 NULL,
+    totalMensajes INT NOT NULL DEFAULT 0,
+    CONSTRAINT FK_Chat_Emisor FOREIGN KEY (idUsuarioEmisor) REFERENCES Usuarios(idUsuario),
+    CONSTRAINT FK_Chat_Receptor FOREIGN KEY (idUsuarioReceptor) REFERENCES Usuarios(idUsuario)
+);
+
+CREATE TABLE ChatMensajes (
+  idMensaje       BIGINT IDENTITY(1,1) PRIMARY KEY,
+  idChat          BIGINT NOT NULL,
+  idUsuarioEmisor BIGINT NOT NULL,
+  idUsuarioReceptor BIGINT NOT NULL,
+  mensaje         NVARCHAR(MAX) NOT NULL,
+  fecha           DATETIME2 DEFAULT SYSDATETIME(),
+  CONSTRAINT FK_ChatMensajes_Chat     FOREIGN KEY (idChat) REFERENCES ChatMsj(idChat),
+  CONSTRAINT FK_ChatMensajes_Emisor   FOREIGN KEY (idUsuarioEmisor) REFERENCES Usuarios(idUsuario),
+  CONSTRAINT FK_ChatMensajes_Receptor FOREIGN KEY (idUsuarioReceptor) REFERENCES Usuarios(idUsuario)
+);
 
 CREATE TABLE Plataforma (
     idPlataforma BIGINT IDENTITY(1,1) PRIMARY KEY,
@@ -85,9 +107,6 @@ CREATE TABLE Mensajes (
     CONSTRAINT FK_Mensajes_Usuarios FOREIGN KEY (idUsuario) REFERENCES Usuarios(idUsuario),
     CONSTRAINT FK_Mensajes_Grupos FOREIGN KEY (idGrupo) REFERENCES Grupos(idGrupo)
 );
-
-
-
 
 CREATE TABLE Plantillas(
     idPlantilla BIGINT IDENTITY(1,1) PRIMARY KEY,
@@ -148,7 +167,6 @@ CREATE TABLE Publicaciones (
     archivoAdjunto VARBINARY(MAX) NULL,
     fechaPublicacion DATE NULL,
     horaPublicacion TIME NULL,
-    fechaLimite DATE NULL, -- Solo para tareas
     estado NVARCHAR(20) DEFAULT 'Activo'
 );
 select * from Publicaciones;
