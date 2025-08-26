@@ -420,10 +420,10 @@ async function unirsePrivado(req, res) {
   }
 }
 
-// <---------- inicio unirse a plataforma ---------->
+// <---------- inicio mis Plataformas con búsqueda ---------->
 async function misPlataformas(req, res) {
   try {
-    const { idUsuario } = req.query; 
+    const { idUsuario, busqueda = "" } = req.query; 
     if (!idUsuario) {
       return res.status(400).json({
         ok: false,
@@ -433,9 +433,9 @@ async function misPlataformas(req, res) {
 
     const pool = await poolPromise;
 
-    
     const consulta = await pool.request()
       .input('idUsuario', sql.BigInt, idUsuario)
+      .input('busqueda', sql.NVarChar, `%${busqueda}%`)
       .query(`
         SELECT 
           p.idPlataforma,
@@ -453,6 +453,7 @@ async function misPlataformas(req, res) {
         FROM usuario_plataforma up
         INNER JOIN Plataforma p ON up.idPlataforma1 = p.idPlataforma
         WHERE up.idUsuario4 = @idUsuario
+          AND (p.nombrePlataforma LIKE @busqueda OR p.descripcionPlataforma LIKE @busqueda)
         ORDER BY up.fechaUnion DESC
       `);
 
@@ -474,8 +475,7 @@ async function misPlataformas(req, res) {
     });
   }
 }
-
-// <---------- fin unirse a plataforma ---------->
+// <---------- fin mis Plataformas con búsqueda ---------->
 module.exports = {
   registro,
   login,
