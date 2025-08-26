@@ -5,7 +5,7 @@ const sql = require('mssql');
 const config = {
   user: 'sa',
   password: 'root',
-  server: 'localhost',
+  server: '192.168.137.238',
   database: 'SmartSys',
   port: 1433,
   options: {

@@ -506,14 +506,16 @@ async function misPlataformas(req, res) {
 // Listado de publicaciones por plataforma
 async function publicacionesPorPlataforma(req, res) {
   try {
-    const { idPlataforma } = req.params; // viene de la URL
+    const idPlataforma = Number(req.params.idPlataforma);
 
-    if (!idPlataforma) {
+    if (!idPlataforma || isNaN(idPlataforma)) {
       return res.status(400).json({
         ok: false,
-        mensaje: "Falta el id de la plataforma"
+        mensaje: "El id de plataforma no es válido"
       });
     }
+
+    console.log('Buscando publicaciones para la plataforma ID:', idPlataforma);
 
     const pool = await poolPromise;
 
@@ -526,8 +528,9 @@ async function publicacionesPorPlataforma(req, res) {
           ON pub.idPublicacion = rel.idPublicacion2
         WHERE rel.idPlataforma2 = @idPlataforma
           AND pub.estado = 'Activo'
-        ORDER BY pub.fechaCreacion DESC
       `);
+
+    console.log('Publicaciones encontradas:', consulta.recordset.length);
 
     res.status(200).json({
       ok: true,
@@ -540,10 +543,12 @@ async function publicacionesPorPlataforma(req, res) {
     console.error("Error en publicacionesPorPlataforma:", error);
     res.status(500).json({
       ok: false,
-      mensaje: "Error al obtener publicaciones por plataforma"
+      mensaje: "Error al obtener publicaciones por plataforma",
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
 }
+
 
 // Ver detalles de una publicación
 async function verPublicacion(req, res) {
