@@ -5,7 +5,20 @@ const multer = require("multer")
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: multer.memoryStorage() });
+const crypto = require("crypto");
 
+//<------- Inicio Codigo unico chat -------->
+function generarCodigoPersonalizado(nombre, apellido) {
+  const iniciales = (
+    (nombre?.[0] || "") + (apellido?.[0] || "")
+  ).toUpperCase();
+
+  // 2 bytes = 4 caracteres hex (más corto)
+  const randomCode = crypto.randomBytes(2).toString("hex").toUpperCase();
+
+  return `${iniciales}${randomCode}`; 
+}
+//<------- Fin Codigo unico chat -------->
 
 // <---------- inicio login -------------->
 async function login(req, res) {

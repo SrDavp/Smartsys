@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dep": "npm install mssql mysql express cors nodemon axios path multer bcrypt npm install -D tailwindcss npx tailwindcss init",
+    "dep": "npm install mssql mysql express cors nodemon axios socket.io path multer bcrypt crypto  npm install -D tailwindcss npx tailwindcss init",
     "build": "tailwindcss -i ./src/input.css -o ./src/output.css",
     "diseño": "copy src\\output.css ..\\webApp\\Content\\tailwind.css",
     "css": "tailwindcss -i ./src/input.css -o ./src/output.css --watch",
@@ -17,7 +17,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@tailwindcss/cli": "^4.1.8"
+    "@tailwindcss/cli": "^4.1.8",
+    "crypto": "^1.0.1",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1"
   },
   "devDependencies": {
     "axios": "^1.11.0",
