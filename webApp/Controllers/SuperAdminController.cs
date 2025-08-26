@@ -382,7 +382,6 @@ namespace SmartSys.Controllers
             original.contenido = pub.contenido;
             original.tipoPublicacion = pub.tipoPublicacion;
             original.estado = pub.estado;
-            original.fechaLimite = pub.fechaLimite;
 
             if (archivoAdjuntoFile != null && archivoAdjuntoFile.ContentLength > 0)
             {

@@ -28,8 +28,6 @@ namespace SmartSys.Models
         public DateTime? fechaPublicacion { get; set; }
         public TimeSpan? horaPublicacion { get; set; }
 
-        public DateTime? fechaLimite { get; set; } // Solo para tareas
-
         [StringLength(20)]
         public string estado { get; set; } = "Activo";
 

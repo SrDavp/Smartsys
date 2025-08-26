@@ -409,7 +409,6 @@ namespace SmartSys.Controllers
                 pub.titulo = pubActualizada.titulo;
                 pub.contenido = pubActualizada.contenido;
                 pub.tipoPublicacion = pubActualizada.tipoPublicacion;
-                pub.fechaLimite = pubActualizada.fechaLimite;
 
                 if (archivo != null && archivo.ContentLength > 0)
                 {
