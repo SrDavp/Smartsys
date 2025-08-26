@@ -17,5 +17,8 @@ router.get("/explorarActivas", sesion.explorarActivas);
 router.post("/unirsePublico", sesion.unirsePublico);
 router.post("/unirsePrivado", sesion.unirsePrivado);
 router.get("/misPlataformas", sesion.misPlataformas);
+//Rutas publicaciones
+router.get("/publicacionesPorPlataforma", sesion.publicacionesPorPlataforma);
+router.get("/verPublicacion", sesion.verPublicacion);
 
 module.exports = router

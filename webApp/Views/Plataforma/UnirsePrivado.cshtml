@@ -1,22 +1,31 @@
 ﻿@{
     ViewBag.Title = "Unirse a Plataforma Privada";
 }
+<br>
+<br>
+<div class="max-w-md mx-auto p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg">
+    <h2 class="text-2xl font-extrabold mb-6 text-purple-700 dark:text-purple-400">Unirse a Plataforma Privada</h2>
 
-<h2 class="text-xl font-bold mb-4">Unirse a Plataforma Privada</h2>
+    @if (ViewBag.Error != null)
+    {
+        <p class="text-red-500 mb-4">@ViewBag.Error</p>
+    }
 
-@if (ViewBag.Error != null)
-{
-    <p class="text-red-500">@ViewBag.Error</p>
-}
+    @using (Html.BeginForm("UnirsePrivado", "Plataforma", FormMethod.Post))
+    {
+        <input type="hidden" name="id" value="@ViewBag.PlataformaId" />
 
-@using (Html.BeginForm("UnirsePrivado", "Plataforma", FormMethod.Post))
-{
-    <input type="hidden" name="id" value="@ViewBag.PlataformaId" />
+        <div class="mb-4">
+            <label for="codigo" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Código de acceso:</label>
+            <input type="text" name="codigo" required
+                   class="mt-1 block w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-400 focus:border-purple-500 outline-none dark:bg-gray-700 dark:text-white" />
+        </div>
 
-    <div class="form-group">
-        <label for="codigo">Código de acceso:</label>
-        <input type="text" name="codigo" class="form-control" required />
-    </div>
-
-    <button type="submit" class="btn btn-primary mt-3">Unirse</button>
-}
+        <button type="submit"
+                class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg shadow-md transition-colors duration-200 font-medium">
+            Unirse
+        </button>
+    }
+</div>
+<br>
+<br>

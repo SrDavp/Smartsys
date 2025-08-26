@@ -51,7 +51,7 @@ namespace SmartSys.Controllers
                 // Hash de la contraseña
                 u.Contrasena = BCrypt.Net.BCrypt.HashPassword(u.Contrasena);
 
-                // Foto de perfil (opcional)
+                // Foto de perfil
                 if (FotoPerfil != null && FotoPerfil.ContentLength > 0)
                 {
                     using (var reader = new BinaryReader(FotoPerfil.InputStream))
@@ -64,11 +64,30 @@ namespace SmartSys.Controllers
                 {
                     u.TipoUsuario = "Usuario";
                 }
+
+                // ✅ Generar CodigoUnico directamente aquí
+                string iniciales = "";
+                if (!string.IsNullOrEmpty(u.Nombre)) iniciales += u.Nombre[0];
+                if (!string.IsNullOrEmpty(u.Apellido)) iniciales += u.Apellido[0];
+                iniciales = iniciales.ToUpper();
+
+                // Generar bytes aleatorios en HEX
+                byte[] randomBytes = new byte[2];
+                using (var rng = System.Security.Cryptography.RandomNumberGenerator.Create())
+                {
+                    rng.GetBytes(randomBytes);
+                }
+                string randomCode = BitConverter.ToString(randomBytes).Replace("-", "");
+                u.CodigoUnico = iniciales + randomCode; // Ej: ER3F7C
+
+                // Fecha de creación
                 u.FechaCreacion = DateTime.Now;
+
                 db.Usuario.Add(u);
                 db.SaveChanges();
                 return RedirectToAction("Login");
             }
+
 
             return View(u);
         }

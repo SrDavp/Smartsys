@@ -36,5 +36,7 @@ namespace SmartSys.Models
 
         public string Biografia { get; set; }
 
+        public string CodigoUnico { get; set; }
+
     }
 }

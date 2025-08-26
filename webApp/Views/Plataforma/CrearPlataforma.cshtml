@@ -3,20 +3,19 @@
     ViewBag.Title = "Crear Plataforma";
 }
 
-<div class="min-h-screen bg-white dark:bg-gray-900 p-4">
-    <div class="max-w-4xl mx-auto"
+<div class="min-h-screen bg-white dark:bg-gray-900 p-6">
+    <div class="max-w-4xl mx-auto">
 
         <!-- Form Card -->
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden mb-20">
-            <!-- Form Content -->
             <div class="p-8">
-                <div class="max-w-3xl">
-                    <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Acerca de tu plataforma</h2>
+                <div class="max-w-3xl mx-auto">
+                    <h2 class="text-3xl font-bold text-purple-900 dark:text-white mb-2">Acerca de tu plataforma</h2>
                     <p class="text-gray-600 dark:text-gray-300 mb-8">Ingresa información detallada sobre tu plataforma.</p>
 
                     @using (Html.BeginForm("CrearPlataforma", "Plataforma", FormMethod.Post, new { enctype = "multipart/form-data", @class = "space-y-6" }))
                     {
-                        <!-- Platform Name -->
+                        <!-- Nombre de Plataforma -->
                         <div class="space-y-2">
                             <label class="text-sm font-medium text-gray-700 dark:text-gray-300 block">Nombre de la plataforma</label>
                             @Html.TextBoxFor(m => m.nombrePlataforma, new
@@ -26,18 +25,18 @@
                             })
                         </div>
 
-                        <!-- Type and Size in same row -->
+                        <!-- Tipo y Tamaño -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="space-y-2">
                                 <label class="text-sm font-medium text-gray-700 dark:text-gray-300 block">Tipo</label>
                                 @Html.DropDownListFor(m => m.privacidadPlataforma, new SelectList(new[] { "Público", "Privado" }), "Seleccionar", new
                                 {
-                                    @class = "w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all duration-200 bg-white cursor-pointer"
+                                    @class = "w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none cursor-pointer"
                                 })
                             </div>
                             <div class="space-y-2">
                                 <label class="text-sm font-medium text-gray-700 dark:text-gray-300 block">Tamaño de plataforma</label>
-                                <select class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all duration-200 bg-white cursor-pointer">
+                                <select class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none cursor-pointer">
                                     <option value="">Elige el tamaño de tu plataforma</option>
                                     <option value="small">Pequeña (1-10 usuarios)</option>
                                     <option value="medium">Mediana (11-100 usuarios)</option>
@@ -46,20 +45,20 @@
                             </div>
                         </div>
 
-                        <!-- Description -->
+                        <!-- Descripción -->
                         <div class="space-y-2">
                             <label class="text-sm font-medium text-gray-700 dark:text-gray-300 block">Descripción</label>
                             @Html.TextAreaFor(m => m.descripcionPlataforma, new
                             {
-                                @class = "w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all duration-200 resize-none",
+                                @class = "w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none resize-none transition-all duration-200",
                                 rows = "4",
                                 placeholder = "Describe tu plataforma..."
                             })
                         </div>
 
-                        <!-- File Uploads -->
+                        <!-- Icono y Fondo -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <!-- Icon -->
+                            <!-- Icono -->
                             <div class="space-y-2">
                                 <label class="text-sm font-medium text-gray-700 dark:text-gray-300 block">Icono de plataforma</label>
                                 <div class="relative border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4 hover:border-purple-400 dark:hover:border-purple-500 transition-colors duration-200 bg-white dark:bg-gray-700">
@@ -100,9 +99,9 @@
                             </div>
                         </div>
 
-                        <!-- Action Button -->
+                        <!-- Botón Siguiente -->
                         <div class="flex justify-end pt-8">
-                            <button type="submit" class="px-8 py-3 bg-purple-400 hover:bg-purple-700 text-white rounded-lg transition-colors duration-200 font-medium shadow-lg">
+                            <button type="submit" class="px-8 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-all duration-200 font-medium shadow-lg">
                                 Siguiente paso
                             </button>
                         </div>
@@ -113,7 +112,7 @@
     </div>
 </div>
 
-<!-- mensaje -->
+<!-- Script para mostrar mensaje de archivos subidos -->
 <script>
     document.getElementById("iconoInput").addEventListener("change", function () {
         if (this.files.length > 0) {

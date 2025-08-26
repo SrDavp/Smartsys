@@ -2,90 +2,111 @@
 @{
     ViewBag.Title = "Publicaciones del Sistema";
 }
-<h2 class="text-2xl font-bold mb-4">Listado de Publicaciones</h2>
 
-@using (Html.BeginForm("Publicaciones", "SuperAdmin", FormMethod.Get))
-{
-    <input type="hidden" name="id" value="@ViewBag.PlataformaId" />
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
-    <div class="row mb-4">
-        <div class="col-md-2">
-            <label for="titulo">Título</label>
-            <input type="text" name="titulo" value="@Request["titulo"]" class="form-control" placeholder="Buscar título..." />
+    <h2 class="text-3xl font-extrabold mb-6 text-purple-700 dark:text-purple-400">
+        Listado de Publicaciones
+    </h2>
+
+    <a href="@Url.Action("CrearPublicacion", "SuperAdmin", new { idPlataforma = ViewBag.PlataformaId })"
+       class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg shadow-md">
+        + Crear Nueva Publicación
+    </a>
+    <br>
+    <br>
+
+
+    <form method="get" class="mb-6 grid grid-cols-1 sm:grid-cols-6 gap-4">
+        <input type="hidden" name="id" value="@ViewBag.PlataformaId" />
+
+        <div>
+            <label for="titulo" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Título</label>
+            <input type="text" name="titulo" value="@Request["titulo"]" placeholder="Buscar título..."
+                   class="px-3 py-2 border rounded-lg w-full focus:ring-2 focus:ring-purple-400 focus:border-purple-500 outline-none" />
         </div>
 
-        <div class="col-md-2">
-            <label for="tipo">Tipo</label>
-            <input type="text" name="tipo" value="@Request["tipo"]" class="form-control" placeholder="Ej: Publicacion" />
+        <div>
+            <label for="tipo" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Tipo</label>
+            <input type="text" name="tipo" value="@Request["tipo"]" placeholder="Ej: Publicacion"
+                   class="px-3 py-2 border rounded-lg w-full focus:ring-2 focus:ring-purple-400 focus:border-purple-500 outline-none" />
         </div>
 
-        <div class="col-md-2">
-            <label for="estado">Estado</label>
-            <input type="text" name="estado" value="@Request["estado"]" class="form-control" placeholder="Ej: Activa" />
+        <div>
+            <label for="estado" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Estado</label>
+            <input type="text" name="estado" value="@Request["estado"]" placeholder="Ej: Activa"
+                   class="px-3 py-2 border rounded-lg w-full focus:ring-2 focus:ring-purple-400 focus:border-purple-500 outline-none" />
         </div>
 
-        <div class="col-md-2">
-            <label for="usuario">Usuario</label>
-            <input type="text" name="usuario" value="@Request["usuario"]" class="form-control" placeholder="Nombre o apellido" />
+        <div>
+            <label for="usuario" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Usuario</label>
+            <input type="text" name="usuario" value="@Request["usuario"]" placeholder="Nombre o apellido"
+                   class="px-3 py-2 border rounded-lg w-full focus:ring-2 focus:ring-purple-400 focus:border-purple-500 outline-none" />
         </div>
 
-        <div class="col-md-2">
-            <label for="fecha">Fecha</label>
-            <input type="date" name="fecha" value="@Request["fecha"]" class="form-control" />
+        <div>
+            <label for="fecha" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Fecha</label>
+            <input type="date" name="fecha" value="@Request["fecha"]"
+                   class="px-3 py-2 border rounded-lg w-full focus:ring-2 focus:ring-purple-400 focus:border-purple-500 outline-none" />
         </div>
 
-        <div class="col-md-2 d-flex align-items-end">
-            <button type="submit" class="btn btn-primary w-100">Buscar</button>
+        <div class="flex items-end">
+            <button type="submit"
+                    class="w-full px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-lg shadow-md transition-colors duration-200">
+                Buscar
+            </button>
         </div>
+    </form>
+
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+            <thead class="bg-purple-100 dark:bg-purple-700 text-purple-800 dark:text-purple-200 font-semibold">
+                <tr>
+                    <th class="px-4 py-2">ID</th>
+                    <th class="px-4 py-2">Imagen</th>
+                    <th class="px-4 py-2">Título</th>
+                    <th class="px-4 py-2">Tipo</th>
+                    <th class="px-4 py-2">Fecha</th>
+                    <th class="px-4 py-2">Estado</th>
+                    <th class="px-4 py-2">Usuario</th>
+                    <th class="px-4 py-2">Acciones</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                @foreach (var item in Model)
+                {
+                    var pub = item.Publicacion;
+                    var user = item.Usuario;
+                    var imagenBase64 = pub.archivoAdjunto != null ? "data:image/png;base64," + Convert.ToBase64String(pub.archivoAdjunto) : null;
+
+                    <tr class="odd:bg-purple-50 even:bg-purple-100 dark:odd:bg-purple-800 dark:even:bg-purple-700 hover:bg-purple-200 dark:hover:bg-purple-600 transition-colors duration-200">
+                        <td class="px-4 py-2 font-medium">@pub.idPublicacion</td>
+                        <td class="px-4 py-2">
+                            @if (imagenBase64 != null)
+                            {
+                                <img src="@imagenBase64" class="w-16 h-16 rounded-lg object-cover border" />
+                            }
+                            else
+                            {
+                                <span class="text-gray-400 dark:text-gray-300 text-sm">Sin imagen</span>
+                            }
+                        </td>
+                        <td class="px-4 py-2 font-medium">@pub.titulo</td>
+                        <td class="px-4 py-2">@pub.tipoPublicacion</td>
+                        <td class="px-4 py-2">
+                            @(Convert.ToDateTime(pub.fechaPublicacion).ToString("dd MMM yyyy"))
+                        </td>
+                        <td class="px-4 py-2">@pub.estado</td>
+                        <td class="px-4 py-2">@user.Nombre @user.Apellido</td>
+                        <td class="px-4 py-2 space-x-1">
+                            <a class="px-2 py-1 bg-yellow-500 hover:bg-yellow-600 text-white text-sm rounded-md transition-colors duration-200"
+                               href="@Url.Action("EditarPublicacion", new { id = pub.idPublicacion })">Editar</a>
+                            <a class="px-2 py-1 bg-red-500 hover:bg-red-600 text-white text-sm rounded-md transition-colors duration-200"
+                               href="@Url.Action("EliminarPublicacion", new { id = pub.idPublicacion })" onclick="return confirm('¿Eliminar publicación?')">Eliminar</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
-}
-
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Imagen</th>
-            <th>Título</th>
-            <th>Tipo</th>
-            <th>Fecha</th>
-            <th>Estado</th>
-            <th>Usuario que las publico</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            var pub = item.Publicacion;
-            var user = item.Usuario;
-
-            var imagenBase64 = pub.archivoAdjunto != null
-                ? "data:image/png;base64," + Convert.ToBase64String(pub.archivoAdjunto)
-                : null;
-
-            <tr>
-                <td>@pub.idPublicacion</td>
-                <td>
-                    @if (imagenBase64 != null)
-                    {
-                        <img src="@imagenBase64" alt="Imagen" style="width: 80px; height: 80px; object-fit: cover;" />
-                    }
-                    else
-                    {
-                        <span class="text-muted">Sin imagen</span>
-                    }
-                </td>
-                <td>@pub.titulo</td>
-                <td>@pub.tipoPublicacion</td>
-                <td>@(pub.fechaPublicacion?.ToShortDateString())</td>
-                <td>@pub.estado</td>
-                <td>@(user.Nombre + " " + user.Apellido)</td>
-                <td>
-                    <a class="btn btn-sm btn-primary" href="@Url.Action("EditarPublicacion", new { id = pub.idPublicacion })">Editar</a>
-                    <a class="btn btn-sm btn-danger" href="@Url.Action("EliminarPublicacion", new { id = pub.idPublicacion })" onclick="return confirm('¿Eliminar publicación?')">Eliminar</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+</div>

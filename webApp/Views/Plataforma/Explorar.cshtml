@@ -1,298 +1,73 @@
 ﻿@model List<SmartSys.Models.Plataforma>
 @{
-    ViewBag.Title = "Mis Plataformas - SmartSys";
-    var adminIds = ViewBag.PlataformasAdmin as List<long>;
+    ViewBag.Title = "Explorar Plataformas";
 }
-<style>
-    .platform-card {
-        transition: box-shadow 0.3s ease;
-    }
 
-        .platform-card:hover {
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-        }
+<!-- TÍTULO -->
+<div class="text-center py-8 mb-8">
+    <h2 class="text-3xl font-bold text-gray-900 dark:text-white">Explorar Plataformas</h2>
+    <h2 class="text-4xl font-extrabold text-purple-900 dark:text-purple-100 tracking-tight">Explorar Plataformas</h2>
+</div>
 
-    .dark .platform-card:hover {
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-    }
+<!-- FORMULARIO DE BÚSQUEDA -->
+<div class="flex justify-center mb-8">
+    <form method="get" action="@Url.Action("Explorar", "Plataforma")" class="w-full max-w-md">
+        <div class="flex flex-col sm:flex-row gap-2">
+            <input type="text" name="busqueda" value="@ViewBag.Busqueda" placeholder="Buscar plataformas..."
+                   class="border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 flex-1 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-300" />
+            <button type="submit"
+                    class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-3 rounded-lg font-semibold transition-all duration-300 whitespace-nowrap shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                <i class="fa-solid fa-search"></i>
+            </button>
+        </div>
+    </form>
+</div>
 
-    .bg-blue-500 {
-        background-color: #3b82f6;
-    }
+@if (Model == null || !Model.Any())
+{
+    <!-- MENSAJE DE NO RESULTADOS -->
+    <section class="flex items-center justify-center h-96 w-full bg-gray-100 dark:bg-gray-800 transition-colors duration-300 rounded-lg">
+        <div class="text-center px-4 py-8">
+            <div class="mb-10 text-purple-500 dark:text-purple-400 font-bold animate-pulse" style="font-size: 8rem; line-height: 1;">:(</div>
+            <h3 class="text-2xl font-semibold mb-2 text-purple-800 dark:text-purple-100">No se han encontrado plataformas</h3>
+            <p class="text-base text-purple-600 dark:text-purple-300">Revisa que lo hayas escrito correctamente</p>
+        </div>
+    </section>
+}
+else
+{
+    <!-- TARJETAS DE PLATAFORMAS -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        @foreach (var p in Model)
+        {
+            <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">@p.nombrePlataforma</h3>
+                <p class="text-gray-600 dark:text-gray-300 mb-4 leading-relaxed">@p.descripcionPlataforma</p>
 
-    .bg-red-500 {
-        background-color: #ef4444;
-    }
+                <div class="bg-white/80 dark:bg-purple-950/80 border border-purple-200 dark:border-purple-800 rounded-xl p-4 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 backdrop-blur-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-sm text-gray-500 dark:text-gray-400">Privacidad:</span>
+                        <span class="text-sm font-medium px-2 py-1 rounded-lg @(p.privacidadPlataforma == "Público" ? "text-purple-700 dark:text-purple-300 bg-purple-100 dark:bg-purple-900" : "text-purple-700 dark:text-purple-300 bg-purple-100 dark:bg-purple-900")">
+                            @p.privacidadPlataforma
+                        </span>
+                    </div>
 
-    .bg-green-500 {
-        background-color: #10b981;
-    }
-
-    .bg-yellow-500 {
-        background-color: #f59e0b;
-    }
-
-    .bg-purple-500 {
-        background-color: #8b5cf6;
-    }
-
-    .bg-pink-500 {
-        background-color: #ec4899;
-    }
-
-    .bg-indigo-500 {
-        background-color: #6366f1;
-    }
-
-    .bg-teal-500 {
-        background-color: #14b8a6;
-    }
-</style>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const darkModeToggle = document.getElementById('darkModeToggle');
-        const currentTheme = localStorage.getItem('theme');
-        if (currentTheme === 'dark') {
-            document.documentElement.classList.add('dark');
-            if (darkModeToggle) darkModeToggle.checked = true;
-        }
-        if (darkModeToggle) {
-            darkModeToggle.addEventListener('change', function () {
-                if (this.checked) {
-                    document.documentElement.classList.add('dark');
-                    localStorage.setItem('theme', 'dark');
-                } else {
-                    document.documentElement.classList.remove('dark');
-                    localStorage.setItem('theme', 'light');
-                }
-            });
-        }
-
-        const searchInput = document.getElementById('searchInput');
-        const platformCards = document.querySelectorAll('.platform-card');
-        if (searchInput) {
-            searchInput.addEventListener('input', function () {
-                const searchTerm = this.value.toLowerCase();
-                platformCards.forEach(card => {
-                    const title = card.querySelector('h3').textContent.toLowerCase();
-                    const description = card.querySelector('p').textContent.toLowerCase();
-                    if (title.includes(searchTerm) || description.includes(searchTerm)) {
-                        card.style.display = 'block';
-                    } else {
-                        card.style.display = 'none';
+                    @if (p.privacidadPlataforma == "Privado")
+                    {
+                        <a href="@Url.Action("UnirsePrivado", "Plataforma", new { id = p.idPlataforma })"
+                           class="w-full bg-purple-600 hover:bg-purple-700 dark:bg-purple-700 dark:hover:bg-purple-800 text-white text-center py-3 px-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-md block mb-2">
+                            <i class="fa-solid fa-key mr-2"></i> Unirse con código
+                        </a>
                     }
-                });
-            });
+                    else
+                    {
+                        <a href="@Url.Action("UnirsePublico", "Plataforma", new { id = p.idPlataforma })"
+                           class="w-full bg-purple-500 hover:bg-purple-600 dark:bg-purple-600 dark:hover:bg-purple-700 text-white text-center py-3 px-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-md block mb-2">
+                            <i class="fa-solid fa-users mr-2"></i> Unirse
+                        </a>
+                    }
+                </div>
+            </div>
         }
-    });
-</script>
-
-<div class="min-h-screen dark:bg-gray-900">
-    <!-- Main Content -->
-    <main class="p-6 bg-gray-50 dark:bg-gray-900">
-        <!-- Buscador -->
-        <div class="flex justify-center mb-6">
-            <div class="relative w-full max-w-lg">
-
-                <input type="text" id="searchInput" placeholder="Buscar plataformas..." class="pl-10 pr-4 py-2 w-full border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-            </div>
-        </div>
-
-        <!-- Mis plataformas -->
-        <div class="text-center mb-8">
-            <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Explorar Plataformas</h2>
-            <p class="text-gray-600 dark:text-gray-300">Busca y únete a las instituciones existentes por los usuarios</p>
-        </div>
-
-        <!-- Platforms Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            <!-- Platform Card 1 -->
-            <div onclick="openPlatform('plantilla1')" class="platform-card cursor-pointer bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-600 overflow-hidden">
-                <div class="bg-blue-500 h-24 relative flex items-center justify-center">
-                    <div class="text-6xl text-white font-bold">?</div>
-                    <button class="absolute top-3 right-3 w-8 h-8 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center text-white">
-                        <i class="fas fa-ellipsis-v text-sm"></i>
-                    </button>
-                </div>
-                <div class="p-4">
-                    <h3 class="font-bold text-gray-800 dark:text-white mb-1">Plantilla</h3>
-                    <p class="text-sm text-gray-600 dark:text-gray-300 mb-3">Plantilla</p>
-                    <div class="flex items-center justify-between text-sm">
-                        <span class="text-gray-500 dark:text-gray-400">Plantilla</span>
-                        <div class="flex items-center space-x-1">
-                            <div class="w-6 h-6 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center text-xs font-medium text-gray-600 dark:text-gray-300">
-                                <i class="fas fa-user text-xs"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Platform Card 2 -->
-            <div onclick="openPlatform('plantilla2')" class="platform-card cursor-pointer bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-600 overflow-hidden">
-                <div class="bg-red-500 h-24 relative flex items-center justify-center">
-                    <div class="text-6xl text-white font-bold">?</div>
-                    <button class="absolute top-3 right-3 w-8 h-8 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center text-white">
-                        <i class="fas fa-ellipsis-v text-sm"></i>
-                    </button>
-                </div>
-                <div class="p-4">
-                    <h3 class="font-bold text-gray-800 dark:text-white mb-1">Plantilla</h3>
-                    <p class="text-sm text-gray-600 dark:text-gray-300 mb-3">Plantilla</p>
-                    <div class="flex items-center justify-between text-sm">
-                        <span class="text-gray-500 dark:text-gray-400">Plantilla</span>
-                        <div class="flex items-center space-x-1">
-                            <div class="w-6 h-6 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center text-xs font-medium text-gray-600 dark:text-gray-300">
-                                <i class="fas fa-user text-xs"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Platform Card 3 -->
-            <div onclick="openPlatform('plantilla3')" class="platform-card cursor-pointer bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-600 overflow-hidden">
-                <div class="bg-green-500 h-24 relative flex items-center justify-center">
-                    <div class="text-6xl text-white font-bold">?</div>
-                    <button class="absolute top-3 right-3 w-8 h-8 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center text-white">
-                        <i class="fas fa-ellipsis-v text-sm"></i>
-                    </button>
-                </div>
-                <div class="p-4">
-                    <h3 class="font-bold text-gray-800 dark:text-white mb-1">Plantilla</h3>
-                    <p class="text-sm text-gray-600 dark:text-gray-300 mb-3">Plantilla</p>
-                    <div class="flex items-center justify-between text-sm">
-                        <span class="text-gray-500 dark:text-gray-400">Plantilla</span>
-                        <div class="flex items-center space-x-1">
-                            <div class="w-6 h-6 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center text-xs font-medium text-gray-600 dark:text-gray-300">
-                                <i class="fas fa-user text-xs"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Platform Card 4 -->
-            <div onclick="openPlatform('plantilla4')" class="platform-card cursor-pointer bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-600 overflow-hidden">
-                <div class="bg-yellow-500 h-24 relative flex items-center justify-center">
-                    <div class="text-6xl text-white font-bold">?</div>
-                    <button class="absolute top-3 right-3 w-8 h-8 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center text-white">
-                        <i class="fas fa-ellipsis-v text-sm"></i>
-                    </button>
-                </div>
-                <div class="p-4">
-                    <h3 class="font-bold text-gray-800 dark:text-white mb-1">Plantilla</h3>
-                    <p class="text-sm text-gray-600 dark:text-gray-300 mb-3">Plantilla</p>
-                    <div class="flex items-center justify-between text-sm">
-                        <span class="text-gray-500 dark:text-gray-400">Plantilla</span>
-                        <div class="flex items-center space-x-1">
-                            <div class="w-6 h-6 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center text-xs font-medium text-gray-600 dark:text-gray-300">
-                                <i class="fas fa-user text-xs"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Platform Card 5 -->
-            <div onclick="openPlatform('plantilla5')" class="platform-card cursor-pointer bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-600 overflow-hidden">
-                <div class="bg-purple-500 h-24 relative flex items-center justify-center">
-                    <div class="text-6xl text-white font-bold">?</div>
-                    <button class="absolute top-3 right-3 w-8 h-8 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center text-white">
-                        <i class="fas fa-ellipsis-v text-sm"></i>
-                    </button>
-                </div>
-                <div class="p-4">
-                    <h3 class="font-bold text-gray-800 dark:text-white mb-1">Plantilla</h3>
-                    <p class="text-sm text-gray-600 dark:text-gray-300 mb-3">Plantilla</p>
-                    <div class="flex items-center justify-between text-sm">
-                        <span class="text-gray-500 dark:text-gray-400">Plantilla</span>
-                        <div class="flex items-center space-x-1">
-                            <div class="w-6 h-6 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center text-xs font-medium text-gray-600 dark:text-gray-300">
-                                <i class="fas fa-user text-xs"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Platform Card 6 -->
-            <div onclick="openPlatform('plantilla6')" class="platform-card cursor-pointer bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-600 overflow-hidden">
-                <div class="bg-pink-500 h-24 relative flex items-center justify-center">
-                    <div class="text-6xl text-white font-bold">?</div>
-                    <button class="absolute top-3 right-3 w-8 h-8 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center text-white">
-                        <i class="fas fa-ellipsis-v text-sm"></i>
-                    </button>
-                </div>
-                <div class="p-4">
-                    <h3 class="font-bold text-gray-800 dark:text-white mb-1">Plantilla</h3>
-                    <p class="text-sm text-gray-600 dark:text-gray-300 mb-3">Plantilla</p>
-                    <div class="flex items-center justify-between text-sm">
-                        <span class="text-gray-500 dark:text-gray-400">Plantilla</span>
-                        <div class="flex items-center space-x-1">
-                            <div class="w-6 h-6 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center text-xs font-medium text-gray-600 dark:text-gray-300">
-                                <i class="fas fa-user text-xs"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Platform Card 7 -->
-            <div onclick="openPlatform('plantilla7')" class="platform-card cursor-pointer bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-600 overflow-hidden">
-                <div class="bg-indigo-500 h-24 relative flex items-center justify-center">
-                    <div class="text-6xl text-white font-bold">?</div>
-                    <button class="absolute top-3 right-3 w-8 h-8 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center text-white">
-                        <i class="fas fa-ellipsis-v text-sm"></i>
-                    </button>
-                </div>
-                <div class="p-4">
-                    <h3 class="font-bold text-gray-800 dark:text-white mb-1">Plantilla</h3>
-                    <p class="text-sm text-gray-600 dark:text-gray-300 mb-3">Plantilla</p>
-                    <div class="flex items-center justify-between text-sm">
-                        <span class="text-gray-500 dark:text-gray-400">Plantilla</span>
-                        <div class="flex items-center space-x-1">
-                            <div class="w-6 h-6 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center text-xs font-medium text-gray-600 dark:text-gray-300">
-                                <i class="fas fa-user text-xs"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Platform Card 8 -->
-            <div onclick="openPlatform('plantilla8')" class="platform-card cursor-pointer bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-600 overflow-hidden">
-                <div class="bg-teal-500 h-24 relative flex items-center justify-center">
-                    <div class="text-6xl text-white font-bold">?</div>
-                    <button class="absolute top-3 right-3 w-8 h-8 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center text-white">
-                        <i class="fas fa-ellipsis-v text-sm"></i>
-                    </button>
-                </div>
-                <div class="p-4">
-                    <h3 class="font-bold text-gray-800 dark:text-white mb-1">Plantilla</h3>
-                    <p class="text-sm text-gray-600 dark:text-gray-300 mb-3">Plantilla</p>
-                    <div class="flex items-center justify-between text-sm">
-                        <span class="text-gray-500 dark:text-gray-400">Plantilla</span>
-                        <div class="flex items-center space-x-1">
-                            <div class="w-6 h-6 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center text-xs font-medium text-gray-600 dark:text-gray-300">
-                                <i class="fas fa-user text-xs"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </main>
-</div>
-
-<!-- Footer space placeholder -->
-<div class="h-20 bg-gray-100 dark:bg-gray-900 flex items-center justify-center">
-    <p class="text-gray-500 dark:text-gray-400"><!-- Footer --></p>
-</div>
-
-<script>
-    function openPlatform(type) {
-        window.location.href = '#/platform/' + type;
-    }
-</script>
+    </div>
+}

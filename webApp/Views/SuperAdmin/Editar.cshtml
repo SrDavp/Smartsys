@@ -3,60 +3,73 @@
     ViewBag.Title = "Editar Usuario";
 }
 
-<h2 class="text-2xl font-bold mb-4">Editar usuario</h2>
+<div class="max-w-3xl mx-auto p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg">
+    <h2 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Editar Usuario</h2>
 
-@using (Html.BeginForm("Editar", "SuperAdmin", FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
-    @Html.HiddenFor(m => m.IdUsuario)
-
-    <div class="form-group">
-        @Html.LabelFor(m => m.Nombre)
-        @Html.TextBoxFor(m => m.Nombre, new { @class = "form-control" })
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(m => m.Apellido)
-        @Html.TextBoxFor(m => m.Apellido, new { @class = "form-control" })
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(m => m.CorreoElectronico)
-        @Html.TextBoxFor(m => m.CorreoElectronico, new { @class = "form-control" })
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(m => m.Telefono)
-        @Html.TextBoxFor(m => m.Telefono, new { @class = "form-control" })
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(m => m.Biografia)
-        @Html.TextAreaFor(m => m.Biografia, new { @class = "form-control" })
-    </div>
-
+    @using (Html.BeginForm("Editar", "SuperAdmin", FormMethod.Post, new { enctype = "multipart/form-data", @class = "space-y-4" }))
     {
-        string base64Image = Model.Foto_perfil != null
-            ? "data:image/png;base64," + Convert.ToBase64String(Model.Foto_perfil)
-            : null;
+        @Html.HiddenFor(m => m.IdUsuario)
 
-        if (base64Image != null)
+        <!-- Nombre -->
+        <div class="space-y-1">
+            @Html.LabelFor(m => m.Nombre, new { @class = "block text-gray-700 dark:text-gray-300 font-medium" })
+            @Html.TextBoxFor(m => m.Nombre, new { @class = "w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all duration-200" })
+        </div>
+
+        <!-- Apellido -->
+        <div class="space-y-1">
+            @Html.LabelFor(m => m.Apellido, new { @class = "block text-gray-700 dark:text-gray-300 font-medium" })
+            @Html.TextBoxFor(m => m.Apellido, new { @class = "w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all duration-200" })
+        </div>
+
+        <!-- Correo -->
+        <div class="space-y-1">
+            @Html.LabelFor(m => m.CorreoElectronico, new { @class = "block text-gray-700 dark:text-gray-300 font-medium" })
+            @Html.TextBoxFor(m => m.CorreoElectronico, new { @class = "w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all duration-200" })
+        </div>
+
+        <!-- Teléfono -->
+        <div class="space-y-1">
+            @Html.LabelFor(m => m.Telefono, new { @class = "block text-gray-700 dark:text-gray-300 font-medium" })
+            @Html.TextBoxFor(m => m.Telefono, new { @class = "w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all duration-200" })
+        </div>
+
+        <!-- Biografía -->
+        <div class="space-y-1">
+            @Html.LabelFor(m => m.Biografia, new { @class = "block text-gray-700 dark:text-gray-300 font-medium" })
+            @Html.TextAreaFor(m => m.Biografia, new { @class = "w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all duration-200 resize-none", rows = "4" })
+        </div>
+
+        <!-- Imagen actual -->
+        if (Model.Foto_perfil != null)
         {
+            var base64Image = "data:image/png;base64," + Convert.ToBase64String(Model.Foto_perfil);
             <div class="mb-4">
-                <label class="block text-gray-700">Imagen actual:</label>
-                <img src="@base64Image" class="w-24 h-24 rounded-full object-cover border" />
+                <label class="block text-gray-700 dark:text-gray-300 font-medium mb-1">Imagen actual:</label>
+                <img src="@base64Image" class="w-24 h-24 rounded-full object-cover border shadow-sm" />
             </div>
         }
+
+        <!-- Nueva foto -->
+        <div class="space-y-1">
+            @Html.Label("Nueva Foto de Perfil", new { @class = "block text-gray-700 dark:text-gray-300 font-medium" })
+            <input type="file" name="FotoPerfil" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all duration-200 cursor-pointer" />
+        </div>
+
+        <!-- Tipo de Usuario -->
+        <div class="space-y-1">
+            @Html.LabelFor(m => m.TipoUsuario, new { @class = "block text-gray-700 dark:text-gray-300 font-medium" })
+            @Html.DropDownListFor(m => m.TipoUsuario, new SelectList(new[] { "Usuario", "admin", "superAdmin" }, Model.TipoUsuario), new
+            {
+                @class = "w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all duration-200 cursor-pointer"
+            })
+        </div>
+
+        <!-- Botón Guardar -->
+        <div class="flex justify-end pt-4">
+            <button type="submit" class="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg shadow-md font-medium transition-colors duration-200">
+                Guardar cambios
+            </button>
+        </div>
     }
-
-    <div class="form-group">
-        @Html.Label("Nueva Foto de Perfil")
-        <input type="file" name="FotoPerfil" class="form-control" />
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(m => m.TipoUsuario)
-        @Html.DropDownListFor(m => m.TipoUsuario, new SelectList(new[] { "Usuario", "admin", "superAdmin" }, Model.TipoUsuario), new { @class = "form-control" })
-    </div>
-
-    <button type="submit" class="btn btn-primary mt-3">Guardar cambios</button>
-}
+</div>

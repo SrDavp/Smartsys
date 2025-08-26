@@ -3,64 +3,71 @@
     ViewBag.Title = "Administrar Usuarios";
 }
 
-<h2 class="text-2xl font-bold mb-4">Usuarios registrados</h2>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
-<p>
-    <a class="btn btn-success" href="@Url.Action("Crear", "SuperAdmin")">Crear nuevo usuario</a>
-</p>
-<form method="get" action="@Url.Action("Index", "SuperAdmin")" class="mb-4">
-    <input type="text" name="busqueda" value="@ViewBag.Busqueda" placeholder="Buscar usuarios..."
-           class="border rounded px-3 py-2 w-full sm:w-1/2" />
-    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded mt-2 sm:mt-0 sm:ml-2">Buscar</button>
-</form>
+    <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Usuarios Registrados</h2>
 
+    <div class="flex flex-col sm:flex-row sm:justify-between mb-6 gap-4">
+        <a class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg shadow-md transition-colors duration-200 font-medium"
+           href="@Url.Action("Crear", "SuperAdmin")">Crear nuevo usuario</a>
 
+        <form method="get" action="@Url.Action("Index", "SuperAdmin")" class="flex flex-col sm:flex-row gap-2 sm:items-center">
+            <input type="text" name="busqueda" value="@ViewBag.Busqueda" placeholder="Buscar usuarios..."
+                   class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all w-full sm:w-64" />
+            <button type="submit" class="px-4 py-2  text-gray-300 rounded-lg shadow-md transition-colors duration-200">Buscar</button>
+        </form>
+    </div>
 
-<table class="table mt-4">
-    <thead>
-        <tr>
-            <th>Foto</th>
-            <th>Nombre</th>
-            <th>Correo Electronico</th>
-            <th>Tipo de Usuario</th>
-            <th>Publicaciones</th>
-            <th>Plataformas a las que pertenece</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var u in Model)
-        {
-            var fotoBase64 = u.Foto_perfil != null
-                ? "data:image/png;base64," + Convert.ToBase64String(u.Foto_perfil)
-                : null;
-            <tr>
-                <td>
-                    @if (fotoBase64 != null)
-                    {
-                        <img src="@fotoBase64" class="w-10 h-10 rounded-full object-cover border" />
-                    }
-                    else
-                    {
-                        <span class="text-gray-400">Sin imagen</span>
-                    }
-                </td>
-                <td>@u.Nombre @u.Apellido</td>
-                <td>@u.CorreoElectronico</td>
-                <td>@u.TipoUsuario</td>
-                <td>
-                    <a class="btn btn-sm btn-secondary" href="@Url.Action("PublicacionesUsuario", "SuperAdmin", new { id = u.IdUsuario })">Ver</a>
-
-                </td>
-                <td>
-                    <a class="btn btn-sm btn-info" href="@Url.Action("PlataformasUsuario", "SuperAdmin", new { id = u.IdUsuario })">Ver</a>
-                </td>
-                <td>
-                    <a class="btn btn-sm btn-primary" href="@Url.Action("Editar", new { id = u.IdUsuario })">Editar</a>
-                    <a class="btn btn-sm btn-danger" href="@Url.Action("Eliminar", new { id = u.IdUsuario })" onclick="return confirm('¿Eliminar usuario?')">Eliminar</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+            <thead class="bg-gray-100 dark:bg-gray-700">
+                <tr>
+                    <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 dark:text-gray-300">Foto</th>
+                    <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 dark:text-gray-300">Nombre</th>
+                    <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 dark:text-gray-300">Correo</th>
+                    <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 dark:text-gray-300">Tipo</th>
+                    <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 dark:text-gray-300">Publicaciones</th>
+                    <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 dark:text-gray-300">Plataformas</th>
+                    <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 dark:text-gray-300">Acciones</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                @foreach (var u in Model)
+                {
+                    var fotoBase64 = u.Foto_perfil != null
+                        ? "data:image/png;base64," + Convert.ToBase64String(u.Foto_perfil)
+                        : null;
+                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                        <td class="px-4 py-2">
+                            @if (fotoBase64 != null)
+                            {
+                                <img src="@fotoBase64" class="w-10 h-10 rounded-full object-cover border" />
+                            }
+                            else
+                            {
+                                <span class="text-gray-400 dark:text-gray-500 text-sm">Sin imagen</span>
+                            }
+                        </td>
+                        <td class="px-4 py-2">@u.Nombre @u.Apellido</td>
+                        <td class="px-4 py-2">@u.CorreoElectronico</td>
+                        <td class="px-4 py-2">@u.TipoUsuario</td>
+                        <td class="px-4 py-2">
+                            <a class="px-2 py-1 bg-purple-500 text-gray-400 text-sm rounded-md"
+                               href="@Url.Action("PublicacionesUsuario", "SuperAdmin", new { id = u.IdUsuario })">Ver</a>
+                        </td>
+                        <td class="px-4 py-2">
+                            <a class="px-2 py-1 bg-purple-500 text-gray-400 text-sm rounded-md"
+                               href="@Url.Action("PlataformasUsuario", "SuperAdmin", new { id = u.IdUsuario })">Ver</a>
+                        </td>
+                        <td class="px-4 py-2 space-x-2">
+                            <a class="px-2 py-1 bg-yellow-500 hover:bg-yellow-600 text-white text-sm rounded-md transition-colors duration-200"
+                               href="@Url.Action("Editar", new { id = u.IdUsuario })">Editar</a>
+                            <a class="px-2 py-1 bg-red-500 hover:bg-red-600 text-white text-sm rounded-md transition-colors duration-200"
+                               href="@Url.Action("Eliminar", new { id = u.IdUsuario })" onclick="return confirm('¿Eliminar usuario?')">Eliminar</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

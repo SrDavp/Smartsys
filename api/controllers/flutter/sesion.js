@@ -8,18 +8,18 @@ const upload = multer({ storage: multer.memoryStorage() });
 const crypto = require("crypto");
 
 //<------- Inicio Codigo unico chat -------->
-function generarCodigoPersonalizado(nombre, apellido) {
-  const iniciales = (
-    (nombre?.[0] || "") + (apellido?.[0] || "")
-  ).toUpperCase();
+function generarCodigoUnico(nombre, apellido) {
+  let iniciales = "";
+  if (nombre && nombre.length > 0) iniciales += nombre[0];
+  if (apellido && apellido.length > 0) iniciales += apellido[0];
+  iniciales = iniciales.toUpperCase();
 
-  // 2 bytes = 4 caracteres hex (más corto)
-  const randomCode = crypto.randomBytes(2).toString("hex").toUpperCase();
+  // Generar 2 bytes aleatorios en HEX (ej: 3F7C)
+  const randomBytes = crypto.randomBytes(2).toString("hex").toUpperCase();
 
-  return `${iniciales}${randomCode}`; 
+  return iniciales + randomBytes; // Ejemplo: ER3F7C
 }
 //<------- Fin Codigo unico chat -------->
-
 // <---------- inicio login -------------->
 async function login(req, res) {
   try {
@@ -83,7 +83,7 @@ async function registro(req, res) {
       correoElectronico,
       contrasena,
       telefono = null,
-      tipoUsuario = 'Usuario',
+      tipoUsuario = "Usuario",
       foto_perfil = null,
       biografia = null
     } = req.body;
@@ -91,30 +91,42 @@ async function registro(req, res) {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(contrasena, salt);
 
+    // ✅ Generar CodigoUnico
+    const codigoUnico = generarCodigoUnico(nombre, apellido);
+
     const pool = await poolPromise;
     await pool.request()
-      .input('nombre', sql.NVarChar, nombre)
-      .input('apellido', sql.NVarChar, apellido)
-      .input('correoElectronico', sql.NVarChar, correoElectronico)
-      .input('contrasena', sql.NVarChar, hashedPassword)
-      .input('telefono', sql.NVarChar, telefono)
-      .input('tipoUsuario', sql.NVarChar, tipoUsuario)
-      .input('foto_perfil', sql.VarBinary, foto_perfil)
-      .input('biografia', sql.NVarChar, biografia)
+      .input("nombre", sql.NVarChar, nombre)
+      .input("apellido", sql.NVarChar, apellido)
+      .input("correoElectronico", sql.NVarChar, correoElectronico)
+      .input("contrasena", sql.NVarChar, hashedPassword)
+      .input("telefono", sql.NVarChar, telefono)
+      .input("tipoUsuario", sql.NVarChar, tipoUsuario)
+      .input("foto_perfil", sql.VarBinary, foto_perfil)
+      .input("biografia", sql.NVarChar, biografia)
+      .input("codigoUnico", sql.NVarChar, codigoUnico) // << agregado
       .query(`INSERT INTO Usuarios 
-        (nombre, apellido, correoElectronico, contrasena, telefono, tipoUsuario, foto_perfil, biografia)
-        VALUES (@nombre, @apellido, @correoElectronico, @contrasena, @telefono, @tipoUsuario, @foto_perfil, @biografia)`);
+        (nombre, apellido, correoElectronico, contrasena, telefono, tipoUsuario, foto_perfil, biografia, codigoUnico)
+        VALUES (@nombre, @apellido, @correoElectronico, @contrasena, @telefono, @tipoUsuario, @foto_perfil, @biografia, @codigoUnico)`);
 
     res.status(201).json({
       ok: true,
-      mensaje: 'Usuario insertado en la bd',
-      data: req.body,
+      mensaje: "Usuario insertado en la bd",
+      data: {
+        nombre,
+        apellido,
+        correoElectronico,
+        telefono,
+        tipoUsuario,
+        biografia,
+        codigoUnico // ✅ devolvemos el código único generado
+      },
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({
       ok: false,
-      mensaje: 'Error al insertar usuario',
+      mensaje: "Error al insertar usuario",
     });
   }
 }
@@ -489,6 +501,90 @@ async function misPlataformas(req, res) {
   }
 }
 // <---------- fin mis Plataformas con búsqueda ---------->
+// <---------- inicio publicaciones ---------->
+
+// Listado de publicaciones por plataforma
+async function publicacionesPorPlataforma(req, res) {
+  try {
+    const { idPlataforma } = req.params; // viene de la URL
+
+    if (!idPlataforma) {
+      return res.status(400).json({
+        ok: false,
+        mensaje: "Falta el id de la plataforma"
+      });
+    }
+
+    const pool = await poolPromise;
+
+    const consulta = await pool.request()
+      .input('idPlataforma', sql.BigInt, idPlataforma)
+      .query(`
+        SELECT pub.*
+        FROM Publicaciones pub
+        INNER JOIN plataforma_publicacion rel
+          ON pub.idPublicacion = rel.idPublicacion2
+        WHERE rel.idPlataforma2 = @idPlataforma
+          AND pub.estado = 'Activo'
+        ORDER BY pub.fechaCreacion DESC
+      `);
+
+    res.status(200).json({
+      ok: true,
+      mensaje: "Publicaciones encontradas",
+      data: consulta.recordset,
+      total: consulta.recordset.length
+    });
+
+  } catch (error) {
+    console.error("Error en publicacionesPorPlataforma:", error);
+    res.status(500).json({
+      ok: false,
+      mensaje: "Error al obtener publicaciones por plataforma"
+    });
+  }
+}
+
+// Ver detalles de una publicación
+async function verPublicacion(req, res) {
+  try {
+    const { idPublicacion } = req.params;
+
+    if (!idPublicacion) {
+      return res.status(400).json({
+        ok: false,
+        mensaje: "Falta el id de la publicación"
+      });
+    }
+
+    const pool = await poolPromise;
+    const consulta = await pool.request()
+      .input('idPublicacion', sql.BigInt, idPublicacion)
+      .query(`SELECT * FROM Publicaciones WHERE idPublicacion = @idPublicacion`);
+
+    if (consulta.recordset.length === 0) {
+      return res.status(404).json({
+        ok: false,
+        mensaje: "Publicación no encontrada"
+      });
+    }
+
+    res.status(200).json({
+      ok: true,
+      mensaje: "Publicación encontrada",
+      data: consulta.recordset[0]
+    });
+
+  } catch (error) {
+    console.error("Error en verPublicacion:", error);
+    res.status(500).json({
+      ok: false,
+      mensaje: "Error al obtener publicación"
+    });
+  }
+}
+
+// <---------- fin publicaciones ---------->
 module.exports = {
   registro,
   login,
@@ -498,5 +594,7 @@ module.exports = {
   explorarActivas,
   unirsePublico,
   unirsePrivado,
-  misPlataformas
+  misPlataformas,
+  publicacionesPorPlataforma,
+  verPublicacion
 };

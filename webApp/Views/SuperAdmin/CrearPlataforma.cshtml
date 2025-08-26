@@ -2,38 +2,48 @@
 @{
     ViewBag.Title = "Crear Plataforma";
 }
-<h2 class="text-2xl font-bold mb-4">Crear Nueva Plataforma</h2>
-@using (Html.BeginForm("CrearPlataforma", "SuperAdmin", FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
-    <div class="form-group">
-        @Html.LabelFor(m => m.nombrePlataforma)
-        @Html.TextBoxFor(m => m.nombrePlataforma, new { @class = "form-control" })
-    </div>
 
-    <div class="form-group">
-        @Html.LabelFor(m => m.descripcionPlataforma)
-        @Html.TextAreaFor(m => m.descripcionPlataforma, new { @class = "form-control" })
-    </div>
+<div class="max-w-3xl mx-auto p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg">
+    <h2 class="text-3xl font-extrabold mb-6 text-purple-700 dark:text-purple-400">Crear Nueva Plataforma</h2>
 
-    <div class="form-group">
-        @Html.LabelFor(m => m.capacidadMiembros_plataforma)
-        @Html.TextBoxFor(m => m.capacidadMiembros_plataforma, new { @class = "form-control", type = "number" })
-    </div>
+    @using (Html.BeginForm("CrearPlataforma", "SuperAdmin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="mb-4">
+            @Html.LabelFor(m => m.nombrePlataforma, new { @class = "block text-sm font-medium text-gray-700 dark:text-gray-300" })
+            @Html.TextBoxFor(m => m.nombrePlataforma, new { @class = "mt-1 block w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-400 focus:border-purple-500 outline-none dark:bg-gray-700 dark:text-white" })
+        </div>
 
-    <div class="form-group">
-        @Html.LabelFor(m => m.privacidadPlataforma)
-        @Html.DropDownListFor(m => m.privacidadPlataforma, new SelectList(new[] { "Privado", "Público" }), new { @class = "form-control" })
-    </div>
+        <div class="mb-4">
+            @Html.LabelFor(m => m.descripcionPlataforma, new { @class = "block text-sm font-medium text-gray-700 dark:text-gray-300" })
+            @Html.TextAreaFor(m => m.descripcionPlataforma, new { @class = "mt-1 block w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-400 focus:border-purple-500 outline-none dark:bg-gray-700 dark:text-white", rows = 4 })
+        </div>
 
-    <div class="form-group">
-        @Html.Label("Icono")
-        <input type="file" name="IconoFile" class="form-control" />
-    </div>
+        <div class="mb-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+                @Html.LabelFor(m => m.capacidadMiembros_plataforma, new { @class = "block text-sm font-medium text-gray-700 dark:text-gray-300" })
+                @Html.TextBoxFor(m => m.capacidadMiembros_plataforma, new { @type = "number", @class = "mt-1 block w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-400 focus:border-purple-500 outline-none dark:bg-gray-700 dark:text-white" })
+            </div>
 
-    <div class="form-group">
-        @Html.Label("Fondo")
-        <input type="file" name="FondoFile" class="form-control" />
-    </div>
+            <div>
+                @Html.LabelFor(m => m.privacidadPlataforma, new { @class = "block text-sm font-medium text-gray-700 dark:text-gray-300" })
+                @Html.DropDownListFor(m => m.privacidadPlataforma, new SelectList(new[] { "Privado", "Público" }),
+                    new { @class = "mt-1 block w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-400 focus:border-purple-500 outline-none dark:bg-gray-700 dark:text-white" })
+            </div>
+        </div>
 
-    <button type="submit" class="btn btn-success mt-3">Crear Plataforma</button>
-}
+        <div class="mb-4">
+            @Html.Label("Icono", new { @class = "block text-sm font-medium text-gray-700 dark:text-gray-300" })
+            <input type="file" name="IconoFile" class="mt-1 block w-full text-sm text-gray-700 dark:text-gray-200 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-purple-500 file:text-white hover:file:bg-purple-600 transition-colors duration-200" />
+        </div>
+
+        <div class="mb-4">
+            @Html.Label("Fondo", new { @class = "block text-sm font-medium text-gray-700 dark:text-gray-300" })
+            <input type="file" name="FondoFile" class="mt-1 block w-full text-sm text-gray-700 dark:text-gray-200 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-purple-500 file:text-white hover:file:bg-purple-600 transition-colors duration-200" />
+        </div>
+
+        <button type="submit"
+                class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg shadow-md transition-colors duration-200 font-medium">
+            Crear Plataforma
+        </button>
+    }
+</div>
