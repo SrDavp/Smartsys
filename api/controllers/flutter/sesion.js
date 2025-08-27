@@ -16,16 +16,21 @@ async function recuperar(req, res) {
     const pool = await poolPromise;
     const result = await pool.request()
       .input('correoElectronico', sql.NVarChar, correoElectronico)
-      .query(`SELECT idUsuario, nombre, apellido
+      .query(`SELECT idUsuario, nombre, apellido, google
                 FROM Usuarios 
                 WHERE correoElectronico = @correoElectronico`);
 
-    if (result.recordset.length === 0) {
+    const usuario = result.recordset[0];
+    console.log(usuario)
+    if (usuario.google === true) {
+      return res.status(404).json({ success: false, message: "Un correo asociado con Google no puede cambiar su contraseña" });
+    }
+    if (result.recordset.length === 0 || usuario.google === 1) {
       return res.status(404).json({ success: false, message: "El correo no está registrado" });
 
     } else {
       const codigo = generarCodigo();
-      const usuario = result.recordset[0]; // Obtenemos la primera fila (debería ser única por correo)
+      const usuario = result.recordset[0];
 
       const nombre = usuario.nombre;
       const apellido = usuario.apellido;
