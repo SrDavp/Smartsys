@@ -21,4 +21,11 @@ router.get("/misPlataformas", sesion.misPlataformas);
 router.get("/publicacionesPorPlataforma/:idPlataforma", sesion.publicacionesPorPlataforma);
 router.get("/verPublicacion", sesion.verPublicacion);
 
+
+router.post("/recuperar", sesion.recuperar);
+router.post("/reset-password", sesion.resetpassword);
+
+router.post("/users/google", sesion.google);
+
+
 module.exports = router

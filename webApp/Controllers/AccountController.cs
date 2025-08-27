@@ -93,6 +93,32 @@ namespace SmartSys.Controllers
         }
 
 
+        public ActionResult RestablecerContraseña()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult RestablecerContraseña(Usuario u)
+        {
+            if (ModelState.IsValid)
+            {
+                // Hash de la contraseña
+                u.Contrasena = BCrypt.Net.BCrypt.HashPassword(u.Contrasena);
+
+                if (string.IsNullOrEmpty(u.TipoUsuario))
+                {
+                    u.TipoUsuario = "Usuario";
+                }
+
+                db.Usuario.Add(u);
+                db.SaveChanges();
+                return RedirectToAction("Login");
+            }
+
+
+            return View(u);
+        }
 
         // GET: Login
         public ActionResult Login()

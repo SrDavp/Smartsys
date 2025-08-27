@@ -4,6 +4,7 @@ const { Server } = require('socket.io');
 const sql = require('mssql');
 const cors = require('cors');
 const axios = require('axios');
+const path = require("path")
 
 const app = express();
 app.use(cors());
@@ -28,6 +29,8 @@ const rutas = require('./routes/flutter/sesionf');
 const chat = require('./routes/flutter/chat');
 const apiPython = require('./routes/python/PythonApi');
 const aspapi = require('./routes/AspApi');
+
+app.use('/img', express.static(path.join(__dirname, 'content/imgs')));
 
 app.use('/', rutas);
 app.use('/', chat);

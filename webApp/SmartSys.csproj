@@ -185,6 +185,8 @@
     <Content Include="Content\css\dark.css" />
     <Content Include="Content\css\traductor.css" />
     <Content Include="Content\input.css" />
+    <Content Include="Content\js\actualizar.js" />
+    <Content Include="Content\js\restablecer.js" />
     <Content Include="Content\js\dark.js" />
     <Content Include="Content\js\traductor.js" />
     <Content Include="Content\tailwind.css" />
@@ -252,6 +254,7 @@
     <Content Include="Views\Chat\Grupos.cshtml" />
     <Content Include="Views\Chat\ChatMensajes.cshtml" />
     <Content Include="Views\Chat\ChatGrupo.cshtml" />
+    <Content Include="Views\Account\RestablecerContraseña.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
