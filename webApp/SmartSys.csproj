@@ -185,6 +185,7 @@
     <Content Include="Content\css\dark.css" />
     <Content Include="Content\css\traductor.css" />
     <Content Include="Content\input.css" />
+    <Content Include="Content\js\oauth.js" />
     <Content Include="Content\js\actualizar.js" />
     <Content Include="Content\js\restablecer.js" />
     <Content Include="Content\js\dark.js" />

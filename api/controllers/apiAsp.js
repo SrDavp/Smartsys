@@ -3,6 +3,9 @@ const { poolPromise, sql } = require("../db");
 const transporter = require('../correo');
 const bcrypt = require('bcrypt');
 const path = require('path');
+const { OAuth2Client } = require('google-auth-library');
+const client = new OAuth2Client("850012171335-055q5ld8dc76qlb24nvaitg6opkf8b9v.apps.googleusercontent.com");
+const crypto = require("crypto");
 
 // <---------- Generar codigo unico -------------->
 function generarCodigo() {
@@ -244,6 +247,133 @@ function generarTemplateCorreo(codigo, nombre, apellido) {
     `;
 }
 
+async function googleauth(req, res) {
+    const { token } = req.body;
+    console.log("Token recibido en backend:", token);
+
+    try {
+        const ticket = await client.verifyIdToken({
+            idToken: token,
+            audience: "850012171335-055q5ld8dc76qlb24nvaitg6opkf8b9v.apps.googleusercontent.com",
+        });
+
+        const payload = ticket.getPayload();
+        console.log("Payload:", payload);
+
+        const { email, given_name, family_name, picture } = payload;
+
+        const nombre = given_name || "Desconocido";
+        const apellido = family_name || "";
+
+        const pool = await poolPromise;
+        const consulta = await pool.request()
+            .input('correoElectronico', sql.NVarChar, email)
+            .query(`SELECT * FROM Usuarios WHERE correoElectronico = @correoElectronico`);
+
+        if (consulta.recordset.length !== 0) {
+
+            const usuario = consulta.recordset[0];
+            console.log(consulta)
+            if (usuario.google === true) {
+
+                return res.status(201).json({
+                    success: true,
+                    message: "Inicio de sesión con Google",
+                    user: usuario,
+                });
+            } else {
+                // Usuario existe pero no es Google
+                return res.status(400).json({
+                    success: false,
+                    message: "El usuario está registrado pero no con Google",
+                });
+            }
+        } else {
+
+            /* 
+            
+            Payload: {
+                iss: 'https://accounts.google.com',
+                azp: '850012171335-055q5ld8dc76qlb24nvaitg6opkf8b9v.apps.googleusercontent.com',
+                aud: '850012171335-055q5ld8dc76qlb24nvaitg6opkf8b9v.apps.googleusercontent.com',
+                sub: '117393349556950911597',
+                email: 'daniel.valencia.sv2@gmail.com',
+                email_verified: true,
+                nbf: 1756301231,
+                name: 'Daniel',
+                picture: 'https://lh3.googleusercontent.com/a/ACg8ocJdMTkbgU9_yKUxtbD87OzSiOVlKv0QEX3sioyqeYcluctXyfpx=s96-c',
+                given_name: 'Daniel',
+                iat: 1756301531,
+                exp: 1756305131,
+                jti: 'fc40b58bad7df306aeac417300de4831c474155a'
+                }
+            
+            */
+
+
+            // Crear nuevo usuario Google
+            const codigo = generarCodigo();
+            const salt = await bcrypt.genSalt(10);
+            const hashedcodigo = await bcrypt.hash(codigo, salt);
+
+            const telefono = null;
+            const tipoUsuario = "Usuario";
+            const foto_perfil = null;
+            const biografia = null;
+            const codigoUnico = generarCodigoUnico(nombre, apellido);
+            const google = 1;
+
+            await pool.request()
+                .input("nombre", sql.NVarChar, nombre)
+                .input("apellido", sql.NVarChar, apellido)
+                .input("correoElectronico", sql.NVarChar, email)
+                .input("contrasena", sql.NVarChar, hashedcodigo)
+                .input("telefono", sql.NVarChar, telefono)
+                .input("tipoUsuario", sql.NVarChar, tipoUsuario)
+                .input("foto_perfil", sql.VarBinary, foto_perfil)
+                .input("biografia", sql.NVarChar, biografia)
+                .input("codigoUnico", sql.NVarChar, codigoUnico)
+                .input("google", sql.Bit, google)
+                .query(`INSERT INTO Usuarios 
+                  (nombre, apellido, correoElectronico, contrasena, telefono, tipoUsuario, foto_perfil, biografia, codigoUnico, google)
+                  VALUES (@nombre, @apellido, @correoElectronico, @contrasena, @telefono, @tipoUsuario, @foto_perfil, @biografia, @codigoUnico, @google)`);
+
+            return res.status(201).json({
+                success: true,
+                message: "Usuario insertado en la BD",
+                user: {
+                    nombre,
+                    apellido,
+                    correoElectronico: email,
+                    telefono,
+                    tipoUsuario,
+                    biografia,
+                    codigoUnico,
+                    google
+                },
+            });
+        }
+    } catch (exception) {
+        console.log("Error al verificar token:", exception);
+        res.status(400).json({ success: false, message: "Token inválido" });
+    }
+}
+
+//<------- Inicio Codigo unico chat -------->
+function generarCodigoUnico(nombre, apellido) {
+    let iniciales = "";
+    if (nombre && nombre.length > 0) iniciales += nombre[0];
+    if (apellido && apellido.length > 0) iniciales += apellido[0];
+    iniciales = iniciales.toUpperCase();
+
+    // Generar 2 bytes aleatorios en HEX (ej: 3F7C)
+    const randomBytes = crypto.randomBytes(2).toString("hex").toUpperCase();
+
+    return iniciales + randomBytes; // Ejemplo: ER3F7C
+}
+//<------- Fin Codigo unico chat -------->
+
+
 async function actualizarcontrasenaperfil(req, res) {
     try {
         const { correo, contrasenaActual, contrasenaNueva } = req.body;
@@ -373,5 +503,6 @@ module.exports = {
     DescOrg,
     restablecer,
     actualizarContrasena,
+    googleauth,
     actualizarcontrasenaperfil
 };

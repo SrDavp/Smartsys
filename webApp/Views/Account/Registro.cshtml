@@ -225,6 +225,16 @@
                     </div>
                 </button>
             }
+
+            <div id="googleSignInButton" class="mt-6">
+                <button type="button"
+                        onclick="handleGoogleSignIn()"
+                        class="w-full flex items-center justify-center bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 font-semibold py-3 px-4 rounded-xl shadow-md transition-all duration-200 transform hover:scale-[1.02]">
+                    <i class="fa-brands fa-google text-red-500 mr-3 text-lg"></i>
+                    <span>Registrarse con Google</span>
+                </button>
+            </div>
+
         </div>
 
         <!-- Link para Login -->
@@ -236,6 +246,7 @@
                 </a>
             </p>
         </div>
+
     </div>
 </div>
 
@@ -247,6 +258,9 @@
     </div>
 </div>
 
+
+<script src="~/Content/js/oauth.js"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         // Funcionalidad para mostrar/ocultar contraseña

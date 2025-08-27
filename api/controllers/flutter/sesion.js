@@ -95,6 +95,7 @@ async function resetpassword(req, res) {
 }
 //<------------- CAMBIAR CONTRASEÑA --------------------->
 
+//<--------------GOOGLE INICIO Y REGISTRO ------------------->
 async function google(req, res) {
   try {
     const { email, nombre, apellido } = req.body;
@@ -172,7 +173,7 @@ async function google(req, res) {
     return res.status(500).json({ success: false, message: 'Error en el servidor', error: error.message });
   }
 }
-
+//<--------------GOOGLE INICIO Y REGISTRO ------------------->
 
 
 

@@ -8,4 +8,6 @@ router.post("/auth/restablecer/", Asp.restablecer)
 router.post("/actualizarcontrasena", Asp.actualizarContrasena)
 router.post("/actualizarcontrasenaperfil", Asp.actualizarcontrasenaperfil)
 
+router.post("/api/auth/google", Asp.googleauth)
+
 module.exports = router
