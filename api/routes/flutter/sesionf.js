@@ -26,6 +26,6 @@ router.post("/recuperar", sesion.recuperar);
 router.post("/reset-password", sesion.resetpassword);
 
 router.post("/users/google", sesion.google);
-
+router.get("/confirmar/:token", sesion.confirmarRegistro);
 
 module.exports = router

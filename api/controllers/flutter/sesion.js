@@ -12,6 +12,7 @@ const crypto = require("crypto");
 //<------------- RECUPERAR CUENTA ---------------------->
 async function recuperar(req, res) {
   const { correoElectronico } = req.body;
+  console.log(req.body)
   try {
     const pool = await poolPromise;
     const result = await pool.request()
@@ -22,12 +23,11 @@ async function recuperar(req, res) {
 
     const usuario = result.recordset[0];
     console.log(usuario)
-    if (usuario.google === true) {
-      return res.status(404).json({ success: false, message: "Un correo asociado con Google no puede cambiar su contraseña" });
+    if (result.recordset.length === 0) {
+      return res.status(404).json({ success: false, message: "El correo no esta registrado" });
     }
-    if (result.recordset.length === 0 || usuario.google === 1) {
-      return res.status(404).json({ success: false, message: "El correo no está registrado" });
-
+    if (result.recordset.length != 0 && usuario.google == 1) {
+      return res.status(404).json({ success: false, message: "Un correo asociado con Google no puede cambiar su contraseña" });
     } else {
       const codigo = generarCodigo();
       const usuario = result.recordset[0];
@@ -43,11 +43,6 @@ async function recuperar(req, res) {
         to: correoElectronico,
         subject: "🔐 Código de Recuperación - SmartSys",
         html: generarTemplateCorreo(codigo, nombre, apellido),
-        attachments: [{
-          filename: 'logo-dark.png',
-          path: path.join(__dirname, '../../content/imgs/logo-dark.png'),
-          cid: 'logo'
-        }]
       };
 
       transporter.sendMail(mailOptions, (error, info) => {
@@ -201,11 +196,16 @@ async function login(req, res) {
       .query(`SELECT idUsuario, nombre, apellido, correoElectronico, contrasena, telefono, tipoUsuario, estadoCuenta, fechaCreacion, foto_perfil, biografia 
               FROM Usuarios 
               WHERE correoElectronico = @correoElectronico`);
-
+    const estado = consulta.recordset[0]
     if (consulta.recordset.length === 0) {
       return res.status(401).json({
         ok: false,
         mensaje: 'Usuario no encontrado',
+      });
+    } else if (estado.estadoCuenta === "Pendiente") {
+      return res.status(401).json({
+        ok: false,
+        mensaje: 'Usuario no activo, porfavor verifique su cuenta en su correo electronico',
       });
     } else {
       const usuario = consulta.recordset[0];
@@ -259,41 +259,78 @@ async function registro(req, res) {
       google = 0
     } = req.body;
 
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(contrasena, salt);
-
-    // ✅ Generar CodigoUnico
-    const codigoUnico = generarCodigoUnico(nombre, apellido);
+    console.log(correoElectronico)
 
     const pool = await poolPromise;
-    await pool.request()
-      .input("nombre", sql.NVarChar, nombre)
-      .input("apellido", sql.NVarChar, apellido)
-      .input("correoElectronico", sql.NVarChar, correoElectronico)
-      .input("contrasena", sql.NVarChar, hashedPassword)
-      .input("telefono", sql.NVarChar, telefono)
-      .input("tipoUsuario", sql.NVarChar, tipoUsuario)
-      .input("foto_perfil", sql.VarBinary, foto_perfil)
-      .input("biografia", sql.NVarChar, biografia)
-      .input("codigoUnico", sql.NVarChar, codigoUnico)
-      .input("google", sql.NVarChar, google)
-      .query(`INSERT INTO Usuarios 
+    const result = await pool.request()
+      .input('correoElectronico', sql.NVarChar, correoElectronico)
+      .query(`SELECT idUsuario, nombre, apellido, correoElectronico, contrasena, telefono, tipoUsuario, estadoCuenta, fechaCreacion, foto_perfil, biografia 
+              FROM Usuarios 
+              WHERE correoElectronico = @correoElectronico`);
+
+    if (result.recordset.length > 0) {
+      res.status(500).json({
+        ok: false,
+        mensaje: "El correo ya esta registrado",
+      });
+    } else {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(contrasena, salt);
+
+
+      const codigoUnico = generarCodigoUnico(nombre, apellido);
+      const mailOptions = {
+        from: {
+          name: 'SmartSys - Sistema de Gestión',
+          address: 'smartsyscj@gmail.com'
+        },
+        to: correoElectronico,
+        subject: "¡Bienvenido a SmartSys!",
+        html: generarTemplateCodigo(nombre, apellido, codigoUnico),
+      };
+
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.error(error);
+          res.status(500).json({
+            ok: false,
+            mensaje: "Error al insertar usuario",
+          });
+        } else {
+          console.log("Correo enviado:", info.response);
+        }
+      });
+
+      const pool = await poolPromise;
+      await pool.request()
+        .input("nombre", sql.NVarChar, nombre)
+        .input("apellido", sql.NVarChar, apellido)
+        .input("correoElectronico", sql.NVarChar, correoElectronico)
+        .input("contrasena", sql.NVarChar, hashedPassword)
+        .input("telefono", sql.NVarChar, telefono)
+        .input("tipoUsuario", sql.NVarChar, tipoUsuario)
+        .input("foto_perfil", sql.VarBinary, foto_perfil)
+        .input("biografia", sql.NVarChar, biografia)
+        .input("codigoUnico", sql.NVarChar, codigoUnico)
+        .input("google", sql.Bit, google)
+        .query(`INSERT INTO Usuarios 
         (nombre, apellido, correoElectronico, contrasena, telefono, tipoUsuario, foto_perfil, biografia, codigoUnico, google)
         VALUES (@nombre, @apellido, @correoElectronico, @contrasena, @telefono, @tipoUsuario, @foto_perfil, @biografia, @codigoUnico, @google)`);
 
-    res.status(201).json({
-      ok: true,
-      mensaje: "Usuario insertado en la bd",
-      data: {
-        nombre,
-        apellido,
-        correoElectronico,
-        telefono,
-        tipoUsuario,
-        biografia,
-        codigoUnico // ✅ devolvemos el código único generado
-      },
-    });
+      res.status(201).json({
+        ok: true,
+        mensaje: "Porfavor confirme su cuenta en su correo electronico",
+        data: {
+          nombre,
+          apellido,
+          correoElectronico,
+          telefono,
+          tipoUsuario,
+          biografia,
+          codigoUnico
+        },
+      });
+    }
   } catch (error) {
     console.error(error);
     res.status(500).json({
@@ -303,6 +340,7 @@ async function registro(req, res) {
   }
 }
 // <---------- fin registro -------->
+
 // <---------- inicio actualizar perfil imagen -------->//
 async function actualizarPerfilImg(req, res) {
   try {
@@ -767,6 +805,322 @@ function generarCodigo() {
 }
 // <---------- Generar codigo unico -------------->
 
+// <------------ CONFIRMAR REGISTRO------------------>   
+async function confirmarRegistro(req, res) {
+  const token = req.params.token;
+  console.log(token)
+  const pool = await poolPromise;
+
+  try {
+    const result = await pool.request()
+      .input("codigoUnico", sql.NVarChar, token)
+      .query(`
+        UPDATE Usuarios
+        SET estadoCuenta = 'Activo'
+        WHERE codigoUnico = @codigoUnico
+      `);
+
+    console.log(result)
+
+    if (result.rowsAffected[0] > 0) {
+      return res.send("<h1>Bienvenido pajarito</h1>");
+    } else {
+      return res.send("<h1>Código no válido pajarito</h1>");
+    }
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send("Error al confirmar el registro");
+  }
+}
+// <------------ CONFIRMAR REGISTRO------------------>   
+
+// <------------------ TEMPLATE VERIFICAR CORREO --------------------->
+function generarTemplateCodigo(nombre, apellido, token) {
+  const enlaceConfirmacion = `http://localhost:3000/confirmar/${token}`;
+
+  return `
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Confirma tu Registro - SmartSys</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                line-height: 1.6;
+                color: #333333;
+                background-color: #f4f4f4;
+            }
+            
+            .container {
+                max-width: 600px;
+                margin: 0 auto;
+                background-color: #ffffff;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+                border-radius: 10px;
+                overflow: hidden;
+            }
+            
+            .header {
+                background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+                padding: 30px 20px;
+                text-align: center;
+                color: white;
+            }
+            
+            .logo {
+                max-width: 150px;
+                height: auto;
+                margin-bottom: 15px;
+                border-radius: 8px;
+            }
+            
+            .header h1 {
+                font-size: 28px;
+                font-weight: 600;
+                margin-bottom: 5px;
+            }
+            
+            .header p {
+                font-size: 16px;
+                opacity: 0.9;
+            }
+            
+            .content {
+                padding: 40px 30px;
+                text-align: center;
+            }
+            
+            .greeting {
+                font-size: 18px;
+                color: #555555;
+                margin-bottom: 25px;
+            }
+            
+            .message {
+                font-size: 16px;
+                color: #666666;
+                margin-bottom: 30px;
+                line-height: 1.7;
+            }
+            
+            .btn-container {
+                margin: 30px 0;
+                text-align: center;
+            }
+            
+            .btn-confirmar {
+                display: inline-block;
+                background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+                color: white;
+                text-decoration: none;
+                padding: 15px 35px;
+                border-radius: 50px;
+                font-size: 18px;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);
+                transition: all 0.3s ease;
+                border: none;
+                cursor: pointer;
+            }
+            
+            .btn-confirmar:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 12px 35px rgba(40, 167, 69, 0.4);
+                background: linear-gradient(135deg, #34ce57 0%, #28d8a3 100%);
+            }
+            
+            .alternative-link {
+                margin: 20px 0;
+                padding: 15px;
+                background: #f8f9fa;
+                border-radius: 8px;
+                border: 1px solid #dee2e6;
+            }
+            
+            .alternative-link p {
+                font-size: 14px;
+                color: #6c757d;
+                margin-bottom: 10px;
+            }
+            
+            .link-text {
+                font-size: 12px;
+                color: #007bff;
+                word-break: break-all;
+                background: white;
+                padding: 10px;
+                border-radius: 4px;
+                border: 1px solid #e9ecef;
+                font-family: monospace;
+            }
+            
+            .instructions {
+                background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+                padding: 20px;
+                border-radius: 8px;
+                border-left: 4px solid #28a745;
+                margin: 25px 0;
+                text-align: left;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            }
+            
+            .instructions h3 {
+                color: #2c3e50;
+                font-size: 16px;
+                margin-bottom: 10px;
+            }
+            
+            .instructions ul {
+                list-style: none;
+                padding: 0;
+            }
+            
+            .instructions li {
+                padding: 5px 0;
+                color: #555555;
+                position: relative;
+                padding-left: 20px;
+            }
+            
+            .instructions li:before {
+                content: "✓";
+                color: #28a745;
+                font-weight: bold;
+                position: absolute;
+                left: 0;
+            }
+            
+            .security-note {
+                background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+                border: 1px solid #2196f3;
+                padding: 15px;
+                border-radius: 8px;
+                margin: 20px 0;
+                color: #1565c0;
+                font-size: 14px;
+            }
+            
+            .expiration-warning {
+                background-color: #fff3cd;
+                border: 1px solid #ffeaa7;
+                padding: 15px;
+                border-radius: 8px;
+                margin: 20px 0;
+                color: #856404;
+                font-size: 14px;
+            }
+            
+            .footer {
+                background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+                color: white;
+                padding: 25px 30px;
+                text-align: center;
+                font-size: 14px;
+            }
+            
+            .footer p {
+                margin: 5px 0;
+                opacity: 0.8;
+            }
+            
+            .footer strong {
+                color: #bdc3c7;
+            }
+            
+            @media (max-width: 600px) {
+                .container {
+                    margin: 10px;
+                    border-radius: 5px;
+                }
+                
+                .content {
+                    padding: 30px 20px;
+                }
+                
+                .btn-confirmar {
+                    font-size: 16px;
+                    padding: 12px 25px;
+                }
+                
+                .header h1 {
+                    font-size: 24px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <div class="header-content">
+                    <h1>SmartSys</h1>
+                    <p>¡Bienvenido/a!</p>
+                </div>
+            </div>
+            
+            <div class="content">
+                <div class="greeting">
+                    ¡Hola ${nombre} ${apellido}! 🎉
+                </div>
+                
+                <div class="message">
+                    ¡Gracias por registrarte en SmartSys! Para completar tu registro y activar tu cuenta, 
+                    necesitamos que confirmes tu dirección de correo electrónico.
+                </div>
+                
+                <div class="btn-container">
+                    <a href="${enlaceConfirmacion}" class="btn-confirmar">
+                        🚀 Confirmar mi Registro
+                    </a>
+                </div>
+                
+                <div class="alternative-link">
+                    <p><strong>¿No puedes hacer clic en el botón?</strong> Copia y pega este enlace en tu navegador:</p>
+                    <div class="link-text">${enlaceConfirmacion}</div>
+                </div>
+                
+                <div class="instructions">
+                    <h3>📋 ¿Qué sucede después?</h3>
+                    <ul>
+                        <li>Haz clic en el botón "Confirmar mi Registro"</li>
+                        <li>Serás redirigido a SmartSys</li>
+                        <li>Tu cuenta quedará activa inmediatamente</li>
+                        <li>Podrás iniciar sesión con tus credenciales</li>
+                    </ul>
+                </div>
+                
+                <div class="security-note">
+                    <strong>🔒 Seguridad:</strong> Este enlace es único y personal. No lo compartas con nadie.
+                </div>
+                
+                <div class="expiration-warning">
+                    <strong>⏰ Importante:</strong> Este enlace expira en 24 horas por motivos de seguridad. 
+                    Si no confirmas tu registro antes de que expire, deberás registrarte nuevamente.
+                </div>
+            </div>
+            
+            <div class="footer">
+                <p><strong>SmartSys</strong> - Sistema de Gestión Inteligente</p>
+                <p>Si no te registraste en SmartSys, puedes ignorar este mensaje.</p>
+                <p>Este es un correo automático, por favor no respondas a este mensaje.</p>
+                <p>© ${new Date().getFullYear()} SmartSys. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </body>
+    </html>
+  `;
+}
+
 // <---------- Template HTML para el correo -------------->
 function generarTemplateCorreo(codigo, nombre, apellido) {
   return `
@@ -955,7 +1309,6 @@ function generarTemplateCorreo(codigo, nombre, apellido) {
         <div class="container">
             <div class="header">
                 <div class="header-content">
-                    <img src="cid:logo" alt="SmartSys Logo" class="logo">
                     <h1>SmartSys</h1>
                 </div>
             </div>
@@ -1016,5 +1369,6 @@ module.exports = {
   verPublicacion,
   recuperar,
   resetpassword,
-  google
+  google,
+  confirmarRegistro
 };
