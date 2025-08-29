@@ -1,6 +1,7 @@
 const express = require("express");
 
 const sesion = require("../../controllers/flutter/sesion.js")
+const publicaciones = require("../../controllers/flutter/publicaciones.js")
 const router = express.Router()
 const multer = require("multer");
 
@@ -9,10 +10,10 @@ const upload = multer({ storage });
 //Rutas usuario
 router.post("/registro", sesion.registro)
 router.post("/login", sesion.login)
-router.post("/actualizarPerfil", sesion.actualizarPerfil    )
+router.post("/actualizarPerfil", sesion.actualizarPerfil)
 router.post("/actualizarPerfilImg", upload.single('fotoPerfil'), sesion.actualizarPerfilImg)
 //Rutas plataforma
-router.get("/explorar", sesion.explorar); 
+router.get("/explorar", sesion.explorar);
 router.get("/explorarActivas", sesion.explorarActivas);
 router.post("/unirsePublico", sesion.unirsePublico);
 router.post("/unirsePrivado", sesion.unirsePrivado);
@@ -27,5 +28,7 @@ router.post("/reset-password", sesion.resetpassword);
 
 router.post("/users/google", sesion.google);
 router.get("/confirmar/:token", sesion.confirmarRegistro);
+
+router.post("/nuevaPublicacion",upload.single("archivoAdjunto"),publicaciones.nuevaPublicacion);
 
 module.exports = router
