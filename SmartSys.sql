@@ -8,7 +8,11 @@ ELMER EDUARDO RIVAS AVILES
 JONATHAN ISAIAS ROSALES ELIAS
 CHRISTOPHER ENRIQUE VILLACORTA MOLINA
 */
-CREATE DATABASE SmartSys;
+CREATE DATABASE SmartSys2;
+USE SmartSys2;
+USE hola;
+DROP DATABASE SmartSys;
+
 USE SmartSys;
 
 /* 
@@ -34,6 +38,14 @@ Select * from usuario_plataforma;
 Select * from Publicaciones
 Select * from plataforma_publicacion
 Select * from  usuario_publicaciones;
+select * from plataforma_publicacion
+
+RESTORE DATABASE Smartsys2
+FROM DISK = 'C:\Users\Estudios\Downloads\SmartSys.bak'
+WITH MOVE 'MiBase_Data' TO 'C:\SQLData\MiBaseNueva.mdf',
+     MOVE 'MiBase_Log' TO 'C:\SQLData\MiBaseNueva.ldf';
+
+delete from usuarios where idUsuario != 0
 
 CREATE TABLE Usuarios(
 	idUsuario BIGINT IDENTITY(1,1) PRIMARY KEY,
@@ -43,14 +55,13 @@ CREATE TABLE Usuarios(
 	contrasena NVARCHAR (MAX) NOT NULL,
 	telefono NVARCHAR (20) NULL,
 	tipoUsuario NVARCHAR (20) NULL DEFAULT 'Usuario', /* Se remplaza el rol (ya no sera intermedia) */
-	estadoCuenta NVARCHAR (20) NOT NULL DEFAULT 'Activo', /* EStado de la cuenta si esta activa o baneada */
+	estadoCuenta NVARCHAR (20) NOT NULL DEFAULT 'Pendiente', /* EStado de la cuenta si esta activa o baneada */
 	fechaCreacion DATETIME2 DEFAULT SYSDATETIME(),
 	foto_perfil VARBINARY(MAX),
 	biografia NVARCHAR (MAX) NULL,
-	codigoUnico NVARCHAR(50) UNIQUE
+	codigoUnico NVARCHAR(50) UNIQUE,
+	google BIT DEFAULT 0
 );
-
-
 
 CREATE TABLE ChatMsj (
     idChat BIGINT IDENTITY(1,1) PRIMARY KEY,
