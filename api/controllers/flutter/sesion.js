@@ -193,7 +193,7 @@ async function login(req, res) {
     const pool = await poolPromise;
     const consulta = await pool.request()
       .input('correoElectronico', sql.NVarChar, correoElectronico)
-      .query(`SELECT idUsuario, nombre, apellido, correoElectronico, contrasena, telefono, tipoUsuario, estadoCuenta, fechaCreacion, foto_perfil, biografia 
+      .query(`SELECT *
               FROM Usuarios 
               WHERE correoElectronico = @correoElectronico`);
     const estado = consulta.recordset[0]
