@@ -1,0 +1,218 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - SmartSys</title>
+
+    <!-- Tailwind CSS -->
+    <link href="~/Content/tailwind.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/Content/css/traductor.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body class="bg-gray-300 dark:bg-gray-900">
+
+    @{
+        Response.Cache.SetCacheability(HttpCacheability.NoCache);
+        Response.Cache.SetNoStore();
+        Response.Cache.SetExpires(DateTime.UtcNow.AddMinutes(-1));
+    }
+
+
+    <!-- 🧭 Barra de navegación -->
+    <nav class="h-20 bg-white shadow-md px-6 flex justify-between items-center dark:bg-gray-900 transition-colors duration-300">
+        <!-- Logo -->
+        <div class="flex items-center">
+            @if (Session["UsuarioID"] == null)
+            {
+                <a href="@Url.Action("Index", "Home")">
+                    <img class="w-40 dark:invert transition-all duration-300" src="~/Content/img/logo.png" />
+                </a>
+            }
+            else if (Session["Tipo"]?.ToString() == "superAdmin")
+            {
+                <a href="@Url.Action("Index", "SuperAdmin")">
+                    <img class="w-40 dark:invert transition-all duration-300" src="~/Content/img/logo.png" />
+                </a>
+            }
+            else
+            {
+                <a href="@Url.Action("Index", "Home")">
+                    <img class="w-40 dark:invert transition-all duration-300" src="~/Content/img/logo.png" />
+                </a>
+            }
+        </div>
+
+        <!-- Menú de navegación -->
+        <ul class="flex flex-wrap gap-4 items-center text-lg font-medium">
+            @if (Session["UsuarioID"] == null)
+            {
+                <li><a href="@Url.Action("About", "Home")" class="text-purple-700 dark:text-purple-300 hover:text-gray-500 dark:hover:text-gray-200 transition-colors duration-200">Sobre SmartSys</a></li>
+                <li><a href="@Url.Action("Contacto", "Home")" class="text-purple-700 dark:text-purple-300 hover:text-gray-500 dark:hover:text-gray-200 transition-colors duration-200">Contacto</a></li>
+
+                <li class="inline-block mr-2">
+                    <a href="@Url.Action("Login", "Account")"
+                       class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200">
+                        Iniciar Sesión
+                    </a>
+                </li>
+
+                <li class="inline-block">
+                    <a href="@Url.Action("Registro", "Account")"
+                       class="px-4 py-2 bg-purple-100 hover:bg-purple-200 text-purple-600 font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200">
+                        Registrarse
+                    </a>
+                </li>
+            }
+            else if (Session["Tipo"]?.ToString() == "superAdmin")
+            {
+                <li><a href="@Url.Action("Index", "SuperAdmin")" class="text-purple-700 dark:text-purple-300 hover:text-gray-500 dark:hover:text-gray-200 transition-colors duration-200">Usuarios</a></li>
+                <li><a href="@Url.Action("Plataformas", "SuperAdmin")" class="text-purple-700 dark:text-purple-300 hover:text-gray-500 dark:hover:text-gray-200 transition-colors duration-200">Plataformas</a></li>
+                <li><a href="@Url.Action("Logout", "Account")" class="text-purple-700 dark:text-purple-300 hover:text-gray-500 dark:hover:text-gray-200 transition-colors duration-200">Cerrar sesión</a></li>
+            }
+            else
+            {
+                <li class="text-purple-700 dark:text-purple-300">Hola, <span class="font-semibold">@Session["Nombre"]</span></li>
+                <li><a href="@Url.Action("Perfil", "Account")" class="text-purple-700 dark:text-purple-300 hover:text-gray-500 dark:hover:text-gray-200 transition-colors duration-200">Perfil</a></li>
+                <li><a href="@Url.Action("CrearPlataforma", "Plataforma")" class="text-purple-700 dark:text-purple-300 hover:text-gray-500 dark:hover:text-gray-200 transition-colors duration-200">Crear Plataforma</a></li>
+                <li><a href="@Url.Action("MisPlataformas", "Plataforma")" class="text-purple-700 dark:text-purple-300 hover:text-gray-500 dark:hover:text-gray-200 transition-colors duration-200">Mis Plataformas</a></li>
+                <li><a href="@Url.Action("Logout", "Account")" class="text-purple-700 dark:text-purple-300 hover:text-gray-500 dark:hover:text-gray-200 transition-colors duration-200">Cerrar sesión</a></li>
+                <li><a href="@Url.Action("Explorar", "Plataforma")" class="text-purple-700 dark:text-purple-300 hover:text-gray-500 dark:hover:text-gray-200 transition-colors duration-200">Explorar Plataformas</a></li>
+            }
+
+            <!-- Botones modo oscuro / claro -->
+            <li>
+                <button class="dark:inline-block hidden text-gray-800 dark:text-white p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200" id="btnLight">
+                    <i class="fa-solid fa-sun"></i>
+                </button>
+                <button class="dark:hidden inline-block text-gray-800 dark:text-white p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200" id="btnDark">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </li>
+
+            <!-- Google Translate -->
+            <li><div class="text-gray-700 dark:text-gray-300" id="google_translate_element"></div></li>
+        </ul>
+    </nav>
+
+
+    <!-- 📄 Contenido principal -->
+    <div class="container">
+        @RenderBody()
+    </div>
+    @if (Session["UsuarioID"] == null)
+    {
+        <!-- Footer -->
+        <footer class="bg-gray-900 text-white py-16">
+            <div class="container mx-auto px-6">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                    <div class="col-span-1 md:col-span-2">
+                        <img class="w-50" src="~/Content/img/logo-dark.png" />
+                        <p class="text-gray-300 mb-6 leading-relaxed">
+                            Crea tu espacio digital con SmartSys. Transforma tus ideas en realidad digital sin límites ni complicaciones.
+                        </p>
+                        <div class="flex space-x-4">
+                            <a href="https://www.facebook.com/" class="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center hover:bg-purple-700 transition-colors">
+                                <i class="fa-brands fa-facebook-f"></i>
+                            </a>
+                            <a href="https://x.com/" class="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center hover:bg-purple-700 transition-colors">
+                                <i class="fa-brands fa-twitter"></i>
+                            </a>
+                            <a href="https://www.instagram.com/" class="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center hover:bg-purple-700 transition-colors">
+                                <i class="fa-brands fa-instagram"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="font-semibold mb-4">Producto</h4>
+                        <ul class="space-y-2 text-gray-300">
+                            <li><a href="@Url.Action("Registro", "Account")" class="hover:text-purple-400 transition-colors">Plataformas</a></li>
+                            <li><a href="@Url.Action("Registro", "Account")" class="hover:text-purple-400 transition-colors">Explorar</a></li>
+                            <li><a href="@Url.Action("Registro", "Account")" class="hover:text-purple-400 transition-colors">Publicaciones</a></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="font-semibold mb-4">Más informacion</h4>
+                        <ul class="space-y-2 text-gray-300">
+                            <li><a href="@Url.Action("About", "Home")" class="hover:text-purple-400 transition-colors">Sobre Nostros</a></li>
+                            <li><a href="@Url.Action("Contacto", "Home")" class="hover:text-purple-400 transition-colors">Contacto</a></li>
+                            <li><a href="@Url.Action("Index", "Home")" class="hover:text-purple-400 transition-colors">Index</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="border-t border-gray-700 mt-12 pt-8 text-center text-gray-400">
+                    <p>
+                        &copy; 2025 SmartSys. Todos los derechos reservados. |
+                        <a href="#" class="hover:text-purple-400 transition-colors">Política de Privacidad</a> |
+                        <a href="#" class="hover:text-purple-400 transition-colors">Términos de Servicio</a>
+                    </p>
+                </div>
+            </div>
+        </footer>
+    }
+    else if (Session["Tipo"]?.ToString() == "superAdmin")
+    {
+        <div></div>
+    }
+    else
+    {
+        <!-- Footer -->
+        <footer class="bg-gray-900 text-white py-16">
+            <div class="container mx-auto px-6">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                    <div class="col-span-1 md:col-span-2">
+                        <img class="w-50" src="~/Content/img/logo-dark.png" />
+                        <p class="text-gray-300 mb-6 leading-relaxed">
+                            Crea tu espacio digital con SmartSys. Transforma tus ideas en realidad digital sin límites ni complicaciones.
+                        </p>
+                        <div class="flex space-x-4">
+                            <a href="https://www.facebook.com/" class="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center hover:bg-purple-700 transition-colors">
+                                <i class="fa-brands fa-facebook-f"></i>
+                            </a>
+                            <a href="https://x.com/" class="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center hover:bg-purple-700 transition-colors">
+                                <i class="fa-brands fa-twitter"></i>
+                            </a>
+                            <a href="https://www.instagram.com/" class="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center hover:bg-purple-700 transition-colors">
+                                <i class="fa-brands fa-instagram"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="font-semibold mb-4">Producto</h4>
+                        <ul class="space-y-2 text-gray-300">
+                            <li><a href="@Url.Action("CrearPlataforma", "Plataforma")" class="hover:text-purple-400 transition-colors">Plataformas</a></li>
+                            <li><a href="@Url.Action("Explorar", "Plataforma")" class="hover:text-purple-400 transition-colors">Explorar</a></li>
+                            <li><a href="@Url.Action("MisPlataformas", "Plataforma") class="hover:text-purple-400 transition-colors">Publicaciones</a></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="font-semibold mb-4">Más informacion</h4>
+                        <ul class="space-y-2 text-gray-300">
+                            <li><a href="@Url.Action("About", "Home")" class="hover:text-purple-400 transition-colors">Sobre Nostros</a></li>
+                            <li><a href="@Url.Action("Contacto", "Home")" class="hover:text-purple-400 transition-colors">Contacto</a></li>
+                            <li><a href="@Url.Action("Index", "Home")" class="hover:text-purple-400 transition-colors">Index</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="border-t border-gray-700 mt-12 pt-8 text-center text-gray-400">
+                    <p>
+                        &copy; 2025 SmartSys. Todos los derechos reservados. |
+                        <a href="#" class="hover:text-purple-400 transition-colors">Política de Privacidad</a> |
+                        <a href="#" class="hover:text-purple-400 transition-colors">Términos de Servicio</a>
+                    </p>
+                </div>
+            </div>
+        </footer>
+    }
+    <script src="~/Content/js/dark.js"></script>
+    <script src="~/Content/js/traductor.js"></script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+</body>
+</html>

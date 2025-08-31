@@ -1,0 +1,43 @@
+﻿@model SmartSys.Models.Plataforma
+@{
+    ViewBag.Title = "Panel de Administración";
+}
+
+<div class="max-w-5xl mx-auto p-6">
+    <!-- TÍTULO -->
+    <h2 class="text-3xl font-extrabold text-purple-900 dark:text-purple-100 mb-6">Panel de Administración</h2>
+    <!-- TARJETA DE INFORMACIÓN GENERAL -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-6 border border-purple-100 dark:border-purple-800 transition-all duration-300">
+        <h2 class="text-4xl font-semibold text-purple-800 dark:text-purple-400 mb-6">@Model.nombrePlataforma</h2>
+        <h4 class="text-lg font-bold text-purple-700 dark:text-gray-300 mb-4">Información General</h4>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <p class="dark:text-gray-400"><strong class="dark:text-white" >Nombre:</strong> @Model.nombrePlataforma</p>
+            <p class="dark:text-gray-400"><strong class="dark:text-white">Descripción:</strong> @Model.descripcionPlataforma</p>
+            <p class="dark:text-gray-400"><strong class="dark:text-white">Capacidad:</strong> @Model.capacidadMiembros_plataforma miembros</p>
+            <p class="dark:text-gray-400"><strong class="dark:text-white">Privacidad:</strong> @Model.privacidadPlataforma</p>
+            <p class="dark:text-gray-400"><strong class="dark:text-white">Código:</strong> @Model.codigoPlataforma</p>
+            <p>
+                <strong class="dark:text-white">Estado:</strong>
+                <span class="px-2 py-1 rounded-lg font-medium @(Model.estadoPlataforma == "Activo" ? "bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300" : "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300")">
+                    @Model.estadoPlataforma
+                </span>
+            </p>
+        </div>
+
+        <!-- BOTONES DE ACCIÓN -->
+        <div class="mt-6 flex flex-wrap gap-3">
+            <a href="@Url.Action("EditarPlataforma", "Plataforma", new { id = Model.idPlataforma })"
+               class="px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg shadow hover:shadow-lg hover:scale-105 transition-transform duration-300 font-medium">
+                Editar Plataforma
+            </a>
+            <a href="@Url.Action("GestionMiembros", "Plataforma", new { id = Model.idPlataforma })"
+               class="px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg shadow hover:shadow-lg hover:scale-105 transition-transform duration-300 font-medium">
+                Gestionar Miembros
+            </a>
+            <a href="@Url.Action("Contenido", "Plataforma", new { id = Model.idPlataforma })"
+               class="px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg shadow hover:shadow-lg hover:scale-105 transition-transform duration-300 font-medium">
+                Ver Contenido
+            </a>
+        </div>
+    </div>
+</div>

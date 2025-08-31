@@ -1,0 +1,59 @@
+﻿@model SmartSys.Models.Plataforma
+@{
+    ViewBag.Title = "Editar Plataforma";
+}
+
+<div class="max-w-3xl mx-auto p-6">
+    <h2 class="text-3xl font-extrabold text-purple-900 dark:text-purple-100 mb-6">Editar Plataforma</h2>
+
+    @using (Html.BeginForm())
+    {
+        @Html.HiddenFor(m => m.idPlataforma)
+
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 space-y-4 border border-purple-100 dark:border-purple-800">
+
+            <!-- Nombre -->
+            <div>
+                @Html.LabelFor(m => m.nombrePlataforma, new { @class = "block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1" })
+                @Html.TextBoxFor(m => m.nombrePlataforma, new { @class = "w-full rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300" })
+            </div>
+
+            <!-- Descripción -->
+            <div>
+                @Html.LabelFor(m => m.descripcionPlataforma, new { @class = "block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1" })
+                @Html.TextAreaFor(m => m.descripcionPlataforma, new { @class = "w-full rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300", rows = "4" })
+            </div>
+
+            <!-- Capacidad -->
+            <div>
+                @Html.LabelFor(m => m.capacidadMiembros_plataforma, new { @class = "block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1" })
+                @Html.TextBoxFor(m => m.capacidadMiembros_plataforma, new { @class = "w-full rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300", type = "number" })
+            </div>
+
+            <!-- Privacidad -->
+            <div>
+                @Html.LabelFor(m => m.privacidadPlataforma, new { @class = "block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1" })
+                @Html.DropDownListFor(m => m.privacidadPlataforma, new SelectList(new[] { "Público", "Privado" }), new { @class = "w-full rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300" })
+            </div>
+
+            <!-- Código -->
+            <div>
+                @Html.LabelFor(m => m.codigoPlataforma, new { @class = "block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1" })
+                @Html.TextBoxFor(m => m.codigoPlataforma, new { @class = "w-full rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300" })
+            </div>
+
+            <!-- Estado -->
+            <div>
+                @Html.LabelFor(m => m.estadoPlataforma, new { @class = "block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1" })
+                @Html.DropDownListFor(m => m.estadoPlataforma, new SelectList(new[] { "Activo", "Inactivo" }), new { @class = "w-full rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300" })
+            </div>
+
+            <!-- Botón Guardar -->
+            <div class="mt-4">
+                <button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition-transform duration-300 transform hover:-translate-y-0.5">
+                    Guardar Cambios
+                </button>
+            </div>
+        </div>
+    }
+</div>

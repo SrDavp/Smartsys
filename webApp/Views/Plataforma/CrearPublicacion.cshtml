@@ -1,0 +1,47 @@
+﻿@model SmartSys.Models.Publicaciones
+@{
+    ViewBag.Title = "Nueva Publicación";
+}
+
+<div class="max-w-3xl mx-auto p-6">
+    <h2 class="text-3xl font-extrabold text-purple-900 dark:text-purple-100 mb-6">Crear Nueva Publicación</h2>
+
+    @using (Html.BeginForm("CrearPublicacion", "Plataforma", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <input type="hidden" name="plataformaId" value="@ViewBag.PlataformaId" />
+
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 space-y-4 border border-purple-100 dark:border-purple-800">
+
+            <!-- Título -->
+            <div>
+                @Html.LabelFor(m => m.titulo, new { @class = "block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1" })
+                @Html.TextBoxFor(m => m.titulo, new { @class = "w-full rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300" })
+            </div>
+
+            <!-- Contenido -->
+            <div>
+                @Html.LabelFor(m => m.contenido, new { @class = "block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1" })
+                @Html.TextAreaFor(m => m.contenido, new { @class = "w-full rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300", rows = "5" })
+            </div>
+
+            <!-- Tipo de Publicación -->
+            <div>
+                @Html.LabelFor(m => m.tipoPublicacion, new { @class = "block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1" })
+                @Html.DropDownListFor(m => m.tipoPublicacion, new SelectList(new[] { "Publicacion", "Tarea", "Anuncio" }), "Selecciona un tipo", new { @class = "w-full rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300" })
+            </div>
+
+            <!-- Archivo Adjunto -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Archivo Adjunto</label>
+                <input type="file" name="archivo" class="w-full rounded-lg border border-gray-300 dark:border-gray-600 px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300" />
+            </div>
+
+            <!-- Botón Crear -->
+            <div class="mt-4">
+                <button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition-transform duration-300 transform hover:-translate-y-0.5">
+                    Crear Publicación
+                </button>
+            </div>
+        </div>
+    }
+</div>

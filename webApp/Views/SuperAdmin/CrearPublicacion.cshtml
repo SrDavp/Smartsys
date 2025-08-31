@@ -1,0 +1,40 @@
+﻿@model SmartSys.Models.Publicaciones
+@{
+    ViewBag.Title = "Crear Publicación";
+}
+
+<div class="max-w-3xl mx-auto p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg">
+    <h2 class="text-3xl font-extrabold mb-6 text-purple-700 dark:text-purple-400">Crear Nueva Publicación</h2>
+
+    @using (Html.BeginForm("CrearPublicacion", "SuperAdmin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <input type="hidden" name="idPlataforma" value="@ViewBag.idPlataforma" />
+
+        <div class="mb-4">
+            @Html.LabelFor(m => m.titulo, new { @class = "block text-sm font-medium text-gray-700 dark:text-gray-300" })
+            @Html.TextBoxFor(m => m.titulo, new { @class = "mt-1 block w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-400 focus:border-purple-500 outline-none dark:bg-gray-700 dark:text-white" })
+        </div>
+
+        <div class="mb-4">
+            @Html.LabelFor(m => m.contenido, new { @class = "block text-sm font-medium text-gray-700 dark:text-gray-300" })
+            @Html.TextAreaFor(m => m.contenido, new { @class = "mt-1 block w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-400 focus:border-purple-500 outline-none dark:bg-gray-700 dark:text-white", rows = 5 })
+        </div>
+
+        <div class="mb-4">
+            @Html.LabelFor(m => m.tipoPublicacion, new { @class = "block text-sm font-medium text-gray-700 dark:text-gray-300" })
+            @Html.DropDownListFor(m => m.tipoPublicacion, new SelectList(new[] { "Publicacion", "Tarea", "Anuncio" }),
+                new { @class = "mt-1 block w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-400 focus:border-purple-500 outline-none dark:bg-gray-700 dark:text-white" })
+        </div>
+
+        <div class="mb-4">
+            @Html.Label("Archivo Adjunto", new { @class = "block text-sm font-medium text-gray-700 dark:text-gray-300" })
+            <input type="file" name="Archivo"
+                   class="mt-1 block w-full text-sm text-gray-700 dark:text-gray-200 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-purple-500 file:text-white hover:file:bg-purple-600 transition-colors duration-200" />
+        </div>
+
+        <button type="submit"
+                class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg shadow-md transition-colors duration-200 font-medium">
+            Crear Publicación
+        </button>
+    }
+</div>

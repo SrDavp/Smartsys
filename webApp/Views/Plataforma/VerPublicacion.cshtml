@@ -1,0 +1,34 @@
+﻿@model SmartSys.Models.Publicaciones
+@{
+    ViewBag.Title = "Detalle de Publicación";
+}
+
+<div class="max-w-3xl mx-auto p-6">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-purple-100 dark:border-purple-800 p-6 space-y-4">
+
+        <!-- Título -->
+        <h2 class="text-3xl font-extrabold text-purple-900 dark:text-purple-100 mb-2">@Model.titulo</h2>
+
+        <!-- Tipo -->
+        <p class="text-gray-700 dark:text-gray-300"><strong>Tipo:</strong> @Model.tipoPublicacion</p>
+
+        <!-- Contenido -->
+        <div>
+            <p class="text-gray-700 dark:text-gray-300 font-semibold mb-1">Contenido:</p>
+            <div class="border border-gray-300 dark:border-gray-600 rounded-lg p-4 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white">
+                @Html.Raw(Model.contenido)
+            </div>
+        </div>
+
+        <!-- Archivo Adjunto -->
+        @if (Model.archivoAdjunto != null)
+        {
+            var base64 = Convert.ToBase64String(Model.archivoAdjunto);
+            var mimeType = "data:image/png;base64";
+            <div>
+                <p class="text-gray-700 dark:text-gray-300 font-semibold mb-1">Archivo:</p>
+                <img src="data:@mimeType;base64,@base64" class="max-w-md rounded-lg shadow-lg" alt="Imagen Adjunta" />
+            </div>
+        }
+    </div>
+</div>

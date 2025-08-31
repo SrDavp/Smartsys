@@ -1,0 +1,402 @@
+﻿@{
+    ViewBag.Title = "SmartSys";
+}
+
+<style>
+    .fade-in-up {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.8s ease-out;
+    }
+
+        .fade-in-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+    .phone-hover {
+        transition: transform 0.3s ease;
+    }
+
+        .phone-hover:hover {
+            transform: translateY(-8px);
+        }
+
+    .pulse-element {
+        animation: pulse 2s infinite;
+    }
+
+    .bounce-element {
+        animation: bounce 1s infinite;
+    }
+
+    .spin-slow {
+        animation: spin 3s linear infinite;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function (entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in-up').forEach(el => {
+            observer.observe(el);
+        });
+    });
+</script>
+
+<div class="min-h-screen dark:bg-gray-900">
+    <!-- Hero Section -->
+    <section class="flex flex-wrap min-h-screen bg-gray-50 dark:bg-gray-900">
+        <div class="ml-10 w-full lg:w-1/2 py-12 px-6">
+            <div class="animate-fade-in">
+                <h1 class="text-gray-800 text-6xl lg:text-7xl mb-6 font-bold dark:text-white leading-tight">
+                    Bienvenido a <span class="text-purple-600">SmartSys</span>
+                </h1>
+                <p class="text-gray-700 text-xl lg:text-2xl mb-8 dark:text-gray-200 font-medium">
+                    Tu plataforma para crear cualquier espacio digital
+                </p>
+                <p class="text-gray-600 text-lg mb-10 dark:text-gray-300 leading-relaxed">
+                    Crea tu propia plataforma digital para cualquier propósito. Desde negocios, emprendimientos, tiendas hasta instituciones, construye comunidades y conecta con tu audiencia de manera profesional.
+                </p>
+
+                <!-- Call to Action Card -->
+                <div class="mb-15 max-w-md border rounded-2xl border-gray-200 bg-white dark:bg-gray-800 dark:border-gray-600 shadow-lg hover:shadow-xl transition-all duration-300">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <i class="fa-solid fa-store text-2xl text-purple-600 mr-3"></i>
+                            <h3 class="text-gray-800 font-semibold text-lg dark:text-white">Comienza tu plataforma</h3>
+                        </div>
+                        <p class="text-gray-600 mb-6 dark:text-gray-300">
+                            Únete a emprendedores, creadores y profesionales que ya están construyendo sus espacios digitales únicos.
+                        </p>
+                        <a class="w-full h-12 rounded-xl text-white bg-purple-600 flex justify-center items-center hover:bg-pruple-800 transition-all duration-300 font-semibold shadow-lg" href="@Url.Action("Registro", "Account")">
+                            <i class="fa-solid fa-arrow-right mr-2"></i>
+                            Crear mi espacio
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hero Image -->
+        <div class="flex-1 flex flex-col justify-center items-center p-6">
+            <div class="text-center max-w-6xl w-full">
+                <div class="mb-8 relative">
+                    <img src="~/Content/img/fondo-home.png"
+                         alt="SmartSys Platform" />
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- Features Section with Scroll Animation -->
+    <section class="py-20 bg-white dark:bg-gray-800">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16 fade-in-up">
+                <h2 class="text-4xl font-bold text-gray-800 dark:text-white mb-4">
+                    ¿De qué trata SmartSys?
+                </h2>
+                <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+                    ¡Utiliza las herramientas para crear tus instituciones y emprendimientos!
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+                <!-- Feature 1 -->
+                <div class="fade-in-up bg-gray-50 dark:bg-gray-700 rounded-2xl border border-gray-200 dark:border-gray-500 p-8 shadow-lg hover:shadow-xl transition-all duration-300">
+                    <div class="flex items-center mb-6">
+                        <div class="w-14 h-14 bg-blue-600 rounded-xl flex items-center justify-center mr-4">
+                            <i class="fa-solid fa-palette text-2xl text-white"></i>
+                        </div>
+                        <h3 class="text-gray-800 dark:text-white text-xl font-bold">Espacios Personalizados</h3>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
+                        Crea plataformas únicas para cualquier propósito. Desde tiendas online hasta comunidades profesionales, personaliza cada detalle según tu visión.
+                    </p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="fade-in-up bg-gray-50 dark:bg-gray-700 rounded-2xl border border-gray-200 dark:border-gray-500 p-8 shadow-lg hover:shadow-xl transition-all duration-300">
+                    <div class="flex items-center mb-6">
+                        <div class="w-14 h-14 bg-green-600 rounded-xl flex items-center justify-center mr-4">
+                            <i class="fa-solid fa-comments text-2xl text-white"></i>
+                        </div>
+                        <h3 class="text-gray-800 dark:text-white text-xl font-bold">Comunicación Directa</h3>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
+                        Conecta con tu comunidad en tiempo real. Chat integrado para resolver dudas, realizar ventas y mantener comunicación entre tu institucion.
+                    </p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="fade-in-up bg-gray-50 dark:bg-gray-700 rounded-2xl border border-gray-200 dark:border-gray-500 p-8 shadow-lg hover:shadow-xl transition-all duration-300">
+                    <div class="flex items-center mb-6">
+                        <div class="w-14 h-14 bg-orange-600 rounded-xl flex items-center justify-center mr-4">
+                            <i class="fa-solid fa-bullhorn text-2xl text-white"></i>
+                        </div>
+                        <h3 class="text-gray-800 dark:text-white text-xl font-bold">Publicaciones</h3>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
+                        Mantén a los miembros informados con actualizaciones, promociones y noticias sobre tu negocio o institucion.
+                    </p>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="fade-in-up bg-gray-50 dark:bg-gray-700 rounded-2xl border border-gray-200 dark:border-gray-500 p-8 shadow-lg hover:shadow-xl transition-all duration-300">
+                    <div class="flex items-center mb-6">
+                        <div class="w-14 h-14 bg-purple-600 rounded-xl flex items-center justify-center mr-4">
+                            <i class="fa-solid fa-id-card text-2xl text-white"></i>
+                        </div>
+                        <h3 class="text-gray-800 dark:text-white text-xl font-bold">Perfiles Profesionales</h3>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
+                        Crea tu identidad digital profesional. Muestra tu experiencia en tu biografía, añade tus datos de contacto y construye tu identidad.
+                    </p>
+                </div>
+
+                <!-- Feature 5 -->
+                <div class="fade-in-up bg-gray-50 dark:bg-gray-700 rounded-2xl border border-gray-200 dark:border-gray-500 p-8 shadow-lg hover:shadow-xl transition-all duration-300">
+                    <div class="flex items-center mb-6">
+                        <div class="w-14 h-14 bg-red-600 rounded-xl flex items-center justify-center mr-4">
+                            <i class="fa-solid fa-layer-group text-2xl text-white"></i>
+                        </div>
+                        <h3 class="text-gray-800 dark:text-white text-xl font-bold">Múltiples Propósitos</h3>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
+                        Utiliza nuestra versatilidad. Una plataforma versátil adaptada a cualquier tipo de institucion o emprendimiento.
+                    </p>
+                </div>
+
+                <!-- Feature 6 -->
+                <div class="fade-in-up bg-gray-50 dark:bg-gray-700 rounded-2xl border border-gray-200 dark:border-gray-500 p-8 shadow-lg hover:shadow-xl transition-all duration-300">
+                    <div class="flex items-center mb-6">
+                        <div class="w-14 h-14 bg-teal-600 rounded-xl flex items-center justify-center mr-4">
+                            <i class="fa-solid fa-lock text-2xl text-white"></i>
+                        </div>
+                        <h3 class="text-gray-800 dark:text-white text-xl font-bold">Personaliza la privacidad</h3>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
+                        Conecta con clientes y miembros de manera publica o privada. Utiliza los codigos para convertir tu plataforma en privada o publica.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How it Works Section -->
+    <section class="py-20 bg-gray-50 dark:bg-gray-800">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16 fade-in-up">
+                <h2 class="text-4xl font-bold text-gray-800 dark:text-white mb-4">Cómo funciona SmartSys</h2>
+                <p class="text-xl text-gray-600 dark:text-gray-300">
+                    Sigue los pasos para comenzar tu plataforma digital
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <div class="text-center fade-in-up">
+                    <div class="w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <span class="text-2xl font-bold text-white">1</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-4">Crea tu plataforma</h3>
+                    <p class="text-gray-600 dark:text-gray-300">
+                        Registra tu cuenta y configura tu perfil digital según el propósito de tu institucion o emprendimiento.
+                    </p>
+                </div>
+                <div class="text-center fade-in-up">
+                    <div class="w-20 h-20 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <span class="text-2xl font-bold text-white">2</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-4">Invita a tu comunidad</h3>
+                    <p class="text-gray-600 dark:text-gray-300">
+                        Comparte el enlace de tu plataforma para que clientes, miembros o colaboradores se unan a tu espacio.
+                    </p>
+                </div>
+                <div class="text-center fade-in-up">
+                    <div class="w-20 h-20 bg-orange-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <span class="text-2xl font-bold text-white">3</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-4">Haz crecer tu plataforma</h3>
+                    <p class="text-gray-600 dark:text-gray-300">
+                        Publica contenido, interactúa con los miembros y desarrolla tu comunidad alrededor de tus productos o servicios.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mobile App Section -->
+    <section class="py-20 bg-white dark:bg-gray-900">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-wrap items-center">
+                <div class="w-full lg:w-1/2 mb-12 lg:mb-0">
+                    <div class="fade-in-up">
+                        <h2 class="text-4xl font-bold text-gray-800 dark:text-white mb-6">
+                            Lleva siempre contigo tus instituciones con la app móvil
+                        </h2>
+                        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8">
+                            Accede a SmartSys desde tu dispositivo móvil. Gestiona tu negocio sin límites de ubicación.
+                        </p>
+                        <div class="space-y-4">
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center mr-4">
+                                    <i class="fa-solid fa-mobile-alt text-white"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-800 dark:text-white">Responsive Design</h4>
+                                    <p class="text-gray-600 dark:text-gray-300">Perfecto en cualquier dispositivo</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center mr-4">
+                                    <i class="fa-solid fa-wifi text-white"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-800 dark:text-white">Sincronización</h4>
+                                    <p class="text-gray-600 dark:text-gray-300">Todos tus datos siempre actualizados</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-full lg:w-1/2 flex justify-center">
+                    <div class="relative phone-hover">
+                        <!-- Phone Frame -->
+                        <div class="w-80 h-[600px] bg-gray-900 rounded-[3rem] p-4 shadow-2xl">
+                            <!-- Screen -->
+                            <div class="w-full h-full bg-white dark:bg-gray-800 rounded-[2.5rem] overflow-hidden relative">
+                                <!-- Status Bar -->
+                                <div class="bg-blue-600 h-12 flex items-center justify-center">
+                                    <span class="text-white font-semibold">SmartSys</span>
+                                </div>
+
+                                <!-- App Content -->
+                                <div class="p-4 space-y-4">
+                                    <!-- Elements with different effects -->
+                                    <div class="pulse-element bg-blue-100 dark:bg-blue-900 rounded-lg p-3">
+                                        <div class="flex items-center">
+                                            <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center mr-3">
+                                                <i class="fa-solid fa-box text-white text-sm"></i>
+                                            </div>
+                                            <span class="text-gray-800 dark:text-white font-medium">Nuevo inventario</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="bounce-element bg-green-100 dark:bg-green-900 rounded-lg p-3">
+                                        <div class="flex items-center">
+                                            <div class="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center mr-3 spin-slow">
+                                                <i class="fa-solid fa-comments text-white text-sm"></i>
+                                            </div>
+                                            <span class="text-gray-800 dark:text-white font-medium">5 mensajes nuevos</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="pulse-element bg-orange-100 dark:bg-orange-900 rounded-lg p-3">
+                                        <div class="flex items-center">
+                                            <div class="w-8 h-8 bg-orange-600 rounded-full flex items-center justify-center mr-3">
+                                                <i class="fa-solid fa-users text-white text-sm"></i>
+                                            </div>
+                                            <span class="text-gray-800 dark:text-white font-medium">23 miembros</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="bounce-element bg-purple-100 dark:bg-purple-900 rounded-lg p-3">
+                                        <div class="flex items-center">
+                                            <div class="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center mr-3 spin-slow">
+                                                <i class="fa-solid fa-bullhorn text-white text-sm"></i>
+                                            </div>
+                                            <span class="text-gray-800 dark:text-white font-medium">Nueva publicación</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Use Cases Section -->
+    <section class="py-20 bg-white dark:bg-gray-800">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16 fade-in-up">
+                <h2 class="text-4xl font-bold text-gray-800 dark:text-white mb-4">
+                    Para todo tipo de instituciones
+                </h2>
+                <p class="text-xl text-gray-600 dark:text-gray-300">
+                    SmartSys es versátil a cualquier emprendimiento que tengas
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+                <!-- Use Case 1 -->
+                <div class="fade-in-up bg-white dark:bg-gray-700 rounded-2xl p-8 shadow-lg border border-gray-100 dark:border-gray-600 hover:shadow-xl transition-all duration-300">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center text-white font-bold mr-4">
+                            <i class="fa-solid fa-book"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-800 dark:text-white">Cursos Personalizados</h4>
+                            <p class="text-gray-500 dark:text-gray-400 text-sm">Comparte tu conocimiento</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300">
+                        "Ideal para profesionales que quieren enseñar sus habilidades. Crea cursos sobre cualquier tema y construye una comunidad de aprendizaje alrededor de tu expertise."
+                    </p>
+                </div>
+
+                <!-- Use Case 2 -->
+                <div class="fade-in-up bg-white dark:bg-gray-700 rounded-2xl p-8 shadow-lg border border-gray-100 dark:border-gray-600 hover:shadow-xl transition-all duration-300">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold mr-4">
+                            <i class="fa-solid fa-store"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-800 dark:text-white">Tiendas y Negocios</h4>
+                            <p class="text-gray-500 dark:text-gray-400 text-sm">Venta y atención al cliente</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300">
+                        "Perfecto para mostrar productos, gestionar inventarios y mantener comunicación directa con clientes. Desde restaurantes hasta tiendas de ropa."
+                    </p>
+                </div>
+
+                <!-- Use Case 3 -->
+                <div class="fade-in-up bg-white dark:bg-gray-700 rounded-2xl p-8 shadow-lg border border-gray-100 dark:border-gray-600 hover:shadow-xl transition-all duration-300">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white font-bold mr-4">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-800 dark:text-white">Emprendedores de Productos</h4>
+                            <p class="text-gray-500 dark:text-gray-400 text-sm">Venta y gestión de productos</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300">
+                        "Excelente para vendedores independientes, consultores y prestadores de servicios que necesitan una plataforma profesional para gestionar su negocio."
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Footer space placeholder -->
+<div class="h-20 bg-gray-100 dark:bg-gray-900 flex items-center justify-center">
+    <p class="text-gray-500 dark:text-gray-400"><!-- Aquí va tu footer --></p>
+</div>

@@ -1,0 +1,173 @@
+﻿@{
+    ViewBag.Title = "RestablecerContraseña";
+}
+
+@model SmartSys.Models.Usuario
+
+<div class="container mx-auto mt-8 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-700 p-8 max-w-md mx-auto">
+    <div id="mensajeCodigo2" class="hidden mb-4 text-center px-4 py-2 rounded-lg text-white font-medium bg-red-500 text-white">El correo no fue encontrado</div>
+    <form id="buscarCuentaForm" class="space-y-6"> <div> <p class="text-5xl text-purple-900 font-medium dark:text-purple-400">Restablecer cuenta</p> <p class="text-l mt-2 text-purple-900 dark:text-purple-400">Usa tu correo para buscar tu cuenta</p> </div> <!-- Campo Email --> <div class="space-y-2"> <label for="CorreoElectronico" class="block text-sm font-semibold text-gray-700 dark:text-gray-200">Correo</label> <div class="relative"> <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"> <i class="fa-solid fa-envelope text-gray-400 dark:text-gray-500"></i> </div> <input id="CorreoElectronico" name="CorreoElectronico" type="email" required placeholder="tu@email.com" class="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-all duration-200 placeholder-gray-400 dark:placeholder-gray-500"> </div> </div> <!-- Botón --> <button type="submit" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200"> Buscar cuenta </button> <div class="text-center mt-8 mb-8"> <p class="text-gray-600 dark:text-gray-400"> ¿Recordaste la contraseña? <a href="@Url.Action("Login", "Account")" class="text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300 font-semibold transition-colors duration-200"> Inicia sesión </a> </p> </div> </form>
+</div>
+
+<!-- Modal -->
+<div id="codigoModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-8 relative animate-fadeIn">
+        <!-- Título -->
+        <h2 class="text-2xl font-bold text-purple-900 dark:text-purple-400 mb-2 text-center" id="ingresar">Ingresa el código</h2>
+        <p class="text-gray-600 dark:text-gray-400 text-center mb-6" id="revisa">Revisa tu correo y escribe el código recibido</p>
+
+        <div id="mensajeCodigo" class="hidden mb-4 text-center px-4 py-2 rounded-lg text-white font-medium"></div>
+
+        <!-- Inputs del código -->
+        <form id="verificarCodigoForm" class="flex justify-center gap-3 mb-6">
+            <input type="text" maxlength="1" class="codigoInput w-12 h-12 text-center text-xl border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none transition">
+            <input type="text" maxlength="1" class="codigoInput w-12 h-12 text-center text-xl border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none transition">
+            <input type="text" maxlength="1" class="codigoInput w-12 h-12 text-center text-xl border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none transition">
+            <input type="text" maxlength="1" class="codigoInput w-12 h-12 text-center text-xl border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none transition">
+            <input type="text" maxlength="1" class="codigoInput w-12 h-12 text-center text-xl border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none transition">
+            <input type="text" maxlength="1" class="codigoInput w-12 h-12 text-center text-xl border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none transition">
+            <input type="hidden" id="correoHidden">
+        </form>
+
+        <!-- Botón verificar -->
+        <button id="submitCodigo" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-semibold py-3 rounded-xl transition transform hover:scale-105 shadow-lg">
+            Verificar código
+        </button>
+
+        <!-- Sección de nueva contraseña -->
+        <div id="passwordSection" class="mt-6 hidden space-y-4">
+            <form method="post" id="actualizarContrasenaForm">
+                <div>
+                    <p class="text-2xl font-semibold text-purple-900 dark:text-purple-400 mb-1 text-center">Bienvenido de Nuevo</p>
+                    <p class="text-gray-600 dark:text-gray-400 text-center mb-4">Crea una nueva contraseña para tu cuenta</p>
+                </div>
+
+                <div class="mt-2">
+                    <div class="flex items-center space-x-2 text-xs">
+                        <span class="text-gray-600 dark:text-gray-400">Seguridad:</span>
+                        <div id="password-strength" class="flex space-x-1">
+                            <div class="strength-bar w-6 h-2 bg-gray-200 dark:bg-gray-600 rounded"></div>
+                            <div class="strength-bar w-6 h-2 bg-gray-200 dark:bg-gray-600 rounded"></div>
+                            <div class="strength-bar w-6 h-2 bg-gray-200 dark:bg-gray-600 rounded"></div>
+                            <div class="strength-bar w-6 h-2 bg-gray-200 dark:bg-gray-600 rounded"></div>
+                        </div>
+                        <span id="strength-text" class="text-gray-500 dark:text-gray-400">Débil</span>
+                    </div>
+                    <p id="strength-text" class="text-gray-500 dark:text-gray-400 text-xs">Utiliza minimo una mayúscula , un caracter especial y un número</p>
+                </div>
+
+                <!-- Campo Contraseña -->
+                <div class="space-y-2">
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-200">Contraseña</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fa-solid fa-lock text-gray-400 dark:text-gray-500"></i>
+                        </div>
+                        <input value="" id="hiddeninput" hidden />
+                        <input type="text" placeholder="Ingresa tu contraseña" name="contraseña" required id="password-field" class="w-full pl-10 pr-12 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-purple-500 focus:outline-none dark:bg-gray-700 dark:text-white transition placeholder-gray-400 dark:placeholder-gray-500" />
+                        <button type="button" id="toggle-password" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition">
+                            <i class="fa-solid fa-eye" id="eye-icon"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Repetir contraseña -->
+                <div class="space-y-2">
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-200">Confirmar contraseña</label>
+
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fa-solid fa-lock text-gray-400 dark:text-gray-500"></i>
+                        </div>
+                        <input type="text" id="confirm-password" placeholder="Repite tu contraseña" class="w-full pl-10 pr-12 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-purple-500 focus:outline-none dark:bg-gray-700 dark:text-white transition placeholder-gray-400 dark:placeholder-gray-500" required />
+                    </div>
+                </div>
+
+                <input type="submit" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-semibold py-3 rounded-xl transition transform hover:scale-105 shadow-lg">
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="~/Content/js/restablecer.js"></script>
+<script src="~/Content/js/actualizar.js"></script>
+<script>
+    const passwordField = document.getElementById('password-field');
+    const confirmPasswordField = document.getElementById('confirm-password');
+    const strengthBars = document.querySelectorAll('.strength-bar');
+    const strengthText = document.getElementById('strength-text');
+    const togglePassword = document.getElementById('toggle-password');
+    const eyeIcon = document.getElementById('eye-icon');
+
+    function checkPasswordStrength(password) {
+        let strength = 0;
+        if (password.length >= 6) strength++;
+        if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength++;
+        if (password.match(/[0-9]/)) strength++;
+        if (password.match(/[^a-zA-Z0-9]/)) strength++;
+        return strength;
+    }
+
+    function updatePasswordStrength(strength) {
+        const colors = ['bg-red-500', 'bg-orange-500', 'bg-yellow-500', 'bg-green-500'];
+        const texts = ['Débil', 'Regular', 'Buena', 'Excelente'];
+
+        strengthBars.forEach((bar, index) => {
+            bar.className = 'strength-bar w-6 h-2 rounded transition-colors duration-200';
+            if (index < strength) {
+                bar.classList.add(colors[strength - 1]);
+            } else {
+                bar.classList.add('bg-gray-200', 'dark:bg-gray-600');
+            }
+        });
+
+        strengthText.textContent = strength > 0 ? texts[strength - 1] : 'Débil';
+        strengthText.className = `text-xs ${strength > 2 ? 'text-green-600' : strength > 1 ? 'text-yellow-600' : 'text-red-600'}`;
+    }
+
+    function validatePasswordMatch() {
+        if (passwordField.value !== confirmPasswordField.value) {
+            showFieldError(confirmPasswordField, 'Las contraseñas no coinciden');
+            return false;
+        } else {
+            removeFieldError(confirmPasswordField);
+            return true;
+        }
+    }
+
+    // Eventos
+    passwordField.addEventListener('input', function () {
+        const strength = checkPasswordStrength(this.value);
+        updatePasswordStrength(strength);
+
+        if (confirmPasswordField.value) {
+            validatePasswordMatch();
+        }
+    });
+
+    confirmPasswordField.addEventListener('input', validatePasswordMatch);
+    confirmPasswordField.addEventListener('blur', validatePasswordMatch);
+
+    // Mostrar/ocultar contraseña
+    togglePassword.addEventListener('click', function () {
+        const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordField.setAttribute('type', type);
+        eyeIcon.className = type === 'password' ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash';
+    });
+
+    function mostrarMensaje(texto, tipo = "error") {
+        const contenedor = document.getElementById('mensajeCodigo');
+        contenedor.textContent = texto;
+        contenedor.className = 'mb-4 text-center px-4 py-2 rounded-lg font-medium transition-all duration-300';
+
+        if (tipo === "error") {
+            contenedor.classList.add('bg-red-500');
+        } else if (tipo === "exito") {
+            contenedor.classList.add('bg-green-500');
+        }
+
+        contenedor.classList.remove('hidden');
+        setTimeout(() => contenedor.classList.add('hidden'), 4000); // desaparece después de 4s
+    }
+
+</script>

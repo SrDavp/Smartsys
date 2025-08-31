@@ -1,0 +1,115 @@
+﻿@model List<SmartSys.Models.Plataforma>
+@{
+    ViewBag.Title = "Plataformas del Sistema";
+}
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+    <h2 class="text-3xl font-extrabold mb-6 text-purple-700 dark:text-purple-400">
+        Listado de Plataformas
+    </h2>
+
+    <a href="@Url.Action("CrearPlataforma")"
+       class="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg shadow-md transition-colors duration-200 font-medium text-center">
+        + Crear Nueva Plataforma
+    </a>
+    <br/>
+    <br/>
+    <div class="flex flex-col sm:flex-row sm:justify-between mb-6 gap-4">
+        <!-- Botón Crear Plataforma -->
+        <!-- Formulario de búsqueda -->
+        <form method="get" class="flex flex-col sm:flex-row gap-4 sm:items-end">
+            <div class="flex flex-col">
+                <label for="busqueda" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Buscar por nombre o descripción
+                </label>
+                <input type="text" name="busqueda" id="busqueda" placeholder="Buscar" value="@ViewBag.Busqueda"
+                       class="px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none w-full sm:w-64 bg-white dark:bg-gray-700 dark:text-white border-gray-300 dark:border-gray-600" />
+            </div>
+
+            <div class="flex flex-col">
+                <label for="estado" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Estado
+                </label>
+                <input type="text" name="estado" id="estado" placeholder="Ej: Activa o Inactiva"
+                       value="@(ViewBag.Estado ?? "")"
+                       class="px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none w-full sm:w-48 bg-white dark:bg-gray-700 dark:text-white border-gray-300 dark:border-gray-600" />
+            </div>
+
+            <div class="flex items-end">
+                <button type="submit"
+                        class="px-2 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg shadow-md transition-colors duration-200 font-medium">
+                    <i class="fa-solid fa-search m-2"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+
+
+    <div class="overflow-x-auto">
+        <table class="w-full divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+            <thead class="bg-purple-700 dark:bg-purple-300 text-black dark:text-white font-semibold">
+                <tr>
+                    <th class="px-4 py-2">Nombre</th>
+                    <th class="px-4 py-2">Descripción</th>
+                    <th class="px-4 py-2">Privacidad</th>
+                    <th class="px-4 py-2">Capacidad</th>
+                    <th class="px-4 py-2">Código</th>
+                    <th class="px-4 py-2">Fecha de Creación</th>
+                    <th class="px-4 py-2">Icono</th>
+                    <th class="px-4 py-2">Fondo</th>
+                    <th class="px-4 py-2">Estado</th>
+                    <th class="px-4 py-2">Acciones</th>
+                    <th class="px-4 py-2">Publicaciones</th>
+                    <th class="px-4 py-2">Miembros</th>
+
+
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                @foreach (var p in Model)
+                {
+                    var iconoBase64 = p.iconoPlataforma != null ? "data:image/png;base64," + Convert.ToBase64String(p.iconoPlataforma) : null;
+                    var fondoBase64 = p.fondoPlataforma != null ? "data:image/png;base64," + Convert.ToBase64String(p.fondoPlataforma) : null;
+
+                    <tr class="odd:bg-purple-50 text-black dark:text-white even:bg-purple-100 dark:odd:bg-purple-800 dark:even:bg-purple-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-200">
+                        <td class="px-4 py-2 font-medium">@p.nombrePlataforma</td>
+                        <td class="px-4 py-2">@p.descripcionPlataforma</td>
+                        <td class="px-4 py-2">@p.privacidadPlataforma</td>
+                        <td class="px-4 py-2">@p.capacidadMiembros_plataforma</td>
+                        <td class="px-4 py-2">@p.codigoPlataforma</td>
+                        <td class="px-4 py-2">@p.fechaCreacion.ToShortDateString()</td>
+                        <td class="px-4 py-2">
+                            @if (iconoBase64 != null)
+                            {
+                                <img src="@iconoBase64" class="w-10 h-10 rounded-full border" />
+                            }
+                        </td>
+                        <td class="px-4 py-2">
+                            @if (fondoBase64 != null)
+                            {
+                                <img src="@fondoBase64" class="w-16 h-10 border object-cover" />
+                            }
+                        </td>
+                        <td class="px-4 py-2">@p.estadoPlataforma</td>
+                        <td class="px-4 py-2 space-x-1">
+                            <a class="px-2 py-1 bg-purple-600 hover:bg-purple-600 text-white text-sm rounded-md transition-colors duration-200"
+                               href="@Url.Action("EditarPlataforma", new { id = p.idPlataforma })">Editar</a>
+                            <div class="h-2"></div>
+                            <a class="px-2 py-1 bg-red-500 hover:bg-red-600 text-white text-sm rounded-md transition-colors duration-200"
+                               href="@Url.Action("EliminarPlataforma", new { id = p.idPlataforma })" onclick="return confirm('¿Eliminar plataforma?')">Eliminar</a>
+                        </td>
+                        <td class="px-4 py-2">
+                            <a class="px-2 py-1 text-gray-400 text-sm rounded-md transition-colors duration-200"
+                               href="@Url.Action("Publicaciones", "SuperAdmin", new { id = p.idPlataforma })">Ver Publicaciones</a>
+                        </td>
+                        <td class="px-4 py-2">
+                            <a class="px-2 py-1 text-gray-400 text-sm rounded-md transition-colors duration-200"
+                               href="@Url.Action("GestionMiembros", "SuperAdmin", new { id = p.idPlataforma })">Ver Miembros</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,146 @@
+﻿@model SmartSys.Models.Plataforma
+@{
+    ViewBag.Title = "Crear Plataforma";
+}
+
+<div class="min-h-screen bg-white dark:bg-gray-900 p-6">
+    <div class="max-w-4xl mx-auto">
+
+        <!-- Form Card -->
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden mb-20">
+            <div class="p-8">
+                <div class="max-w-3xl mx-auto">
+                    <h2 class="text-3xl font-bold text-purple-900 dark:text-purple-400 mb-2">Acerca de tu plataforma</h2>
+                    <p class="text-gray-600 dark:text-gray-300 mb-8">Ingresa información detallada sobre tu plataforma.</p>
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-xl p-4 mb-6">
+                            <div class="flex items-center">
+                                <i class="fa-solid fa-exclamation-triangle text-red-500 mr-3"></i>
+                                <div>
+                                    <h3 class="text-sm font-semibold text-red-800 dark:text-red-200">Error</h3>
+                                    <p class="text-sm text-red-700 dark:text-red-300 mt-1">@ViewBag.Error</p>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    @using (Html.BeginForm("CrearPlataforma", "Plataforma", FormMethod.Post, new { enctype = "multipart/form-data", @class = "space-y-6" }))
+                    {
+                        <!-- Nombre de Plataforma -->
+                        <div class="space-y-2">
+                            <label class="text-sm font-medium text-gray-700 dark:text-gray-300 block">Nombre de la plataforma</label>
+                            @Html.TextBoxFor(m => m.nombrePlataforma, new
+                       {
+                           @class = "w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all duration-200",
+                           placeholder = "Ingresa el nombre de tu plataforma",
+                           @required = "required"
+                       })
+                        </div>
+
+                        <!-- Tipo y Tamaño -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label class="text-sm font-medium text-gray-700 dark:text-gray-300 block">Tipo</label>
+                                @Html.DropDownListFor(m => m.privacidadPlataforma, new SelectList(new[] { "Público", "Privado" }), "Seleccionar", new
+                           {
+                               @class = "w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none cursor-pointer",
+                               @required = "required"
+                           })
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-sm font-medium text-gray-700 dark:text-gray-300 block">
+                                    Tamaño de plataforma
+                                </label>
+                                @Html.TextBoxFor(m => m.capacidadMiembros_plataforma, new
+                           {
+                               @class = "w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all duration-200",
+                               placeholder = "Ingresa la capacidad de miembros(10-1000)",
+                               @required = "required"
+                           })
+                            </div>
+
+                        </div>
+
+                        <!-- Descripción -->
+                        <div class="space-y-2">
+                            <label class="text-sm font-medium text-gray-700 dark:text-gray-300 block">Descripción</label>
+                            @Html.TextAreaFor(m => m.descripcionPlataforma, new
+                       {
+                           @class = "w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none resize-none transition-all duration-200",
+                           rows = "4",
+                           placeholder = "Describe tu plataforma...",
+                           @required = "required"
+                       })
+                        </div>
+
+                        <!-- Icono y Fondo -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Icono -->
+                            <div class="space-y-2">
+                                <label class="text-sm font-medium text-gray-700 dark:text-gray-300 block">Icono de plataforma</label>
+                                <div class="relative border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4 hover:border-purple-400 dark:hover:border-purple-500 transition-colors duration-200 bg-white dark:bg-gray-700">
+                                    <input type="file" name="IconoFile" id="iconoInput" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" accept="image/*">
+                                    <div class="text-center">
+                                        <div class="w-12 h-12 mx-auto mb-2 bg-white dark:bg-gray-600 rounded-lg flex items-center justify-center">
+                                            <svg class="w-6 h-6 text-gray-400 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                                            </svg>
+                                        </div>
+                                        <button type="button" class="text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">
+                                            Seleccionar archivo
+                                        </button>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">PNG, JPG hasta 10MB</p>
+                                        <p id="iconoSubido" class="text-green-600 dark:text-green-400 text-sm font-medium hidden mt-2">Archivo subido ✅</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Fondo -->
+                            <div class="space-y-2">
+                                <label class="text-sm font-medium text-gray-700 dark:text-gray-300 block">Fondo de plataforma</label>
+                                <div class="relative border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4 hover:border-purple-400 dark:hover:border-purple-500 transition-colors duration-200 bg-white dark:bg-gray-700">
+                                    <input type="file" name="FondoFile" id="fondoInput" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" accept="image/*">
+                                    <div class="text-center">
+                                        <div class="w-12 h-12 mx-auto mb-2 bg-white dark:bg-gray-600 rounded-lg flex items-center justify-center">
+                                            <svg class="w-6 h-6 text-gray-400 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                                            </svg>
+                                        </div>
+                                        <button type="button" class="text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">
+                                            Seleccionar archivo
+                                        </button>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">PNG, JPG hasta 10MB</p>
+                                        <p id="fondoSubido" class="text-green-600 dark:text-green-400 text-sm font-medium hidden mt-2">Archivo subido ✅</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Botón Siguiente -->
+                        <div class="flex justify-end pt-8">
+                            <button type="submit" class="px-8 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-all duration-200 font-medium shadow-lg">
+                                Siguiente paso
+                            </button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Script para mostrar mensaje de archivos subidos -->
+<script>
+    document.getElementById("iconoInput").addEventListener("change", function () {
+        if (this.files.length > 0) {
+            document.getElementById("iconoSubido").classList.remove("hidden");
+        }
+    });
+
+    document.getElementById("fondoInput").addEventListener("change", function () {
+        if (this.files.length > 0) {
+            document.getElementById("fondoSubido").classList.remove("hidden");
+        }
+    });
+</script>

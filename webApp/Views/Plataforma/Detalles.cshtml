@@ -1,0 +1,79 @@
+﻿@model SmartSys.Models.Plataforma
+
+@{
+    ViewBag.Title = "Detalles de Plataforma";
+}
+
+<div class="max-w-4xl mx-auto bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border border-purple-100 dark:border-purple-800">
+
+    <!-- Título -->
+    <h2 class="text-3xl font-extrabold text-purple-900 dark:text-purple-100 mb-6">Detalles de la Plataforma</h2>
+
+    <!-- Información de la Plataforma -->
+    <dl class="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-700 dark:text-gray-300">
+        <div>
+            <dt class="font-semibold">Nombre:</dt>
+            <dd class="mt-1">@Model.nombrePlataforma</dd>
+        </div>
+        <div>
+            <dt class="font-semibold">Código:</dt>
+            <dd class="mt-1">@Model.codigoPlataforma</dd>
+        </div>
+        <div>
+            <dt class="font-semibold">Privacidad:</dt>
+            <dd class="mt-1">@Model.privacidadPlataforma</dd>
+        </div>
+        <div>
+            <dt class="font-semibold">Capacidad:</dt>
+            <dd class="mt-1">@Model.capacidadMiembros_plataforma miembros</dd>
+        </div>
+        <div>
+            <dt class="font-semibold">Estado:</dt>
+            <dd class="mt-1">@Model.estadoPlataforma</dd>
+        </div>
+        <div class="md:col-span-2">
+            <dt class="font-semibold">Descripción:</dt>
+            <dd class="mt-1">@Model.descripcionPlataforma</dd>
+        </div>
+        <div>
+            <dt class="font-semibold">Fecha de creación:</dt>
+            <dd class="mt-1">@Model.fechaCreacion.ToString("dd/MM/yyyy")</dd>
+        </div>
+        <div>
+            <dt class="font-semibold">Ícono:</dt>
+            <dd class="mt-1">
+                @if (Model.iconoPlataforma != null)
+                {
+                    var base64Icon = "data:image/png;base64," + Convert.ToBase64String(Model.iconoPlataforma);
+                    <img src="@base64Icon" alt="Ícono" class="w-20 h-20 rounded-full border border-purple-300 dark:border-purple-700 shadow" />
+                }
+                else
+                {
+                    <span class="text-sm text-gray-500 dark:text-gray-400">No hay ícono.</span>
+                }
+            </dd>
+        </div>
+        <div class="md:col-span-2">
+            <dt class="font-semibold">Fondo:</dt>
+            <dd class="mt-2">
+                @if (Model.fondoPlataforma != null)
+                {
+                    var base64Fondo = "data:image/png;base64," + Convert.ToBase64String(Model.fondoPlataforma);
+                    <img src="@base64Fondo" alt="Fondo" class="w-full h-40 object-cover rounded-xl shadow-md" />
+                }
+                else
+                {
+                    <span class="text-sm text-gray-500 dark:text-gray-400">No hay imagen de fondo.</span>
+                }
+            </dd>
+        </div>
+    </dl>
+
+    <!-- Botón Volver -->
+    <div class="mt-6">
+        <a href="@Url.Action("MisPlataformas", "Plataforma")"
+           class="inline-block px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
+            Volver
+        </a>
+    </div>
+</div>

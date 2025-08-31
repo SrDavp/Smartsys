@@ -1,0 +1,202 @@
+﻿@{
+    ViewBag.Title = "Contacto - SmartSys";
+}
+
+<div class="min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-cyan-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+    <!-- Hero Section -->
+    <section class="py-16 px-4">
+        <div class="max-w-6xl mx-auto text-center">
+            <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-3xl mb-6 shadow-2xl">
+                <i class="fa-solid fa-headset text-3xl text-white"></i>
+            </div>
+            <h1 class="text-4xl lg:text-5xl font-bold text-gray-800 dark:text-white mb-6">
+                ¿Necesitas ayuda? <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600">Estamos aquí</span>
+            </h1>
+            <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
+                Nuestro equipo de expertos está listo para ayudarte a resolver cualquier duda y llevar tu proyecto al siguiente nivel con SmartSys.
+            </p>
+        </div>
+    </section>
+
+    <!-- Contact Methods -->
+    <section class="py-12 px-4">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+                <!-- Email Support -->
+                <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 text-center">
+                    <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                        <i class="fa-solid fa-envelope text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-3">Soporte por Email</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4">Respuesta garantizada en menos de 24 horas</p>
+                    <a href="mailto:smartsyscj@gmail.com" class="text-purple-600 hover:text-purple-800 dark:text-purple-400 font-semibold">
+                        smartsyscj@gmail.com
+                    </a>
+                </div>
+
+                <!-- Phone Support -->
+                <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 text-center">
+                    <div class="w-16 h-16 bg-gradient-to-r from-green-500 to-green-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                        <i class="fa-solid fa-phone text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-3">Soporte Telefónico</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4">Lunes a Viernes: 8:00 AM - 6:00 PM</p>
+                    <a href="tel:+50360773292" class="text-green-600 hover:text-green-800 dark:text-green-400 font-semibold">
+                        +503 6077-3292
+                    </a>
+                </div>
+
+                <!-- Live Chat -->
+                <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 text-center">
+                    <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                        <i class="fa-solid fa-comments text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-3">Chat en Vivo</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4">Disponible 24/7 en nuestra App</p>
+                    <button class="text-blue-600 hover:text-blue-800 dark:text-blue-400 font-semibold" onclick="openLiveChat()">
+                        Descarga la App
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Information -->
+    <section class="py-12 px-4">
+        <div class="max-w-4xl mx-auto">
+            <div class="bg-gradient-to-br from-purple-600 to-indigo-600 rounded-2xl p-8 text-white">
+                <h3 class="text-2xl font-bold mb-6">Información de Contacto</h3>
+
+                <div class="space-y-6">
+                    <!-- Address -->
+                    <div class="flex items-start space-x-4">
+                        <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-map-marker-alt text-white"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-1">Oficina Principal</h4>
+                            <p class="text-purple-100">
+                                Centro Comercial Galerías<br>
+                                Local 205, San Salvador<br>
+                                El Salvador
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Business Hours -->
+                    <div class="flex items-start space-x-4">
+                        <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-clock text-white"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-1">Horarios</h4>
+                            <p class="text-purple-100">
+                                Lunes - Viernes: 8:00 AM - 6:00 PM<br>
+                                Sábados: 9:00 AM - 2:00 PM<br>
+                                Domingos: Cerrado
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Response Time -->
+                    <div class="flex items-start space-x-4">
+                        <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-stopwatch text-white"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-1">Tiempo de Respuesta</h4>
+                            <p class="text-purple-100">
+                                Email: Menos de 24 horas<br>
+                                Chat: Inmediato<br>
+                                Teléfono: Inmediato
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Social Media -->
+                <div class="mt-8 pt-8 border-t border-white/20">
+                    <h4 class="font-semibold mb-4">Síguenos en Redes Sociales</h4>
+                    <div class="flex space-x-4">
+                        <a href="https://www.facebook.com/" class="w-10 h-10 bg-white/20 hover:bg-white/30 rounded-lg flex items-center justify-center transition-colors duration-200">
+                            <i class="fa-brands fa-facebook text-white"></i>
+                        </a>
+                        <a href="https://x.com/" class="w-10 h-10 bg-white/20 hover:bg-white/30 rounded-lg flex items-center justify-center transition-colors duration-200">
+                            <i class="fa-brands fa-twitter text-white"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-16 px-4 bg-white dark:bg-gray-800">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-4">Preguntas Frecuentes</h2>
+                <p class="text-gray-600 dark:text-gray-300">Encuentra respuestas rápidas a las consultas más comunes</p>
+            </div>
+
+            <div class="space-y-4">
+                <div class="faq-item bg-gray-50 dark:bg-gray-700 rounded-xl border border-gray-200 dark:border-gray-600">
+                    <button class="faq-toggle w-full px-6 py-4 text-left flex items-center justify-between font-semibold text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200 rounded-xl">
+                        <span>¿Cómo puedo contactar al soporte técnico?</span>
+                        <i class="fa-solid fa-chevron-down text-purple-600 transform transition-transform duration-200"></i>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-4 text-gray-600 dark:text-gray-300">
+                        Puedes contactarnos por email (smartsyscj@gmail.com), teléfono (+503 6077-3292), o usar nuestro chat en vivo disponible 24/7.
+                    </div>
+                </div>
+
+                <div class="faq-item bg-gray-50 dark:bg-gray-700 rounded-xl border border-gray-200 dark:border-gray-600">
+                    <button class="faq-toggle w-full px-6 py-4 text-left flex items-center justify-between font-semibold text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200 rounded-xl">
+                        <span>¿Cuál es el tiempo de respuesta promedio?</span>
+                        <i class="fa-solid fa-chevron-down text-purple-600 transform transition-transform duration-200"></i>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-4 text-gray-600 dark:text-gray-300">
+                        Garantizamos respuesta por email en menos de 24 horas. El chat en vivo y soporte telefónico ofrecen respuesta inmediata durante horario de oficina.
+                    </div>
+                </div>
+
+                <div class="faq-item bg-gray-50 dark:bg-gray-700 rounded-xl border border-gray-200 dark:border-gray-600">
+                    <button class="faq-toggle w-full px-6 py-4 text-left flex items-center justify-between font-semibold text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200 rounded-xl">
+                        <span>¿Ofrecen soporte en inglés?</span>
+                        <i class="fa-solid fa-chevron-down text-purple-600 transform transition-transform duration-200"></i>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-4 text-gray-600 dark:text-gray-300">
+                        Sí, todo nuestro equipo de soporte habla inglés nativo y puede ayudarte.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const toggles = document.querySelectorAll(".faq-toggle");
+
+        toggles.forEach((toggle) => {
+            toggle.addEventListener("click", () => {
+                const content = toggle.nextElementSibling;
+                const icon = toggle.querySelector("i");
+
+                // Alternar visibilidad
+                content.classList.toggle("hidden");
+
+                // Rotar el ícono
+                icon.classList.toggle("rotate-180");
+
+                // Cerrar otros si quieres estilo acordeón
+                toggles.forEach((other) => {
+                    if (other !== toggle) {
+                        other.nextElementSibling.classList.add("hidden");
+                        other.querySelector("i").classList.remove("rotate-180");
+                    }
+                });
+            });
+        });
+    });
+</script>
+

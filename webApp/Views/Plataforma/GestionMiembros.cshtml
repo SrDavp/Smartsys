@@ -1,0 +1,56 @@
+﻿@model List<SmartSys.Models.MiembroViewModel>
+
+@{
+    ViewBag.Title = "Gestión de Miembros";
+    var plataformaId = ViewBag.PlataformaId;
+}
+
+<div class="max-w-5xl mx-auto p-6">
+    <h2 class="text-3xl font-extrabold text-purple-900 dark:text-purple-100 mb-6">Miembros de la Plataforma</h2>
+
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+            <thead class="bg-gray-100 dark:bg-gray-700">
+                <tr>
+                    <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 dark:text-gray-300">Nombre</th>
+                    <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 dark:text-gray-300">Correo</th>
+                    <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 dark:text-gray-300">Rol</th>
+                    <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 dark:text-gray-300">Expulsar</th>
+                    <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 dark:text-gray-300">Hcaer Admin</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="dark:text-white px-4 py-2">@item.Usuario.Nombre @item.Usuario.Apellido</td>
+                        <td class="dark:text-white px-4 py-2">@item.Usuario.CorreoElectronico</td>
+                        <td class="dark:text-white px-4 py-2">
+                            <span class="px-2 py-1 rounded-lg font-medium @(item.Relacion.rolUsuarioPlataforma == "Admin" ? "bg-purple-600 text-white" : "bg-purple-600 text-white")">
+                                @item.Relacion.rolUsuarioPlataforma
+                            </span>
+                        </td>
+                        <td class="dark:text-white px-4 py-2">
+                            @if (item.Relacion.rolUsuarioPlataforma != "Admin")
+                            {
+                                <a href="@Url.Action("Expulsar", "Plataforma", new { idUsuario = item.Usuario.IdUsuario, idPlataforma = plataformaId })"
+                                   class="px-3 py-1 rounded-xl bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300">
+                                    Expulsar
+                                </a>
+                            }
+                        </td>
+                        <td class="dark:text-white px-4 py-2">
+                            @if (item.Relacion.rolUsuarioPlataforma != "Admin")
+                            {
+                                <a href="@Url.Action("CambiarRol", "Plataforma", new { idUsuario = item.Usuario.IdUsuario, idPlataforma = plataformaId })"
+                                   class="px-3 py-1 rounded-lg font-medium bg-purple-600 text-white bg-purple-600 text-white">
+                                    Hacer Admin
+                                </a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
