@@ -7,7 +7,7 @@
     <div class="w-full flex justify-center">
         <div class="max-w-7xl px-6 py-12">
 
-            <div class="text-center mb-12" style="margin-left: 200px;">
+            <div class="text-center mb-12" ">
                 <h1 class="text-3xl font-bold text-gray-800 dark:text-white mb-2">Editar perfil</h1>
                 <p class="text-gray-600 dark:text-gray-300">Actualice su información personal</p>
             </div>
@@ -16,7 +16,7 @@
             {
                 @Html.HiddenFor(m => m.IdUsuario)
 
-                <div style="height: 635.6px" class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl border border-gray-200 dark:border-gray-700 p-8 sticky top-8">
+                <div style="height:28rem; width:22%" class="bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 p-8 sticky top-8">
                     <div class="text-center">
                         <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-6">Foto de Perfil</h3>
 
@@ -63,10 +63,9 @@
                             <input type="file" id="fotoPerfil" name="FotoPerfil" class="hidden" accept="image/*" />
                         </div>
 
-                        <button type="button" class="px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg shadow hover:shadow-lg hover:scale-105 transition-transform duration-300 font-medium"
+                        <button style="width:100%" type="button" class="px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg shadow hover:shadow-lg hover:scale-105 transition-transform duration-300 font-medium"
                                 onclick="document.getElementById('fotoPerfil').click()">
-                            <i class="fa-solid fa-upload mr-2"></i>
-                            Cambiar Imagen
+                            Cambiar Imagen                             <i class="fa-solid fa-upload mr-2"></i>
                         </button>
 
                         <p class="text-xs text-gray-500 dark:text-gray-400 mt-3">
@@ -75,86 +74,101 @@
                     </div>
                 </div>
 
-                <div style="width: 800px;">
+                <div style="width:80%;">
                     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 p-8" style="width: 100%;">
                         <div class="space-y-8">
                             <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-8">Acerca de ti</h2>
 
-                            <div class="flex items-center justify-between py-6 border-b border-black/80 dark:border-white/30">
-                                <label class="text-gray-700 dark:text-gray-300 font-medium text-base flex-shrink-0">Nombre</label>
-                                <div class="flex items-center space-x-6">
-                                    <span id="nombreDisplay" class="text-gray-800 dark:text-white font-medium text-base">@Model.Nombre</span>
-                                    @Html.TextBoxFor(m => m.Nombre, new
-                                    {
-                                        @class = "bg-transparent text-gray-800 dark:text-white font-medium border-none outline-none text-base hidden",
-                                        @placeholder = "Tu nombre",
-                                        @id = "nombreInput"
-                                    })
-                                    <button type="button" class="flex items-center space-x-2 text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 transition-colors text-xs flex-shrink-0"
-                                            onclick="toggleEdit('nombre')">
-                                        <i id="nombreIcon" class="fa-solid fa-pen text-xs"></i>
-                                        <span id="nombreText" class="text-xs">Editar</span>
-                                    </button>
+                            <!-- Nombre y Apellido -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 py-6 border-b border-black/80 dark:border-white/30">
+                                <!-- Nombre -->
+                                <div>
+                                    <label class="text-gray-700 dark:text-gray-300 font-medium text-base flex-shrink-0">Nombre</label>
+                                    <div class="flex items-center space-x-6 mt-2">
+                                        <span id="nombreDisplay" class="text-gray-800 dark:text-white font-medium text-base">@Model.Nombre</span>
+                                        @Html.TextBoxFor(m => m.Nombre, new
+                                        {
+                                            @style = "width:100%;",
+                                            @class = "p-4 border border-gray-300 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none text-base hidden",
+                                            @placeholder = "Tu nombre",
+                                            @id = "nombreInput"
+                                        })
+                                        <button type="button" class="flex items-center space-x-2 text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 transition-colors text-xs flex-shrink-0"
+                                                onclick="toggleEdit('nombre')">
+                                            <i id="nombreIcon" class="fa-solid fa-pen text-xs"></i>
+                                            <span id="nombreText" class="text-xs">Editar</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Apellido -->
+                                <div>
+                                    <label class="text-gray-700 dark:text-gray-300 font-medium text-base flex-shrink-0">Apellido</label>
+                                    <div class="flex items-center space-x-6 mt-2">
+                                        <span id="apellidoDisplay" class="text-gray-800 dark:text-white font-medium text-base">@Model.Apellido</span>
+                                        @Html.TextBoxFor(m => m.Apellido, new
+                                        {
+                                       @style = "width:100%;",
+                                            @class = "p-4 border border-gray-300 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none text-base hidden",
+                                            @placeholder = "Apellido",
+                                            @id = "apellidoInput"
+                                        })
+                                        <button type="button" class="flex items-center space-x-2 text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 transition-colors text-xs flex-shrink-0"
+                                                onclick="toggleEdit('apellido')">
+                                            <i id="apellidoIcon" class="fa-solid fa-pen text-xs"></i>
+                                            <span id="apellidoText" class="text-xs">Editar</span>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="flex items-center justify-between py-6 border-b border-black/80 dark:border-white/30">
-                                <label class="text-gray-700 dark:text-gray-300 font-medium text-base flex-shrink-0">Apellido</label>
-                                <div class="flex items-center space-x-6">
-                                    <span id="apellidoDisplay" class="text-gray-800 dark:text-white font-medium text-base">@Model.Apellido</span>
-                                    @Html.TextBoxFor(m => m.Apellido, new
-                                    {
-                                        @class = "bg-transparent text-gray-800 dark:text-white font-medium border-none outline-none text-base hidden",
-                                        @placeholder = "Apellido",
-                                        @id = "apellidoInput"
-                                    })
-                                    <button type="button" class="flex items-center space-x-2 text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 transition-colors text-xs flex-shrink-0"
-                                            onclick="toggleEdit('apellido')">
-                                        <i id="apellidoIcon" class="fa-solid fa-pen text-xs"></i>
-                                        <span id="apellidoText" class="text-xs">Editar</span>
-                                    </button>
+                            <!-- Correo y Teléfono -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 py-6 border-b border-black/80 dark:border-white/30">
+                                <!-- Correo -->
+                                <div>
+                                    <label class="text-gray-700 dark:text-gray-300 font-medium text-base flex-shrink-0">Correo electrónico</label>
+                                    <div class="flex items-center space-x-6 mt-2">
+                                        <span id="correoDisplay" class="text-gray-800 dark:text-white font-medium text-base">@Model.CorreoElectronico</span>
+                                        @Html.TextBoxFor(m => m.CorreoElectronico, new
+                                        {
+                                       @style = "width:100%;",
+                                            @class = "p-4 border border-gray-300 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none text-base hidden",
+                                            @placeholder = "correo@ejemplo.com",
+                                            @id = "correoInput"
+                                        })
+                                        <button type="button" class="flex items-center space-x-2 text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 transition-colors text-xs flex-shrink-0"
+                                                onclick="toggleEdit('correo')">
+                                            <i id="correoIcon" class="fa-solid fa-pen text-xs"></i>
+                                            <span id="correoText" class="text-xs">Editar</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Teléfono -->
+                                <div>
+                                    <label class="text-gray-700 dark:text-gray-300 font-medium text-base flex-shrink-0">Teléfono</label>
+                                    <div class="flex items-center space-x-6 mt-2">
+                                        <span id="telefonoDisplay" class="text-gray-800 dark:text-white font-medium text-base">@Model.Telefono</span>
+                                        @Html.TextBoxFor(m => m.Telefono, new
+                                        {
+                                       @style = "width:100%;",
+                                            @class = "p-4 border border-gray-300 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none text-base hidden",
+                                            @placeholder = "Teléfono",
+                                            @id = "telefonoInput"
+                                        })
+                                        <button type="button" class="flex items-center space-x-2 text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 transition-colors text-xs flex-shrink-0"
+                                                onclick="toggleEdit('telefono')">
+                                            <i id="telefonoIcon" class="fa-solid fa-pen text-xs"></i>
+                                            <span id="telefonoText" class="text-xs">Editar</span>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="flex items-center justify-between py-6 border-b border-black/80 dark:border-white/30">
-                                <label class="text-gray-700 dark:text-gray-300 font-medium text-base flex-shrink-0">Correo electrónico</label>
-                                <div class="flex items-center space-x-6">
-                                    <span id="correoDisplay" class="text-gray-800 dark:text-white font-medium text-base">@Model.CorreoElectronico</span>
-                                    @Html.TextBoxFor(m => m.CorreoElectronico, new
-                                    {
-                                        @class = "bg-transparent text-gray-800 dark:text-white font-medium border-none outline-none text-base hidden",
-                                        @placeholder = "correo@ejemplo.com",
-                                        @id = "correoInput"
-                                    })
-                                    <button type="button" class="flex items-center space-x-2 text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 transition-colors text-xs flex-shrink-0"
-                                            onclick="toggleEdit('correo')">
-                                        <i id="correoIcon" class="fa-solid fa-pen text-xs"></i>
-                                        <span id="correoText" class="text-xs">Editar</span>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div class="flex items-center justify-between py-6 border-b border-black/80 dark:border-white/30">
-                                <label class="text-gray-700 dark:text-gray-300 font-medium text-base flex-shrink-0">Teléfono</label>
-                                <div class="flex items-center space-x-6">
-                                    <span id="telefonoDisplay" class="text-gray-800 dark:text-white font-medium text-base">@Model.Telefono</span>
-                                    @Html.TextBoxFor(m => m.Telefono, new
-                                    {
-                                        @class = "bg-transparent text-gray-800 dark:text-white font-medium border-none outline-none text-base hidden",
-                                        @placeholder = "Teléfono",
-                                        @id = "telefonoInput"
-                                    })
-                                    <button type="button" class="flex items-center space-x-2 text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 transition-colors text-xs flex-shrink-0"
-                                            onclick="toggleEdit('telefono')">
-                                        <i id="telefonoIcon" class="fa-solid fa-pen text-xs"></i>
-                                        <span id="telefonoText" class="text-xs">Editar</span>
-                                    </button>
-                                </div>
-                            </div>
 
                             <div class="pt-4 border-b border-black/80 dark:border-white/30 pb-6">
                                 <div class="flex items-center justify-between">
-                                    <label class="block text-gray-700 dark:text-gray-300 font-medium text-base">Biografía</label>
+                                    <label class="mb-2 block text-gray-700 dark:text-gray-300 font-medium text-base">Biografía</label>
                                     <button type="button" class="flex items-center space-x-2 text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 transition-colors text-xs"
                                             onclick="toggleEdit('biografia')">
                                         <i id="biografiaIcon" class="fa-solid fa-pen text-xs"></i>
@@ -173,29 +187,31 @@
                                     @maxlength = "200"
                                 })
                             </div>
-
-                            <div class="border-b border-black/80 dark:border-white/30 pb-6">
-                                <div class="flex items-center justify-between mb-6">
-                                    <label class="block text-gray-700 dark:text-gray-300 font-medium text-base">Contraseña</label>
-                                    <button type="button" class="flex items-center space-x-2 text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 transition-colors text-xs"
-                                            onclick="abrirModalContrasena()">
-                                        <i class="fa-solid fa-pen text-xs"></i>
-                                        <span class="text-xs">Editar</span>
-                                    </button>
-                                </div>
-                                <div class="w-full p-4 bg-gray-50 dark:bg-gray-700 rounded-xl text-gray-800 dark:text-white text-base min-h-[60px] flex items-center">
-                                    *************
-                                </div>
-                            </div>
                         </div>
                     </div>
 
-                    <div class="pt-8 pb-16 flex justify-center">
-                        <button type="submit"
-                                class="px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg shadow hover:shadow-lg hover:scale-105 transition-transform duration-300 font-medium">
-                            <i class="fa-solid fa-save"></i>
-                            <span>Guardar Cambios</span>
-                        </button>
+                    <div class="flex justify-center space-x-2">
+                        <div class="pt-8 pb-16 flex justify-center">
+                            <button type="submit"
+                                    class="px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg shadow hover:shadow-lg hover:scale-105 transition-transform duration-300 font-medium">
+                                <i class="fa-solid fa-save"></i>
+                                <span>Guardar Cambios</span>
+                            </button>
+                        </div>
+                        <div class="pt-8 pb-16 flex justify-center">
+                            <button type="button" class="px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg shadow hover:shadow-lg hover:scale-105 transition-transform duration-300 font-medium"
+                                    onclick="abrirModalContrasena()">
+                                <i class="fa-solid fa-pen text-xs"></i>
+                                <span>Cambiar Contraseñana</span>
+                            </button>
+                        </div>
+                        <div class="pt-8 pb-16 flex justify-center">
+                            <div type="submit"
+                                 class="px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg shadow hover:shadow-lg hover:scale-105 transition-transform duration-300 font-medium">
+                                <i class="fa-solid fa-lock"></i>
+                                <span>Codigo: @Model.CodigoUnico</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             }
@@ -288,6 +304,7 @@
         </form>
     </div>
 </div>
+
 
 <script>
     function abrirModalContrasena() {
