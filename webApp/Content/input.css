@@ -1,3 +1,0 @@
-﻿@import "tailwindcss";
-@custom-variant dark (&:where(dark, .dark *));
-@import "@fortawesome/fontawesome-free/css/all.min.css";

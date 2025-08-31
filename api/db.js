@@ -6,7 +6,7 @@ const config = {
   user: 'sa',
   password: 'root',
   server: '192.168.0.12',
-  database: 'SmartSys',
+  database: 'SmartSys2',
   port: 1433,
   options: {
     encrypt: false,
