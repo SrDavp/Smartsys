@@ -29,7 +29,7 @@ namespace SmartSys.Controllers
             if (Session["UsuarioID"] == null)
                 return RedirectToAction("Login", "Account");
             //Validar Capacidad
-            if (p.capacidadMiembros_plataforma < 3 || p.capacidadMiembros_plataforma > 1000)
+            if (p.capacidadMiembros_plataforma < 10 || p.capacidadMiembros_plataforma > 1000)
             {
                 ViewBag.Error = "La cantidad de miembros es de 10 a 1000";
                 return View(p);
@@ -418,7 +418,21 @@ namespace SmartSys.Controllers
                 });
 
                 db.SaveChanges();
-                return RedirectToAction("Contenido", new { id = id });
+
+                // 🔹 Verificar rol del usuario en la plataforma
+                var relacion = db.usuario_plataforma
+                    .FirstOrDefault(up => up.idUsuario4 == idUsuario && up.idPlataforma1 == id);
+
+                if (relacion != null && relacion.rolUsuarioPlataforma == "Admin")
+                {
+                    // Si es Admin → redirige a Contenido
+                    return RedirectToAction("Contenido", new { id = id });
+                }
+                else
+                {
+                    // Si no es Admin → redirige a Publicaciones
+                    return RedirectToAction("Publicaciones", new { id = id });
+                }
             }
 
             ViewBag.PlataformaId = id;

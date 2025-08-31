@@ -3,7 +3,7 @@
     ViewBag.Title = "Detalle de Publicación";
 }
 
-<div class="max-w-3xl mx-auto p-6">
+<div style="width:36%" class="mx-auto p-6">
     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-purple-100 dark:border-purple-800 p-6 space-y-4">
 
         <!-- Título -->
@@ -27,8 +27,12 @@
             var mimeType = "data:image/png;base64";
             <div>
                 <p class="text-gray-700 dark:text-gray-300 font-semibold mb-1">Archivo:</p>
-                <img src="data:@mimeType;base64,@base64" class="max-w-md rounded-lg shadow-lg" alt="Imagen Adjunta" />
+                <img style="width:100%" src="data:@mimeType;base64,@base64" class="rounded-lg shadow-lg" alt="Imagen Adjunta" />
             </div>
         }
+    <p class="text-gray-700 dark:text-gray-300"><strong>Fecha de la Publicacion:</strong> @(Model.fechaPublicacion.HasValue? Model.fechaPublicacion.Value.ToString("dd/MM/yyyy")
+        : "Fecha no disponible")
+    </p>
     </div>
+
 </div>

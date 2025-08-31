@@ -1,79 +1,80 @@
 ﻿@model SmartSys.Models.Plataforma
-
 @{
     ViewBag.Title = "Detalles de Plataforma";
 }
 
-<div class="max-w-4xl mx-auto bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border border-purple-100 dark:border-purple-800">
+<br>
+<br />
+<div style="width:50%" class="mx-auto py-8 px-4 rounded-xl shadow-2xl bg-white dark:bg-gray-800">
 
-    <!-- Título -->
-    <h2 class="text-3xl font-extrabold text-purple-900 dark:text-purple-100 mb-6">Detalles de la Plataforma</h2>
+    <!-- ENCABEZADO DE PLATAFORMA -->
+    <div class="bg-white dark:bg-gray-800 p-6 flex flex-col md:flex-row items-center gap-6">
 
-    <!-- Información de la Plataforma -->
-    <dl class="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-700 dark:text-gray-300">
-        <div>
-            <dt class="font-semibold">Nombre:</dt>
-            <dd class="mt-1">@Model.nombrePlataforma</dd>
-        </div>
-        <div>
-            <dt class="font-semibold">Código:</dt>
-            <dd class="mt-1">@Model.codigoPlataforma</dd>
-        </div>
-        <div>
-            <dt class="font-semibold">Privacidad:</dt>
-            <dd class="mt-1">@Model.privacidadPlataforma</dd>
-        </div>
-        <div>
-            <dt class="font-semibold">Capacidad:</dt>
-            <dd class="mt-1">@Model.capacidadMiembros_plataforma miembros</dd>
-        </div>
-        <div>
-            <dt class="font-semibold">Estado:</dt>
-            <dd class="mt-1">@Model.estadoPlataforma</dd>
-        </div>
-        <div class="md:col-span-2">
-            <dt class="font-semibold">Descripción:</dt>
-            <dd class="mt-1">@Model.descripcionPlataforma</dd>
-        </div>
-        <div>
-            <dt class="font-semibold">Fecha de creación:</dt>
-            <dd class="mt-1">@Model.fechaCreacion.ToString("dd/MM/yyyy")</dd>
-        </div>
-        <div>
-            <dt class="font-semibold">Ícono:</dt>
-            <dd class="mt-1">
-                @if (Model.iconoPlataforma != null)
-                {
-                    var base64Icon = "data:image/png;base64," + Convert.ToBase64String(Model.iconoPlataforma);
-                    <img src="@base64Icon" alt="Ícono" class="w-20 h-20 rounded-full border border-purple-300 dark:border-purple-700 shadow" />
-                }
-                else
-                {
-                    <span class="text-sm text-gray-500 dark:text-gray-400">No hay ícono.</span>
-                }
-            </dd>
-        </div>
-        <div class="md:col-span-2">
-            <dt class="font-semibold">Fondo:</dt>
-            <dd class="mt-2">
+        <!-- Info básica -->
+        <div class="w-full md:w-1/3 flex flex-col items-start gap-3">
+            <h2 class="text-3xl font-bold text-purple-900 dark:text-purple-100">@Model.nombrePlataforma</h2>
+            <!-- Ícono sobre el fondo -->
+            @if (Model.iconoPlataforma != null)
+            {
+                var base64Icon = "data:image/png;base64," + Convert.ToBase64String(Model.iconoPlataforma);
+                <img src="@base64Icon" alt="Ícono"
+                     style="width: 7rem; height: 7rem; border-radius: 50%; box-shadow: 0 4px 6px rgba(0,0,0,0.2);" />
+            }
+            <p class="text-gray-700 dark:text-gray-300 line-clamp-3">@Model.descripcionPlataforma</p>
+            <div style="position: relative; width: 100%; height: 12rem; border-radius: 1rem; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                <!-- Fondo -->
                 @if (Model.fondoPlataforma != null)
                 {
                     var base64Fondo = "data:image/png;base64," + Convert.ToBase64String(Model.fondoPlataforma);
-                    <img src="@base64Fondo" alt="Fondo" class="w-full h-40 object-cover rounded-xl shadow-md" />
+                    <img src="@base64Fondo" alt="Fondo" style="width: 100%; height: 100%; object-fit: cover;" />
                 }
                 else
                 {
-                    <span class="text-sm text-gray-500 dark:text-gray-400">No hay imagen de fondo.</span>
+                    <div style="width: 100%; height: 100%; background-color: #e5e7eb; display: flex; align-items: center; justify-content: center; color: #6b7280;">
+                        Sin fondo
+                    </div>
                 }
-            </dd>
+            </div>
         </div>
-    </dl>
+    </div>
 
-    <!-- Botón Volver -->
-    <div class="mt-6">
-        <a href="@Url.Action("MisPlataformas", "Plataforma")"
-           class="inline-block px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
-            Volver
-        </a>
+    <!-- DETALLES ADICIONALES -->
+    <div class="bg-white dark:bg-gray-800 p-6">
+        <dl class="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-700 dark:text-gray-300">
+            <div>
+                <dt class="font-semibold">Código:</dt>
+                <dd class="mt-1">@Model.codigoPlataforma</dd>
+            </div>
+            <div>
+                <dt class="font-semibold">Privacidad:</dt>
+                <dd class="mt-1">@Model.privacidadPlataforma</dd>
+            </div>
+            <div>
+                <dt class="font-semibold">Capacidad:</dt>
+                <dd class="mt-1">@Model.capacidadMiembros_plataforma miembros</dd>
+            </div>
+            <div>
+                <dt class="font-semibold">Estado:</dt>
+                <dd class="mt-1">@Model.estadoPlataforma</dd>
+            </div>
+            <div class="md:col-span-2">
+                <dt class="font-semibold">Descripción completa:</dt>
+                <dd class="mt-1">@Model.descripcionPlataforma</dd>
+            </div>
+            <div>
+                <dt class="font-semibold">Fecha de creación:</dt>
+                <dd class="mt-1">@Model.fechaCreacion.ToString("dd/MM/yyyy")</dd>
+            </div>
+        </dl>
+
+        <!-- Botón Volver -->
+        <div class="mt-6">
+            <a href="@Url.Action("MisPlataformas", "Plataforma")"
+               class="inline-block px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
+                Volver
+            </a>
+        </div>
     </div>
 </div>
+<br />
+<br />

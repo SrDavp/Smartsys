@@ -1,86 +1,119 @@
 ﻿@model List<SmartSys.Models.Plataforma>
 @{
     var adminIds = ViewBag.PlataformasAdmin as List<long>;
+    var totalAdmin = adminIds != null ? adminIds.Count : 0;
+    var totalUnido = Model != null ? Model.Count - totalAdmin : 0;
 }
 
-<!-- TÍTULO -->
-<div class="text-center py-8 mb-8">
-    <h2 class="text-3xl font-bold text-gray-900 dark:text-white">Mis Plataformas</h2>
-</div>
+<!-- TÍTULO Y ESTADÍSTICAS -->
+<div class="max-w-6xl mx-auto py-8 px-4">
+    <h2 class="text-3xl font-extrabold text-purple-800 dark:text-white mb-4">Mis Plataformas</h2>
 
-@if (Model == null || !Model.Any())
-{
-    <!-- MENSAJE DE NO RESULTADOS -->
-    <section class="flex items-center justify-center h-96 w-full bg-gray-100 dark:bg-gray-800 transition-colors duration-300 rounded-lg shadow-inner">
-        <div class="text-center px-4 py-8">
-            <div class="mb-10 text-purple-500 dark:text-purple-400 font-bold" style="font-size: 8rem; line-height: 1;">:(</div>
-            <h3 class="text-2xl font-semibold mb-2 text-purple-800 dark:text-purple-200">No tienes plataformas activas</h3>
-            <p class="text-base text-purple-600 dark:text-purple-300 mb-6">¡Comencemos a crear una!</p>
-            <a href="@Url.Action("Crear", "Plataforma")"
-               class="inline-block px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg hover:scale-105 transition-transform duration-300">
-                Crear Plataforma
-            </a>
+    <!-- Contadores -->
+    <div class="flex flex-wrap gap-4 mb-6">
+        <div class="bg-purple-50 dark:bg-gray-800 p-4 rounded-xl shadow flex-1 min-w-[180px]">
+            <p class="text-gray-700 dark:text-gray-300">Administrando de Plataformas: </p>
+            <p class="text-2xl font-bold text-purple-700 dark:text-purple-300">@totalAdmin</p>
         </div>
-    </section>
-}
-else
-{
-    <!-- TARJETAS DE PLATAFORMAS -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-10">
-        @foreach (var p in Model)
-        {
-            <div class="relative p-6 bg-white dark:bg-gray-900 rounded-2xl shadow-lg border border-purple-100 dark:border-purple-800 hover:shadow-2xl hover:scale-105 transition-all duration-300">
+        <div class="bg-purple-50 dark:bg-gray-800 p-4 rounded-xl shadow flex-1 min-w-[180px]">
+            <p class="text-gray-700 dark:text-gray-300">Miembro de Plataformas</p>
+            <p class="text-2xl font-bold text-purple-700 dark:text-purple-300">@totalUnido</p>
+        </div>
+    </div>
 
-                <!-- Icono decorativo -->
-                <div class="absolute top-4 right-10">
-                    <i class="fa-solid fa-layer-group text-purple-300 text-2xl"></i>
-                </div>
-                <div class="flex items-center">
-                    <div>
-                        @if (p.iconoPlataforma != null)
+    <!-- BUSCADOR -->
+    <div class="flex mb-8 max-w-md gap-2">
+        <input type="text" id="buscarPlataforma" placeholder="Buscar plataformas..."
+               class="flex-1 p-3 rounded-lg border border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white focus:ring-2 focus:ring-purple-500 focus:outline-none transition-colors duration-300"
+               onkeyup="filtrarPlataformas()" />
+        <button type="submit"
+                class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-3 rounded-lg font-semibold transition-transform duration-300 shadow hover:shadow-lg transform hover:-translate-y-0.5">
+            <i class="fa-solid fa-search"></i>
+        </button>
+    </div>
+
+    <!-- MENSAJE DE NO RESULTADOS -->
+    @if (Model == null || !Model.Any())
+    {
+        <section class="flex items-center justify-center h-96 w-full bg-gray-100 dark:bg-gray-800 transition-colors duration-300 rounded-lg shadow-inner">
+            <div class="text-center px-4 py-8">
+                <div class="mb-10 text-purple-500 dark:text-purple-400 font-bold animate-pulse" style="font-size: 8rem; line-height: 1;">:(</div>
+                <h3 class="text-2xl font-semibold mb-2 text-purple-800 dark:text-purple-200">No tienes plataformas activas</h3>
+                <p class="text-base text-purple-600 dark:text-purple-300 mb-6">¡Comencemos a crear una!</p>
+                <a href="@Url.Action("Crear", "Plataforma")"
+                   class="inline-block px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg hover:scale-105 transition-transform duration-300">
+                    Crear Plataforma
+                </a>
+            </div>
+        </section>
+    }
+    else
+    {
+        <!-- TARJETAS DE PLATAFORMAS -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-6">
+            @foreach (var p in Model)
+            {
+                <div class="relative bg-white dark:bg-gray-900 rounded-2xl shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300 overflow-hidden">
+
+                    <!-- Fondo de la tarjeta -->
+                    <div class="relative w-full h-40 shadow-md overflow-hidden">
+                        @if (p.fondoPlataforma != null)
                         {
-                            var base64Icon = "data:image/png;base64," + Convert.ToBase64String(p.iconoPlataforma);
-                            <img src="@base64Icon" alt="Ícono" class="w-25 h-25 rounded-full" />
+                            var base64Fondo = "data:image/png;base64," + Convert.ToBase64String(p.fondoPlataforma);
+                            <img src="@base64Fondo" alt="Fondo" class="w-full h-40 object-cover" />
                         }
                         else
                         {
-                            <span class="text-sm text-gray-500 dark:text-gray-400">No hay ícono.</span>
+                            <div class="w-full h-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-500">No hay imagen de fondo</div>
+                        }
+
+                        <!-- Ícono sobre el fondo -->
+                        @if (p.iconoPlataforma != null)
+                        {
+                            var base64Icon = "data:image/png;base64," + Convert.ToBase64String(p.iconoPlataforma);
+                            <img src="@base64Icon" alt="Ícono"
+                                 class="absolute bottom-2 left-2 w-20 h-20 rounded-full border-4 border-white dark:border-gray-800 shadow-lg" />
                         }
                     </div>
 
-                    <h3 class="ml-10 text-2xl font-bold text-purple-700 dark:text-purple-300 mb-2">@p.nombrePlataforma</h3>
+                    <!-- Contenido de la tarjeta -->
+                    <div class="p-6 dark:border-purple-100 dark:border">
+                        <h3 class="text-2xl font-bold text-purple-700 dark:text-purple-300 mb-2">@p.nombrePlataforma</h3>
+                        <p class="text-gray-700 dark:text-gray-300 mb-3 line-clamp-3">@p.descripcionPlataforma</p>
 
+                        <div class="mt-4 flex flex-wrap gap-3">
+                            <a href="@Url.Action("Detalles", "Plataforma", new { id = p.idPlataforma })"
+                               class="px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg shadow hover:shadow-lg hover:scale-105 transition-transform duration-300 font-medium">
+                                Ver más
+                            </a>
+                            <a href="@Url.Action("Publicaciones", "Plataforma", new { id = p.idPlataforma })"
+                               class="px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg shadow hover:shadow-lg hover:scale-105 transition-transform duration-300 font-medium">
+                                Publicaciones
+                            </a>
+
+                            @if (adminIds != null && adminIds.Contains(p.idPlataforma))
+                            {
+                                <a href="@Url.Action("PanelAdmin", "Plataforma", new { id = p.idPlataforma })"
+                                   class="px-5 py-2 rounded-lg shadow hover:shadow-lg hover:scale-105 transition-transform duration-300 font-medium dark:text-white dark:bg-gray-700">
+                                    Panel Admin
+                                </a>
+                            }
+                        </div>
+                    </div>
                 </div>
-                <h3 class="text-2xl font-bold text-purple-700 dark:text-purple-300 mb-2">@p.nombrePlataforma</h3>
-                <p class="text-gray-700 dark:text-gray-300 mb-3 line-clamp-3">@p.descripcionPlataforma</p>
+            }
+        </div>
+    }
+</div>
 
-                <div class="flex flex-col gap-1 text-sm text-gray-500 dark:text-gray-400">
-                    <span><strong>Código:</strong> @p.codigoPlataforma</span>
-                    <span><strong>Privacidad:</strong> @p.privacidadPlataforma</span>
-                </div>
+<script>
+    function filtrarPlataformas() {
+        var input = document.getElementById("buscarPlataforma").value.toLowerCase();
+        var tarjetas = document.querySelectorAll(".grid > div");
 
-                <div class="mt-6 flex flex-wrap gap-3">
-                    <a href="@Url.Action("Detalles", "Plataforma", new { id = p.idPlataforma })"
-                       class="px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg shadow hover:shadow-lg hover:scale-105 transition-transform duration-300 font-medium">
-                        Ver más
-                    </a>
-                    <a href="@Url.Action("Publicaciones", "Plataforma", new { id = p.idPlataforma })"
-                       class="px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg shadow hover:shadow-lg hover:scale-105 transition-transform duration-300 font-medium">
-                        Ver Publicaciones
-                    </a>
-
-                    @if (adminIds != null && adminIds.Contains(p.idPlataforma))
-                    {
-                        <a href="@Url.Action("PanelAdmin", "Plataforma", new { id = p.idPlataforma })"
-                           class="px-5 py-2 rounded-lg shadow hover:shadow-lg hover:scale-105 transition-transform duration-300 font-medium dark:text-white dark:bg-gray-700">
-                            Panel Admin
-                        </a>
-                    }
-                </div>
-            </div>
-        }
-    </div>
-
-}
-<br />
-<br />
+        tarjetas.forEach(function (tarjeta) {
+            var nombre = tarjeta.querySelector("h3").textContent.toLowerCase();
+            tarjeta.style.display = nombre.includes(input) ? "" : "none";
+        });
+    }
+</script>
