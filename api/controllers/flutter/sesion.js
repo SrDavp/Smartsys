@@ -229,7 +229,8 @@ async function login(req, res) {
             estadoCuenta: usuario.estadoCuenta,
             fechaCreacion: usuario.fechaCreacion,
             foto_perfil: usuario.foto_perfil,
-            biografia: usuario.biografia
+            biografia: usuario.biografia,
+            codigoUnico: usuario.codigoUnico,
           }
         });
       }
@@ -369,7 +370,7 @@ async function actualizarPerfilImg(req, res) {
     const consulta = await pool.request()
       .input('idUsuario', sql.BigInt, idUsuario)
       .query(`
-        SELECT idUsuario, nombre, apellido, correoElectronico, telefono, tipoUsuario, estadoCuenta, fechaCreacion, foto_perfil, biografia 
+        SELECT idUsuario, nombre, apellido, correoElectronico, telefono, tipoUsuario, estadoCuenta, fechaCreacion, foto_perfil, biografia, codigoUnico
         FROM Usuarios WHERE idUsuario = @idUsuario
       `);
 
@@ -409,7 +410,7 @@ async function actualizarPerfil(req, res) {
     // Consulta el usuario actualizado
     const consulta = await pool.request()
       .input('idUsuario', sql.BigInt, idUsuario)
-      .query(`SELECT idUsuario, nombre, apellido, correoElectronico, telefono, tipoUsuario, estadoCuenta, fechaCreacion, foto_perfil, biografia 
+      .query(`SELECT idUsuario, nombre, apellido, correoElectronico, telefono, tipoUsuario, estadoCuenta, fechaCreacion, foto_perfil, biografia, codigoUnico
               FROM Usuarios WHERE idUsuario = @idUsuario`);
 
     const usuarioActualizado = consulta.recordset[0];

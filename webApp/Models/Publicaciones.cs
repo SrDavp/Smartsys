@@ -21,6 +21,7 @@ namespace SmartSys.Models
 
         [Required]
         [StringLength(20)]
+        [Display(Name = "Tipo de Publicación")]
         public string tipoPublicacion { get; set; } = "Publicacion"; // Publicacion, Tarea, Anuncio
 
         public byte[] archivoAdjunto { get; set; }
