@@ -19,6 +19,7 @@ namespace SmartSys.Models
 
         [Required]
         [EmailAddress]
+        [Display(Name = "Correo Electrónico")]
         public string CorreoElectronico { get; set; }
 
         [Required]
@@ -37,7 +38,7 @@ namespace SmartSys.Models
         public HttpPostedFileBase FotoPerfil { get; set; }
 
         public string Biografia { get; set; }
-
+        [Display(Name = "Código")]
         public string CodigoUnico { get; set; }
 
     }
