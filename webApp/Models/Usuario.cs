@@ -23,12 +23,16 @@ namespace SmartSys.Models
         public string CorreoElectronico { get; set; }
 
         [Required]
+        [Display(Name = "Contraseña")]
         public string Contrasena { get; set; }
 
+        [Display(Name = "Tipo de Usuario")]
         public string TipoUsuario { get; set; }
 
+        [Display(Name = "Estado de la Cuenta")]
         public string EstadoCuenta { get; set; }
 
+        [Display(Name = "Fecha de Creación")]
         public DateTime FechaCreacion { get; set; }
 
         public string Telefono { get; set; }

@@ -16,7 +16,6 @@
     <br>
     <br>
 
-
     <form method="get" class="mb-6 grid grid-cols-1 sm:grid-cols-6 gap-4">
         <input type="hidden" name="id" value="@ViewBag.PlataformaId" />
 
@@ -60,16 +59,16 @@
 
     <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-800 rounded-lg shadow-md">
-            <thead class="bg-purple-700 dark:bg-purple-300 text-white dark:text-gray-900 font-semibold">
+            <thead class="bg-purple-700 text-white font-semibold border-b-2 border-purple-800">
                 <tr>
-                    <th class="px-4 py-2">ID</th>
-                    <th class="px-4 py-2">Imagen</th>
-                    <th class="px-4 py-2">Título</th>
-                    <th class="px-4 py-2">Tipo</th>
-                    <th class="px-4 py-2">Fecha</th>
-                    <th class="px-4 py-2">Estado</th>
-                    <th class="px-4 py-2">Usuario</th>
-                    <th class="px-4 py-2">Acciones</th>
+                    <th class="px-4 py-2 text-black dark:text-white text-left">id</th>
+                    <th class="px-4 py-2 text-black dark:text-white text-left">Imagen</th>
+                    <th class="px-4 py-2 text-black dark:text-white text-left">Título</th>
+                    <th class="px-4 py-2 text-black dark:text-white text-left">Tipo</th>
+                    <th class="px-4 py-2 text-black dark:text-white text-left">Fecha</th>
+                    <th class="px-4 py-2 text-black dark:text-white text-left">Estado</th>
+                    <th class="px-4 py-2 text-left text-black dark:text-white">Usuario</th>
+                    <th class="px-4 py-2 text-black dark:text-white text-center">Acciones</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
@@ -98,7 +97,7 @@
                         </td>
                         <td class="dark:text-white px-4 py-2">@pub.estado</td>
                         <td class="dark:text-white px-4 py-2">@user.Nombre @user.Apellido</td>
-                        <td class="dark:text-white px-4 py-2 space-x-1">
+                        <td class="dark:text-white px-4 py-2 space-x-1 text-center">
                             <a class="px-2 py-1 bg-purple-600 hover:bg-purple-800 text-white text-sm rounded-md transition-colors duration-200"
                                href="@Url.Action("EditarPublicacion", new { id = pub.idPublicacion })">Editar</a>
                             <a class="px-2 py-1 bg-red-500 hover:bg-red-600 text-white text-sm rounded-md transition-colors duration-200"
@@ -107,7 +106,6 @@
                     </tr>
                 }
             </tbody>
-
         </table>
         <br />
         <br />

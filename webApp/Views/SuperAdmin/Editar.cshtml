@@ -68,10 +68,10 @@
         <!-- Tipo de Usuario -->
         <div class="space-y-1">
             @Html.LabelFor(m => m.TipoUsuario, new { @class = "block text-gray-700 dark:text-gray-300 font-medium" })
-            @Html.DropDownListFor(m => m.TipoUsuario, new SelectList(new[] { "Usuario", "admin", "superAdmin" }, Model.TipoUsuario), new
-            {
-                @class = "w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all duration-200 cursor-pointer"
-            })
+            @Html.DropDownListFor(m => m.TipoUsuario, new SelectList(new[] { "Usuario", "superAdmin" }, Model.TipoUsuario), new
+       {
+           @class = "notranslate w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all duration-200 cursor-pointer"
+       })
         </div>
 
         <!-- Botón Guardar -->
