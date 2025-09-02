@@ -27,8 +27,31 @@
             <!-- Tipo de Publicación -->
             <div>
                 @Html.LabelFor(m => m.tipoPublicacion, new { @class = "block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1" })
-                @Html.DropDownListFor(m => m.tipoPublicacion, new SelectList(new[] { "Publicacion", "Tarea", "Anuncio" }), "Selecciona un tipo", new { @class = "w-full rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300" })
+
+                @{
+                    var rol = ViewBag.RolUsuario as string;
+                    var opciones = new List<string>();
+
+                    if (rol == "Admin")
+                    {
+                        opciones = new List<string> { "Publicación", "Tarea", "Anuncio" };
+                    }
+                    else // Miembro u otro rol
+                    {
+                        opciones = new List<string> { "Publicación" };
+                    }
+                }
+
+                @Html.DropDownListFor(
+                    m => m.tipoPublicacion,
+                    new SelectList(opciones),
+                    "Selecciona un tipo",
+                    new
+                        {
+                        @class = "w-full rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300"
+                    })
             </div>
+
 
             <!-- Archivo Adjunto -->
             <div>

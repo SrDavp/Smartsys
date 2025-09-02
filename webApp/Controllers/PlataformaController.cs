@@ -426,8 +426,29 @@ namespace SmartSys.Controllers
         public ActionResult CrearPublicacion(long id)
         {
             ViewBag.PlataformaId = id;
-            return View();
+
+            // Obtener el id del usuario logueado (ajústalo según como guardes la sesión)
+            var usuarioId = (long)Session["UsuarioId"];
+
+            using (var db = new SmartSysDbContext())
+            {
+                var relacion = db.usuario_plataforma
+                    .FirstOrDefault(up => up.idUsuario4 == usuarioId && up.idPlataforma1 == id);
+
+                if (relacion != null)
+                {
+                    ViewBag.RolUsuario = relacion.rolUsuarioPlataforma;
+                }
+                else
+                {
+                    // Si no pertenece a la plataforma, por defecto tratamos como Miembro
+                    ViewBag.RolUsuario = "Miembro";
+                }
+            }
+
+            return View(new Publicaciones());
         }
+
 
         // POST: Crear publicación
         [HttpPost]
