@@ -51,6 +51,17 @@
                         @class = "w-full rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300"
                     })
             </div>
+            <!-- Fecha de Entrega (solo si es Tarea) -->
+            <div id="fechaEntregaContainer" style="display:none;">
+                @Html.LabelFor(m => m.fechaEntrega, "Fecha de Entrega", new { @class = "block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1" })
+                @Html.TextBoxFor(m => m.fechaEntrega, new
+                {
+                    type = "date",
+                    min = DateTime.Now.ToString("yyyy-MM-dd"),
+                    @class = "w-full rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300"
+                })
+                @Html.ValidationMessageFor(m => m.fechaEntrega, "", new { @class = "text-red-500 text-sm mt-1" })
+            </div>
 
 
             <!-- Archivo Adjunto -->
@@ -68,3 +79,28 @@
         </div>
     }
 </div>
+
+<!-- Fecha de Entrega (solo si es Tarea) -->
+<div id="fechaEntregaContainer" style="display:none;">
+    @Html.LabelFor(m => m.fechaEntrega, "Fecha de Entrega", new { @class = "block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1" })
+    @Html.TextBoxFor(m => m.fechaEntrega, new { type = "date", @class = "w-full rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300" })
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const tipoSelect = document.getElementById("tipoPublicacion");
+        const fechaEntregaDiv = document.getElementById("fechaEntregaContainer");
+
+        function toggleFechaEntrega() {
+            if (tipoSelect.value === "Tarea") {
+                fechaEntregaDiv.style.display = "block";
+            } else {
+                fechaEntregaDiv.style.display = "none";
+            }
+        }
+
+        // Ejecutar al inicio y cuando cambie el valor
+        toggleFechaEntrega();
+        tipoSelect.addEventListener("change", toggleFechaEntrega);
+    });
+</script>

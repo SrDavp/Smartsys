@@ -428,7 +428,10 @@ namespace SmartSys.Controllers
             ViewBag.PlataformaId = id;
 
             // Obtener el id del usuario logueado (ajústalo según como guardes la sesión)
-            var usuarioId = (long)Session["UsuarioId"];
+            if (Session["UsuarioID"] == null)
+                return RedirectToAction("Login", "Account");
+
+            long usuarioId = Convert.ToInt64(Session["UsuarioID"]);
 
             using (var db = new SmartSysDbContext())
             {
@@ -454,6 +457,21 @@ namespace SmartSys.Controllers
         [HttpPost]
         public ActionResult CrearPublicacion(long id, Publicaciones pub, HttpPostedFileBase archivo)
         {
+            long idUsuario = Convert.ToInt64(Session["UsuarioID"]);
+
+            // ✅ Validación especial si es Tarea
+            if (pub.tipoPublicacion == "Tarea")
+            {
+                if (!pub.fechaEntrega.HasValue)
+                {
+                    ModelState.AddModelError("fechaEntrega", "Debe seleccionar una fecha de entrega.");
+                }
+                else if (pub.fechaEntrega.Value.Date < DateTime.Now.Date)
+                {
+                    ModelState.AddModelError("fechaEntrega", "La fecha de entrega no puede ser en el pasado.");
+                }
+            }
+
             if (ModelState.IsValid)
             {
                 pub.fechaPublicacion = DateTime.Now.Date;
@@ -479,7 +497,6 @@ namespace SmartSys.Controllers
                 });
 
                 // Asociar usuario creador
-                long idUsuario = Convert.ToInt64(Session["UsuarioID"]);
                 db.usuario_publicaciones.Add(new usuario_publicaciones
                 {
                     idUsuario1 = idUsuario,
@@ -494,19 +511,19 @@ namespace SmartSys.Controllers
 
                 if (relacion != null && relacion.rolUsuarioPlataforma == "Admin")
                 {
-                    // Si es Admin → redirige a Contenido
                     return RedirectToAction("Contenido", new { id = id });
                 }
                 else
                 {
-                    // Si no es Admin → redirige a Publicaciones
                     return RedirectToAction("Publicaciones", new { id = id });
                 }
             }
 
+            // ❌ Si hubo error de validación, volvemos a la vista
             ViewBag.PlataformaId = id;
             return View(pub);
         }
+
 
         // Ver detalles
         public ActionResult VerPublicacion(long id)

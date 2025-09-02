@@ -68,8 +68,16 @@
 
                 <p class="text-gray-500 dark:text-gray-400 text-xs mb-3">
                     Publicado por: @nombreAutor <br />
-                    Fecha: @(p.fechaPublicacion.HasValue ? p.fechaPublicacion.Value.ToString("dd/MM/yyyy") : "Fecha no disponible")
+                    Fecha publicación: @(p.fechaPublicacion.HasValue ? p.fechaPublicacion.Value.ToString("dd/MM/yyyy") : "No disponible") <br />
+
+                    @if (p.tipoPublicacion == "Tarea" && p.fechaEntrega != null)
+                    {
+                        <span class="text-purple-700 dark:text-purple-700 font-semibold">
+                            Fecha entrega: @Convert.ToDateTime(p.fechaEntrega).ToString("dd/MM/yyyy")
+                        </span>
+                    }
                 </p>
+
 
                 <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-3 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white mb-3 text-sm max-h-28 overflow-y-auto contenido">
                     @Html.Raw(p.contenido)
@@ -79,6 +87,13 @@
                    class="mt-auto inline-block px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg shadow hover:shadow-lg text-center font-medium transition-all duration-300">
                     Ver más
                 </a>
+                @if (p.tipoPublicacion == "Tarea" && p.fechaEntrega != null)
+                {
+                    <a href="@Url.Action("VerPublicacion", new { id = p.idPublicacion })" style="margin-top: 2%;"
+                       class="inline-block px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg shadow hover:shadow-lg text-center font-medium transition-all duration-300">
+                        Entregar tarea
+                    </a>
+                }
             </div>
         }
     </div>

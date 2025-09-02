@@ -32,6 +32,10 @@ namespace SmartSys.Models
         [StringLength(20)]
         public string estado { get; set; } = "Activo";
 
+        [Display(Name = "Fecha de Entrega")]
+        [DataType(DataType.Date)]
+        public DateTime? fechaEntrega { get; set; }
+
 
         //    // Relaciones (opcionales si quieres navegarlas)
         //    public virtual ICollection<plataforma_publicacion> plataformas { get; set; }

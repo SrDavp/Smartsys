@@ -27,7 +27,17 @@
             <!-- Tipo de Publicación -->
             <div>
                 @Html.LabelFor(m => m.tipoPublicacion, new { @class = "block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1" })
-                @Html.DropDownListFor(m => m.tipoPublicacion, new SelectList(new[] { "Publicacion", "Tarea", "Anuncio" }, Model.tipoPublicacion), new { @class = "w-full rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300" })
+                @Html.DropDownListFor(
+                    m => m.tipoPublicacion,
+                    new SelectList(new[] { "Publicacion", "Tarea", "Anuncio" }, Model.tipoPublicacion),
+                    new { @class = "w-full rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300", id = "tipoPublicacion" }
+                )
+            </div>
+
+            <!-- Fecha de Entrega (solo si es Tarea) -->
+            <div id="fechaEntregaDiv" style="display:none;">
+                @Html.Label("Fecha de Entrega", new { @class = "block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1" })
+                @Html.TextBoxFor(m => m.fechaEntrega, "{0:yyyy-MM-dd}", new { @type = "date", @class = "w-full rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300" })
             </div>
 
             <!-- Archivo Nuevo -->
@@ -45,3 +55,23 @@
         </div>
     }
 </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const tipoSelect = document.getElementById("tipoPublicacion");
+            const fechaDiv = document.getElementById("fechaEntregaDiv");
+
+            function toggleFechaEntrega() {
+                if (tipoSelect.value === "Tarea") {
+                    fechaDiv.style.display = "block";
+                } else {
+                    fechaDiv.style.display = "none";
+                }
+            }
+
+            // Ejecutar al cargar la página
+            toggleFechaEntrega();
+
+            // Ejecutar al cambiar selección
+            tipoSelect.addEventListener("change", toggleFechaEntrega);
+        });
+    </script>

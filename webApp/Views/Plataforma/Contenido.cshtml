@@ -18,7 +18,8 @@
                 <tr>
                     <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 dark:text-gray-300">Título</th>
                     <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 dark:text-gray-300">Tipo</th>
-                    <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 dark:text-gray-300">Fecha</th>
+                    <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 dark:text-gray-300">Fecha Publicación</th>
+                    <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 dark:text-gray-300">Fecha Entrega</th>
                     <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 dark:text-gray-300">Archivo</th>
                     <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 dark:text-gray-300">Acciones</th>
                 </tr>
@@ -33,6 +34,18 @@
                             @(Convert.ToDateTime(p.fechaPublicacion).ToString("dd/MM/yyyy"))
                         </td>
 
+                        <!-- Fecha de Entrega solo si es Tarea -->
+                        <td class="px-6 py-4 text-gray-700 dark:text-gray-300">
+                            @if (p.tipoPublicacion == "Tarea" && p.fechaEntrega != null)
+                            {
+                                @Convert.ToDateTime(p.fechaEntrega).ToString("dd/MM/yyyy")
+                            }
+                            else
+                            {
+                                <span class="text-gray-500 dark:text-gray-400">-</span>
+                            }
+                        </td>
+
                         <td class="px-6 py-4">
                             @if (p.archivoAdjunto != null)
                             {
@@ -45,23 +58,25 @@
                                 <span class="text-gray-500 dark:text-gray-400">Sin archivo</span>
                             }
                         </td>
+
                         <td class="px-6 py-4 flex gap-2">
                             <a href="@Url.Action("VerPublicacion", new { id = p.idPublicacion })"
-                               class="px-3 py-1 rounded-lg font-medium bg-purple-600 text-white bg-purple-600 text-white">
+                               class="px-3 py-1 rounded-lg font-medium bg-purple-600 text-white">
                                 Ver
                             </a>
                             <a href="@Url.Action("EditarPublicacion", new { id = p.idPublicacion })"
-                               class="px-3 py-1 rounded-lg font-medium bg-purple-600 text-white bg-purple-600 text-white">
+                               class="px-3 py-1 rounded-lg font-medium bg-purple-600 text-white">
                                 Editar
                             </a>
                             <a href="@Url.Action("EliminarPublicacion", new { id = p.idPublicacion, idPlataforma = plataformaId })"
-                               class="px-3 py-1 rounded-lg font-medium bg-red-600 text-white bg-red-600 text-white">
+                               class="px-3 py-1 rounded-lg font-medium bg-red-600 text-white">
                                 Eliminar
                             </a>
                         </td>
                     </tr>
                 }
             </tbody>
+
         </table>
     </div>
 </div>
