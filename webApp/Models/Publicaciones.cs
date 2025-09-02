@@ -32,6 +32,7 @@ namespace SmartSys.Models
         [StringLength(20)]
         public string estado { get; set; } = "Activo";
 
+
         //    // Relaciones (opcionales si quieres navegarlas)
         //    public virtual ICollection<plataforma_publicacion> plataformas { get; set; }
         //    public virtual ICollection<usuario_publicaciones> autores { get; set; }

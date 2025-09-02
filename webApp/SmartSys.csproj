@@ -251,6 +251,7 @@
     <Content Include="Views\Account\RestablecerContraseña.cshtml" />
     <Content Include="Views\Plataforma\Publicaciones.cshtml" />
     <Content Include="Views\SuperAdmin\GestionMiembros.cshtml" />
+    <Content Include="Views\Plataforma\VerMiembros.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

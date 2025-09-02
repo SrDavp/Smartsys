@@ -1,0 +1,117 @@
+﻿@model List<SmartSys.Models.MiembroViewModel>
+
+@{
+    ViewBag.Title = "Gestión de Miembros";
+    var plataformaId = ViewBag.PlataformaId;
+
+    // Filtrar administradores y miembros
+    var administradores = Model.Where(m => m.Relacion.rolUsuarioPlataforma == "Admin").ToList();
+    var miembros = Model.Where(m => m.Relacion.rolUsuarioPlataforma != "Admin").ToList();
+}
+
+<div class="max-w-5xl mx-auto p-6">
+    <h2 class="text-3xl font-extrabold text-purple-900 dark:text-purple-100 mb-6">Miembros de la Plataforma</h2>
+
+    <!-- Sección Administradores -->
+    <h3 class="text-2xl font-bold text-purple-700 dark:text-purple-300 mb-4">Administradores</h3>
+    @if (administradores.Any())
+    {
+        <div class="overflow-x-auto mb-8">
+            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+                <thead class="bg-gray-100 dark:bg-gray-700">
+                    <tr>
+                        <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 dark:text-gray-300">Foto</th>
+                        <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 dark:text-gray-300">Nombre</th>
+                        <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 dark:text-gray-300">Correo</th>
+                        <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 dark:text-gray-300">Tipo de Usuario</th>
+                        <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 dark:text-gray-300">Código</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                    @foreach (var item in administradores)
+                    {
+                        var fotoBase64 = item.Usuario.Foto_perfil != null
+                           ? "data:image/png;base64," + Convert.ToBase64String(item.Usuario.Foto_perfil)
+                           : null;
+                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                            <td class="px-4 py-2">
+                                @if (fotoBase64 != null)
+                                {
+                                    <img src="@fotoBase64" class="w-10 h-10 rounded-full object-cover border" />
+                                }
+                                else
+                                {
+                                    <span class="text-gray-400 dark:text-white text-sm">Sin imagen</span>
+                                }
+                            </td>
+
+                            <td class="dark:text-white px-4 py-2">@item.Usuario.Nombre @item.Usuario.Apellido</td>
+                            <td class="dark:text-white px-4 py-2">@item.Usuario.CorreoElectronico</td>
+                            <td class="dark:text-white px-4 py-2">
+                                <span class="px-2 py-1 rounded-lg font-medium bg-purple-600 text-white">
+                                    @item.Relacion.rolUsuarioPlataforma
+                                </span>
+                            </td>
+                            <td class="dark:text-white px-4 py-2">@item.Usuario.CodigoUnico</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <p class="text-gray-600 dark:text-gray-400 mb-8">No hay administradores registrados.</p>
+    }
+
+    <!-- Sección Miembros -->
+    <h3 class="text-2xl font-bold text-purple-700 dark:text-purple-300 mb-4">Miembros</h3>
+    @if (miembros.Any())
+    {
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+                <thead class="bg-gray-100 dark:bg-gray-700">
+                    <tr>
+                        <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 dark:text-gray-300">Foto</th>
+                        <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 dark:text-gray-300">Nombre</th>
+                        <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 dark:text-gray-300">Correo</th>
+                        <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 dark:text-gray-300">Tipo de Usuario</th>
+                        <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 dark:text-gray-300">Código</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                    @foreach (var item in miembros)
+                    {
+                        var fotoBase64 = item.Usuario.Foto_perfil != null
+                           ? "data:image/png;base64," + Convert.ToBase64String(item.Usuario.Foto_perfil)
+                           : null;
+                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                            <td class="px-4 py-2">
+                                @if (fotoBase64 != null)
+                                {
+                                    <img src="@fotoBase64" class="w-10 h-10 rounded-full object-cover border" />
+                                }
+                                else
+                                {
+                                    <span class="text-gray-400 dark:text-white text-sm">Sin imagen</span>
+                                }
+                            </td>
+                            <td class="dark:text-white px-4 py-2">@item.Usuario.Nombre @item.Usuario.Apellido</td>
+                            <td class="dark:text-white px-4 py-2">@item.Usuario.CorreoElectronico</td>
+                            <td class="dark:text-white px-4 py-2">
+                                <span class="px-2 py-1 rounded-lg font-medium bg-purple-600 text-white">
+                                    @item.Relacion.rolUsuarioPlataforma
+                                </span>
+                            </td>
+                            <td class="dark:text-white px-4 py-2">@item.Usuario.CodigoUnico</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <p class="text-gray-600 dark:text-gray-400">No hay miembros registrados.</p>
+    }
+</div>

@@ -289,6 +289,33 @@ namespace SmartSys.Controllers
 
             return View(p);
         }
+        //Ver Miembros de la Plataforma
+        [HttpGet]
+        public ActionResult VerMiembros(long id)
+        {
+            if (Session["UsuarioID"] == null)
+                return RedirectToAction("Login", "Account");
+
+            long usuarioId = Convert.ToInt64(Session["UsuarioID"]);
+
+            // Trae la lista de miembros
+            var miembros = db.usuario_plataforma
+    .Where(up => up.idPlataforma1 == id)
+    .Join(db.Usuario,
+        rel => rel.idUsuario4,
+        usu => usu.IdUsuario,
+        (rel, usu) => new MiembroViewModel
+        {
+            Usuario = usu,
+            Relacion = rel
+        })
+    .ToList();
+
+
+            ViewBag.PlataformaId = id;
+            return View(miembros);
+        }
+
         //Gestionar Miembro de la Plataforma
         [HttpGet]
         public ActionResult GestionMiembros(long id)
@@ -353,14 +380,35 @@ namespace SmartSys.Controllers
         //Publicaciones Plataformas
         public ActionResult Publicaciones(long id)
         {
+            // Traer publicaciones de la plataforma
             var publicaciones = (from pub in db.Publicaciones
-                                 join rel in db.plataforma_publicacion on pub.idPublicacion equals rel.idPublicacion2
+                                 join rel in db.plataforma_publicacion
+                                     on pub.idPublicacion equals rel.idPublicacion2
                                  where rel.idPlataforma2 == id && pub.estado == "Activo"
                                  select pub).ToList();
 
+            // Obtener solo los IDs
+            var publicacionesIds = publicaciones.Select(p => p.idPublicacion).ToList();
+
+            // Diccionario: idPublicacion -> Nombre completo del autor
+            var autores = (from up in db.usuario_publicaciones
+                           join usu in db.Usuario
+                               on up.idUsuario1 equals usu.IdUsuario
+                           where publicacionesIds.Contains(up.idPublicacion1)
+                           select new
+                           {
+                               up.idPublicacion1,
+                               NombreCompleto = usu.Nombre + " " + usu.Apellido
+                           }).ToDictionary(x => x.idPublicacion1, x => x.NombreCompleto);
+
             ViewBag.PlataformaId = id;
+            ViewBag.Autores = autores; // guardamos el diccionario en el ViewBag
+
             return View(publicaciones);
         }
+
+
+
         // Listado de publicaciones
         public ActionResult Contenido(long id)
         {
@@ -442,9 +490,24 @@ namespace SmartSys.Controllers
         // Ver detalles
         public ActionResult VerPublicacion(long id)
         {
-            var pub = db.Publicaciones.Find(id);
-            return View(pub);
+            // Traer la publicación
+            var publicacion = db.Publicaciones.FirstOrDefault(p => p.idPublicacion == id);
+
+            if (publicacion == null)
+                return HttpNotFound();
+
+            // Obtener el autor
+            var autor = (from up in db.usuario_publicaciones
+                         join usu in db.Usuario
+                             on up.idUsuario1 equals usu.IdUsuario
+                         where up.idPublicacion1 == publicacion.idPublicacion
+                         select usu.Nombre + " " + usu.Apellido).FirstOrDefault();
+
+            ViewBag.Autor = autor ?? "Desconocido";
+
+            return View(publicacion);
         }
+
 
         // GET: Editar publicación
         public ActionResult EditarPublicacion(long id)

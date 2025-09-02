@@ -15,7 +15,7 @@ namespace SmartSys.Models
 
         [Key, Column(Order = 1)]
         public long idPlataforma1 { get; set; }
-
+        [Display (Name = "Rol Usuario")]
         public string rolUsuarioPlataforma { get; set; } = "Miembro";
 
         public DateTime fechaUnion { get; set; } = DateTime.Now;

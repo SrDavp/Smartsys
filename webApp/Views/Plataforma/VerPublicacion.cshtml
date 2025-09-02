@@ -12,6 +12,9 @@
         <!-- Tipo -->
         <p class="text-gray-700 dark:text-gray-300"><strong>Tipo:</strong> @Model.tipoPublicacion</p>
 
+        <!-- Autor -->
+        <p class="text-gray-700 dark:text-gray-300"><strong>Autor:</strong> @ViewBag.Autor</p>
+
         <!-- Contenido -->
         <div>
             <p class="text-gray-700 dark:text-gray-300 font-semibold mb-1">Contenido:</p>
@@ -30,9 +33,11 @@
                 <img style="width:100%" src="data:@mimeType;base64,@base64" class="rounded-lg shadow-lg" alt="Imagen Adjunta" />
             </div>
         }
-    <p class="text-gray-700 dark:text-gray-300"><strong>Fecha de la Publicacion:</strong> @(Model.fechaPublicacion.HasValue? Model.fechaPublicacion.Value.ToString("dd/MM/yyyy")
-        : "Fecha no disponible")
-    </p>
-    </div>
 
+        <p class="text-gray-700 dark:text-gray-300">
+            <strong>Fecha de la Publicacion:</strong> @(Model.fechaPublicacion.HasValue
+                ? Model.fechaPublicacion.Value.ToString("dd/MM/yyyy")
+                : "Fecha no disponible")
+        </p>
+    </div>
 </div>

@@ -58,66 +58,75 @@
 }
 else
 {
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 px-4">
-        @foreach (var p in Model)
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 px-4">
+    @foreach (var p in Model)
+    {
+        if (p.estadoPlataforma == "Inactivo")
         {
-            <div class="relative bg-white dark:bg-gray-900 rounded-2xl shadow-lg hover:shadow-2xl transition-transform transform hover:-translate-y-1 overflow-hidden">
+            continue; // No mostrar esta plataforma
+        }
 
-                <!-- Fondo con overlay -->
-                <div class="relative w-full h-40">
-                    @if (p.fondoPlataforma != null)
+        <div class="relative bg-white dark:bg-gray-900 rounded-2xl shadow-lg hover:shadow-2xl transition-transform transform hover:-translate-y-1 overflow-hidden">
+            <!-- Fondo con overlay -->
+            <div class="relative w-full h-40">
+                @if (p.fondoPlataforma != null)
+                {
+                    var base64Fondo = "data:image/png;base64," + Convert.ToBase64String(p.fondoPlataforma);
+                    <img src="@base64Fondo" alt="Fondo" class="w-full h-full object-cover" style="filter: brightness(0.8);" />
+                }
+                else
+                {
+                    <div style="width:100%;height:100%;background-color:#e5e7eb;display:flex;align-items:center;justify-content:center;color:#6b7280;">
+                        Sin fondo
+                    </div>
+                }
+
+                <!-- Ícono superpuesto -->
+                @if (p.iconoPlataforma != null)
+                {
+                    var base64Icon = "data:image/png;base64," + Convert.ToBase64String(p.iconoPlataforma);
+                    <img src="@base64Icon" alt="Ícono"
+                         style="position:absolute;bottom:-1.5rem;left:1rem;width:4rem;height:4rem;border-radius:50%;border:3px solid white;box-shadow:0 4px 8px rgba(0,0,0,0.3);" />
+                }
+            </div>
+
+            <!-- Contenido de la tarjeta -->
+            <div class="p-6 pt-10">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">@p.nombrePlataforma</h3>
+                <p class="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">@p.descripcionPlataforma</p>
+
+                <div class="bg-white/80 dark:bg-purple-950/80 rounded-xl p-4 shadow-inner backdrop-blur-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-sm text-gray-500 dark:text-gray-400">Privacidad:</span>
+                        <span class="text-sm font-medium px-2 py-1 rounded-lg @(p.privacidadPlataforma == "Público" ? "text-purple-700 dark:text-purple-300 bg-purple-100 dark:bg-purple-900" : "text-purple-700 dark:text-purple-300 bg-purple-100 dark:bg-purple-900")">
+                            @p.privacidadPlataforma
+                        </span>
+                    </div>
+
+                    @if (p.privacidadPlataforma == "Privado")
                     {
-                        var base64Fondo = "data:image/png;base64," + Convert.ToBase64String(p.fondoPlataforma);
-                        <img src="@base64Fondo" alt="Fondo" class="w-full h-full object-cover" style="filter: brightness(0.8);" />
+                        <a href="@Url.Action("UnirsePrivado", "Plataforma", new { id = p.idPlataforma })"
+                           class="w-full bg-purple-600 hover:bg-purple-700 dark:bg-purple-700 dark:hover:bg-purple-800 text-white text-center py-2 rounded-lg font-semibold transition-all duration-300 shadow-md mb-2 inline-block">
+                            <i class="fa-solid fa-key mr-2"></i> Unirse con código
+                        </a>
                     }
                     else
                     {
-                        <div style="width:100%;height:100%;background-color:#e5e7eb;display:flex;align-items:center;justify-content:center;color:#6b7280;">
-                            Sin fondo
-                        </div>
+                        <a href="@Url.Action("UnirsePublico", "Plataforma", new { id = p.idPlataforma })"
+                           class="w-full bg-purple-600 hover:bg-purple-700 dark:bg-purple-700 dark:hover:bg-purple-800 text-white text-center py-2 rounded-lg font-semibold transition-all duration-300 shadow-md mb-2 inline-block">
+                            <i class="fa-solid fa-users mr-2"></i> Unirse
+                        </a>
                     }
-
-                    <!-- Ícono superpuesto -->
-                    @if (p.iconoPlataforma != null)
-                    {
-                        var base64Icon = "data:image/png;base64," + Convert.ToBase64String(p.iconoPlataforma);
-                        <img src="@base64Icon" alt="Ícono"
-                             style="position:absolute;bottom:-1.5rem;left:1rem;width:4rem;height:4rem;border-radius:50%;border:3px solid white;box-shadow:0 4px 8px rgba(0,0,0,0.3);" />
-                    }
-                </div>
-
-                <!-- Contenido de la tarjeta -->
-                <div class="p-6 pt-10">
-                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">@p.nombrePlataforma</h3>
-                    <p class="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">@p.descripcionPlataforma</p>
-
-                    <div class="bg-white/80 dark:bg-purple-950/80 rounded-xl p-4 shadow-inner backdrop-blur-sm">
-                        <div class="flex items-center justify-between mb-4">
-                            <span class="text-sm text-gray-500 dark:text-gray-400">Privacidad:</span>
-                            <span class="text-sm font-medium px-2 py-1 rounded-lg @(p.privacidadPlataforma == "Público" ? "text-purple-700 dark:text-purple-300 bg-purple-100 dark:bg-purple-900" : "text-purple-700 dark:text-purple-300 bg-purple-100 dark:bg-purple-900")">
-                                @p.privacidadPlataforma
-                            </span>
-                        </div>
-
-                        @if (p.privacidadPlataforma == "Privado")
-                        {
-                            <a href="@Url.Action("UnirsePrivado", "Plataforma", new { id = p.idPlataforma })"
-                               class="w-full bg-purple-600 hover:bg-purple-700 dark:bg-purple-700 dark:hover:bg-purple-800 text-white text-center py-2 rounded-lg font-semibold transition-all duration-300 shadow-md mb-2 inline-block">
-                                <i class="fa-solid fa-key mr-2"></i> Unirse con código
-                            </a>
-                        }
-                        else
-                        {
-                            <a href="@Url.Action("UnirsePublico", "Plataforma", new { id = p.idPlataforma })"
-                               class="w-full bg-purple-600 hover:bg-purple-700 dark:bg-purple-700 dark:hover:bg-purple-800 text-white text-center py-2 rounded-lg font-semibold transition-all duration-300 shadow-md mb-2 inline-block">
-                                <i class="fa-solid fa-users mr-2"></i> Unirse
-                            </a>
-                        }
-                    </div>
+                <a href="@Url.Action("VerMiembros", "Plataforma", new { id = p.idPlataforma })"
+                   class="w-full bg-purple-600 hover:bg-purple-700 dark:bg-purple-700 dark:hover:bg-purple-800 text-white text-center py-2 rounded-lg font-semibold transition-all duration-300 shadow-md mb-2 inline-block">
+                    <i class="fa-solid fa-users mr-2"></i> Ver Miembros
+                </a>
                 </div>
             </div>
-        }
-    </div>
+        </div>
+    }
+
+</div>
 }
 <br />
 <br />
