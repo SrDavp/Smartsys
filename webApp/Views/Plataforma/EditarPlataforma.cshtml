@@ -33,7 +33,7 @@
             <!-- Privacidad -->
             <div>
                 @Html.LabelFor(m => m.privacidadPlataforma, new { @class = "block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1" })
-                @Html.DropDownListFor(m => m.privacidadPlataforma, new SelectList(new[] { "Público", "Privado" }), new { @class = "w-full rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300" })
+                @Html.DropDownListFor(m => m.privacidadPlataforma, new SelectList(new[] { "Público", "Privado" }), new { @class = "notranslate w-full rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300" })
             </div>
 
             <!-- Código -->
@@ -45,7 +45,7 @@
             <!-- Estado -->
             <div>
                 @Html.LabelFor(m => m.estadoPlataforma, new { @class = "block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1" })
-                @Html.DropDownListFor(m => m.estadoPlataforma, new SelectList(new[] { "Activo", "Inactivo" }), new { @class = "w-full rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300" })
+                @Html.DropDownListFor(m => m.estadoPlataforma, new SelectList(new[] { "Activo", "Inactivo" }), new { @class = "notranslate w-full rounded-lg border border-gray-300 dark:border-gray-600 px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300" })
             </div>
 
             <!-- Botón Guardar -->

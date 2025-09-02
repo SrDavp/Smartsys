@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "Gestión de Miembros";
     var plataformaId = ViewBag.PlataformaId;
+    var totalMiembros = Model.Count;
 
     // Filtrar administradores y miembros
     var administradores = Model.Where(m => m.Relacion.rolUsuarioPlataforma == "Admin").ToList();
@@ -11,6 +12,12 @@
 
 <div class="max-w-5xl mx-auto p-6">
     <h2 class="text-3xl font-extrabold text-purple-900 dark:text-purple-100 mb-6">Miembros de la Plataforma</h2>
+    <div class="bg-purple-50 dark:bg-gray-800 p-4 rounded-xl shadow flex-1 min-w-[180px]">
+        <p class="text-gray-700 dark:text-gray-300">Números de Miembros</p>
+        <p class="text-2xl font-bold text-purple-700 dark:text-purple-300">@totalMiembros</p>
+    </div>
+    <br />
+    <br />
 
     <!-- Sección Administradores -->
     <h3 class="text-2xl font-bold text-purple-700 dark:text-purple-300 mb-4">Administradores</h3>
