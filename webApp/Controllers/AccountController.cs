@@ -136,7 +136,7 @@ namespace SmartSys.Controllers
                 // Validar si la cuenta está inactiva
                 if (user.EstadoCuenta == "Inactivo")
                 {
-                    ViewBag.Error = "Tu cuenta ha sido desactivada.";
+                    ViewBag.Error = "Tu cuenta ha sido desactivada. Para volverla Activar manda un correo a smartsyscj@gmail.com";
                     return View(u);
                 }
 
