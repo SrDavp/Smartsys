@@ -252,6 +252,8 @@
     <Content Include="Views\Plataforma\Publicaciones.cshtml" />
     <Content Include="Views\SuperAdmin\GestionMiembros.cshtml" />
     <Content Include="Views\Plataforma\VerMiembros.cshtml" />
+    <Content Include="Views\Plataforma\SubirTarea.cshtml" />
+    <Content Include="Views\Plataforma\VerEntregasTarea.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

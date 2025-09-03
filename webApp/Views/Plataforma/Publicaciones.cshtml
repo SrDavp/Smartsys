@@ -3,6 +3,8 @@
     ViewBag.Title = "Contenido";
     var plataformaId = ViewBag.PlataformaId;
     var totalPublicaciones = Model.Count;
+    var totalTareas = Model.Count(p => p.tipoPublicacion == "Tarea");
+    var totalAnuncios = Model.Count(p => p.tipoPublicacion == "Anuncio");
     var tipos = Model.Select(p => p.tipoPublicacion).Distinct().ToList();
 }
 
@@ -17,9 +19,20 @@
         + Nueva Publicación
     </a>
 
-    <div class="bg-purple-50 dark:bg-gray-800 p-4 rounded-xl shadow flex-1 min-w-[180px]">
-        <p class="text-gray-700 dark:text-gray-300">Números de Publicaciones</p>
-        <p class="text-2xl font-bold text-purple-700 dark:text-purple-300">@totalPublicaciones</p>
+    <!-- Panel de totales -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="bg-purple-50 dark:bg-gray-800 p-4 rounded-xl shadow text-center">
+            <p class="text-gray-700 dark:text-gray-300">Total Publicaciones</p>
+            <p class="text-2xl font-bold text-purple-700 dark:text-purple-300">@totalPublicaciones</p>
+        </div>
+        <div class="bg-purple-50 dark:bg-gray-800 p-4 rounded-xl shadow text-center">
+            <p class="text-gray-700 dark:text-gray-300">Total Tareas</p>
+            <p class="text-2xl font-bold text-purple-700 dark:text-purple-300">@totalTareas</p>
+        </div>
+        <div class="bg-purple-50 dark:bg-gray-800 p-4 rounded-xl shadow text-center">
+            <p class="text-gray-700 dark:text-gray-300">Total Anuncios</p>
+            <p class="text-2xl font-bold text-purple-700 dark:text-purple-300">@totalAnuncios</p>
+        </div>
     </div>
 
     <!-- Buscador y filtros -->
@@ -39,6 +52,7 @@
                class="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-600 transition" />
     </div>
 
+    <!-- Grid de publicaciones (tu código original) -->
     <div id="publicacionesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         @foreach (var p in Model)
         {
@@ -78,7 +92,6 @@
                     }
                 </p>
 
-
                 <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-3 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white mb-3 text-sm max-h-28 overflow-y-auto contenido">
                     @Html.Raw(p.contenido)
                 </div>
@@ -89,9 +102,9 @@
                 </a>
                 @if (p.tipoPublicacion == "Tarea" && p.fechaEntrega != null)
                 {
-                    <a href="@Url.Action("VerPublicacion", new { id = p.idPublicacion })" style="margin-top: 2%;"
+                    <a href="@Url.Action("SubirTarea", "Plataforma", new { idPublicacion = p.idPublicacion })" style="margin-top: 2%;"
                        class="inline-block px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg shadow hover:shadow-lg text-center font-medium transition-all duration-300">
-                        Entregar tarea
+                        Subir tarea
                     </a>
                 }
             </div>

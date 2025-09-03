@@ -592,6 +592,97 @@ namespace SmartSys.Controllers
 
             return RedirectToAction("Contenido", new { id = idPlataforma });
         }
+        //Entrega de Tarea
+        [HttpGet]
+        public ActionResult SubirTarea(long idPublicacion)
+        {
+            long idUsuario = Convert.ToInt64(Session["UsuarioID"]);
+
+            var entrega = db.usuario_publicaciones
+                            .FirstOrDefault(up => up.idPublicacion1 == idPublicacion && up.idUsuario1 == idUsuario);
+
+            if (entrega == null)
+            {
+                entrega = new usuario_publicaciones
+                {
+                    idPublicacion1 = idPublicacion,
+                    idUsuario1 = idUsuario,
+                    EstadoEntrega = "Pendiente"
+                };
+            }
+
+            return View(entrega);
+        }
+
+        [HttpPost]
+        public ActionResult SubirTarea(long idPublicacion, HttpPostedFileBase archivoTarea)
+        {
+            long idUsuario = Convert.ToInt64(Session["UsuarioID"]);
+
+            var entrega = db.usuario_publicaciones
+                            .FirstOrDefault(up => up.idPublicacion1 == idPublicacion && up.idUsuario1 == idUsuario);
+
+            if (entrega == null)
+            {
+                entrega = new usuario_publicaciones
+                {
+                    idPublicacion1 = idPublicacion,
+                    idUsuario1 = idUsuario
+                };
+                db.usuario_publicaciones.Add(entrega);
+            }
+
+            if (archivoTarea != null && archivoTarea.ContentLength > 0)
+            {
+                using (var br = new BinaryReader(archivoTarea.InputStream))
+                {
+                    entrega.EntregaTarea = br.ReadBytes(archivoTarea.ContentLength);
+                    entrega.FechaEntregaUsuario = DateTime.Now;
+                    entrega.EstadoEntrega = "Entregado";
+                }
+            }
+
+            db.SaveChanges();
+
+            // Redirige al contenido de la plataforma
+            var plataformaId = db.plataforma_publicacion
+                                .Where(p => p.idPublicacion2 == idPublicacion)
+                                .Select(p => p.idPlataforma2)
+                                .FirstOrDefault();
+
+            return RedirectToAction("Contenido", new { id = plataformaId });
+        }
+        //Ver Entregas
+        public ActionResult VerEntregasTarea(long idPublicacion)
+        {
+            var entregas = (from up in db.usuario_publicaciones
+                            join u in db.Usuario on up.idUsuario1 equals u.IdUsuario
+                            join p in db.Publicaciones on up.idPublicacion1 equals p.idPublicacion
+                            where up.idPublicacion1 == idPublicacion
+                            select new EntregaTareaViewModel
+                            {
+                                IdUsuario = u.IdUsuario,
+                                NombreUsuario = u.Nombre,
+                                EntregaTarea = up.EntregaTarea,
+                                FechaEntregaUsuario = up.FechaEntregaUsuario,
+                                EstadoEntrega = up.EstadoEntrega,
+                                IdPublicacion = p.idPublicacion,
+                                PublicacionTitulo = p.titulo
+                            }).ToList();
+
+            if (entregas.Count > 0 && db.Publicaciones.Find(idPublicacion).tipoPublicacion != "Tarea")
+            {
+                var plataformaId = db.plataforma_publicacion
+                                    .Where(pp => pp.idPublicacion2 == idPublicacion)
+                                    .Select(pp => pp.idPlataforma2)
+                                    .FirstOrDefault();
+                return RedirectToAction("Contenido", new { id = plataformaId });
+            }
+
+            ViewBag.Publicacion = entregas.FirstOrDefault()?.PublicacionTitulo ?? "Tarea";
+
+            return View(entregas);
+        }
 
 
     }

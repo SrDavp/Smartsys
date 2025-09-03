@@ -17,6 +17,15 @@ namespace SmartSys.Models
 
         public DateTime fechaCreacion { get; set; } = DateTime.Now;
 
+        // Archivo que sube el usuario como entrega de tarea
+        public byte[] EntregaTarea { get; set; }
+
+        // Fecha en que el usuario entregó la tarea
+        public DateTime? FechaEntregaUsuario { get; set; }
+
+        // Estado de la entrega: "Pendiente", "Entregado", "Retrasado"
+        public string EstadoEntrega { get; set; } = "Pendiente";
+
         [ForeignKey("idUsuario1")]
         public virtual Usuario Usuario { get; set; }
 
@@ -28,4 +37,17 @@ namespace SmartSys.Models
             public Publicaciones Publicacion { get; set; }
             public Usuario Usuario { get; set; }
         }
+    // ViewModel para mostrar entregas de tarea
+    public class EntregaTareaViewModel
+    {
+        public long IdUsuario { get; set; }
+        public string NombreUsuario { get; set; }
+        public byte[] EntregaTarea { get; set; }
+        public DateTime? FechaEntregaUsuario { get; set; }
+        public string EstadoEntrega { get; set; }
+
+        // Info de la publicación (tarea)
+        public long IdPublicacion { get; set; }
+        public string PublicacionTitulo { get; set; }
     }
+}

@@ -37,6 +37,8 @@ namespace SmartSys.Models
         public DateTime? fechaEntrega { get; set; }
 
 
+
+
         //    // Relaciones (opcionales si quieres navegarlas)
         //    public virtual ICollection<plataforma_publicacion> plataformas { get; set; }
         //    public virtual ICollection<usuario_publicaciones> autores { get; set; }
