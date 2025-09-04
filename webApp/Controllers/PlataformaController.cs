@@ -380,32 +380,48 @@ namespace SmartSys.Controllers
         //Publicaciones Plataformas
         public ActionResult Publicaciones(long id)
         {
-            // Traer publicaciones de la plataforma
-            var publicaciones = (from pub in db.Publicaciones
-                                 join rel in db.plataforma_publicacion
-                                     on pub.idPublicacion equals rel.idPublicacion2
-                                 where rel.idPlataforma2 == id && pub.estado == "Activo"
-                                 select pub).ToList();
+            // Traer publicaciones de la plataforma junto con el rol del usuario que las publicó
+            var publicacionesConRol = (from pub in db.Publicaciones
+                                       join rel in db.plataforma_publicacion
+                                           on pub.idPublicacion equals rel.idPublicacion2
+                                       join up in db.usuario_publicaciones
+                                           on pub.idPublicacion equals up.idPublicacion1
+                                       join usu in db.Usuario
+                                           on up.idUsuario1 equals usu.IdUsuario
+                                       join usp in db.usuario_plataforma
+                                           on new { usu.IdUsuario, rel.idPlataforma2 } equals new { IdUsuario = usp.idUsuario4, idPlataforma2 = usp.idPlataforma1 }
+                                       where rel.idPlataforma2 == id && pub.estado == "Activo"
+                                       select new
+                                       {
+                                           Publicacion = pub,
+                                           Autor = usu.Nombre + " " + usu.Apellido,
+                                           RolUsuario = usp.rolUsuarioPlataforma
+                                       }).ToList();
 
-            // Obtener solo los IDs
-            var publicacionesIds = publicaciones.Select(p => p.idPublicacion).ToList();
+            // Separar publicaciones y diccionario de autores si lo necesitas en la vista
+            var publicaciones = publicacionesConRol.Select(x => x.Publicacion).ToList();
+            var autores = publicacionesConRol
+                          .GroupBy(x => x.Publicacion.idPublicacion)
+                          .ToDictionary(g => g.Key, g => g.Select(x => x.Autor).FirstOrDefault());
+            var roles = publicacionesConRol
+                          .GroupBy(x => x.Publicacion.idPublicacion)
+                          .ToDictionary(g => g.Key, g => g.Select(x => x.RolUsuario).FirstOrDefault());
 
-            // Diccionario: idPublicacion -> Nombre completo del autor
-            var autores = (from up in db.usuario_publicaciones
-                           join usu in db.Usuario
-                               on up.idUsuario1 equals usu.IdUsuario
-                           where publicacionesIds.Contains(up.idPublicacion1)
-                           select new
-                           {
-                               up.idPublicacion1,
-                               NombreCompleto = usu.Nombre + " " + usu.Apellido
-                           }).ToDictionary(x => x.idPublicacion1, x => x.NombreCompleto);
+            long usuarioId = Convert.ToInt64(Session["UsuarioID"]);// o como tengas guardado el usuario logueado
+            var rolUsuarioActual = db.usuario_plataforma
+                                     .Where(up => up.idUsuario4 == usuarioId && up.idPlataforma1 == id)
+                                     .Select(up => up.rolUsuarioPlataforma)
+                                     .FirstOrDefault();
+
+            ViewBag.RolUsuarioActual = rolUsuarioActual;
 
             ViewBag.PlataformaId = id;
-            ViewBag.Autores = autores; // guardamos el diccionario en el ViewBag
+            ViewBag.Autores = autores;
+            ViewBag.Roles = roles; // roles de cada publicación
 
             return View(publicaciones);
         }
+
 
 
 
@@ -658,6 +674,9 @@ namespace SmartSys.Controllers
             var entregas = (from up in db.usuario_publicaciones
                             join u in db.Usuario on up.idUsuario1 equals u.IdUsuario
                             join p in db.Publicaciones on up.idPublicacion1 equals p.idPublicacion
+                            join pp in db.plataforma_publicacion on p.idPublicacion equals pp.idPublicacion2
+                            join usp in db.usuario_plataforma
+                                on new { u.IdUsuario, pp.idPlataforma2 } equals new { IdUsuario = usp.idUsuario4, idPlataforma2 = usp.idPlataforma1 }
                             where up.idPublicacion1 == idPublicacion
                             select new EntregaTareaViewModel
                             {
@@ -667,7 +686,8 @@ namespace SmartSys.Controllers
                                 FechaEntregaUsuario = up.FechaEntregaUsuario,
                                 EstadoEntrega = up.EstadoEntrega,
                                 IdPublicacion = p.idPublicacion,
-                                PublicacionTitulo = p.titulo
+                                PublicacionTitulo = p.titulo,
+                                rolUsuarioPlataforma = usp.rolUsuarioPlataforma
                             }).ToList();
 
             if (entregas.Count > 0 && db.Publicaciones.Find(idPublicacion).tipoPublicacion != "Tarea")
@@ -683,6 +703,7 @@ namespace SmartSys.Controllers
 
             return View(entregas);
         }
+
 
 
     }

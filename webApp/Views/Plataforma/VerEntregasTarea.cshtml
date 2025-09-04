@@ -19,16 +19,15 @@
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                @foreach (var e in Model)
+                @foreach (var e in Model.Where(x => x.rolUsuarioPlataforma != "Admin"))
                 {
                     <tr class="hover:bg-purple-50 dark:hover:bg-purple-950 transition-colors duration-300">
                         <td class="px-6 py-4 text-gray-900 dark:text-white">@e.NombreUsuario</td>
                         <td class="px-6 py-4">
                             @if (e.EntregaTarea != null)
                             {
-                                // Convertimos a Base64 y asumimos que es imagen (puedes ajustar mimeType si necesitas)
                                 var base64 = Convert.ToBase64String(e.EntregaTarea);
-                                var mimeType = "image/png"; // o "image/jpeg", depende de tu archivo
+                                var mimeType = "image/png"; // ajusta según tipo de archivo
                                 <img src="data:@mimeType;base64,@base64" alt="Tarea de @e.NombreUsuario" class="max-w-[100px] max-h-[100px] rounded shadow" />
                             }
                             else
@@ -36,7 +35,6 @@
                                 <span class="text-gray-500 dark:text-gray-400">Sin entregar</span>
                             }
                         </td>
-
                         <td class="px-6 py-4 text-gray-700 dark:text-gray-300">
                             @(e.FechaEntregaUsuario != null ? e.FechaEntregaUsuario.Value.ToString("dd/MM/yyyy HH:mm") : "-")
                         </td>

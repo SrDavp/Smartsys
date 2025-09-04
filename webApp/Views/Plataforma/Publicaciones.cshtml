@@ -6,6 +6,9 @@
     var totalTareas = Model.Count(p => p.tipoPublicacion == "Tarea");
     var totalAnuncios = Model.Count(p => p.tipoPublicacion == "Anuncio");
     var tipos = Model.Select(p => p.tipoPublicacion).Distinct().ToList();
+    var roles = ViewBag.Roles as Dictionary<long, string> ?? new Dictionary<long, string>();
+    var rolUsuarioActual = ViewBag.RolUsuarioActual as string ?? "Miembro";
+
 }
 
 <div class="max-w-6xl mx-auto p-4 space-y-6">
@@ -100,10 +103,11 @@
                    class="mt-auto inline-block px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg shadow hover:shadow-lg text-center font-medium transition-all duration-300">
                     Ver más
                 </a>
-                @if (p.tipoPublicacion == "Tarea" && p.fechaEntrega != null)
+                @if (p.tipoPublicacion == "Tarea" && p.fechaEntrega != null &&
+                     (rolUsuarioActual != "Admin"))
                 {
-                    <a href="@Url.Action("SubirTarea", "Plataforma", new { idPublicacion = p.idPublicacion })" style="margin-top: 2%;"
-                       class="inline-block px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg shadow hover:shadow-lg text-center font-medium transition-all duration-300">
+                    <a href="@Url.Action("SubirTarea", "Plataforma", new { idPublicacion = p.idPublicacion })"
+                       style="margin-top:2%;" class="inline-block px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg shadow hover:shadow-lg text-center font-medium transition-all duration-300">
                         Subir tarea
                     </a>
                 }

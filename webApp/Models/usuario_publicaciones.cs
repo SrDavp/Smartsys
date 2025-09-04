@@ -46,6 +46,8 @@ namespace SmartSys.Models
         public DateTime? FechaEntregaUsuario { get; set; }
         public string EstadoEntrega { get; set; }
 
+        public string rolUsuarioPlataforma { get; set; }
+
         // Info de la publicación (tarea)
         public long IdPublicacion { get; set; }
         public string PublicacionTitulo { get; set; }
