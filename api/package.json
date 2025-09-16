@@ -1,43 +1,27 @@
 {
   "name": "api",
   "version": "1.0.0",
-  "description": "",
+  "description": "API con Node.js y Socket.IO",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dep": "npm install mssql mysql express cors nodemon axios socket.io nodemailer path multer bcrypt crypto google-auth-library npm install -D tailwindcss npx tailwindcss init",
-    "build": "tailwindcss -i ./src/input.css -o ./src/output.css",
-    "diseño": "copy src\\output.css ..\\webApp\\Content\\tailwind.css",
-    "css": "tailwindcss -i ./src/input.css -o ./src/output.css --watch",
-    "funes": "nodemon --watch src/output.css --exec \"npm run diseño\"",
-    "dev": "nodemon app.js",
-    "dev-tailwind": "concurrently \"npm run css\" \"npm run funes\""
+    "start": "node app.js",
+    "dev": "nodemon app.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "@tailwindcss/cli": "^4.1.8",
-    "socket.io-client": "^4.8.1"
-  },
-  "devDependencies": {
     "axios": "^1.11.0",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
-    "express": "^5.1.0",
+    "express": "^4.18.2",
     "google-auth-library": "^10.3.0",
-    "init": "^0.1.2",
-    "install": "^0.13.0",
     "mssql": "^11.0.1",
     "multer": "^2.0.2",
     "mysql": "^2.18.1",
     "nodemailer": "^7.0.6",
-    "nodemon": "^3.1.10",
-    "npm": "^11.5.2",
-    "npx": "^10.2.2",
     "path": "^0.12.7",
-    "socket.io": "^4.8.1",
-    "tailwindcss": "^3.4.17"
+    "socket.io": "^4.8.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
   }
 }
