@@ -32,30 +32,10 @@
                                 <div class="relative inline-block">
                                     <img id="previewImagen" src="@base64Image" alt="Foto de perfil"
                                          class="w-60 h-60 rounded-full object-cover border-8 border-white dark:border-gray-600 shadow-2xl group-hover:shadow-purple-500/25 transition-all duration-300" />
-                                    <div class="absolute inset-0 rounded-full bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                        <label for="fotoPerfil" class="cursor-pointer transform hover:scale-110 transition-transform duration-200">
-                                            <i class="fa-solid fa-camera text-3xl text-white drop-shadow-lg"></i>
-                                        </label>
-                                    </div>
                                 </div>
                             }
                             else
                             {
-                                <div id="avatarPlaceholder" class="relative inline-block">
-                                    <div class="w-48 h-48 rounded-full bg-gradient-to-br from-purple-100 to-indigo-200 dark:from-gray-700 dark:to-gray-600 border-8 border-white dark:border-gray-600 shadow-2xl group-hover:shadow-purple-500/25 transition-all duration-300 flex items-center justify-center">
-                                        <i class="fa-solid fa-user text-6xl text-gray-400 dark:text-gray-500"></i>
-                                    </div>
-                                    <div class="absolute inset-0 rounded-full bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                        <label for="fotoPerfil" class="cursor-pointer transform hover:scale-110 transition-transform duration-200">
-                                            <i class="fa-solid fa-camera text-3xl text-white drop-shadow-lg"></i>
-                                        </label>
-                                    </div>
-                                    <div class="absolute -bottom-2 -right-2 w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center shadow-lg">
-                                        <label for="fotoPerfil" class="cursor-pointer">
-                                            <i class="fa-solid fa-plus text-white text-sm"></i>
-                                        </label>
-                                    </div>
-                                </div>
                                 <img id="previewImagen" src="" alt="Foto de perfil"
                                      class="w-48 h-48 rounded-full object-cover border-8 border-white dark:border-gray-600 shadow-2xl hidden" />
                             }
@@ -470,37 +450,28 @@
             const reader = new FileReader();
             reader.onload = function (e) {
                 const previewImg = document.getElementById('previewImagen');
-                const placeholder = document.getElementById('avatarPlaceholder');
 
-                const container = document.createElement('div');
-                container.className = 'relative';
-
-                previewImg.src = e.target.result;
+                // Mostrar la imagen si estaba oculta
                 previewImg.classList.remove('hidden');
 
-                previewImg.className = 'rounded-full object-cover border-4 border-white dark:border-gray-600 shadow-xl brightness-75';
-                previewImg.style.width = '320px';
-                previewImg.style.height = '320px';
-                previewImg.style.minWidth = '320px';
-                previewImg.style.minHeight = '320px';
+                // Cambiar la fuente de la imagen
+                previewImg.src = e.target.result;
 
-                const overlay = document.createElement('div');
-                overlay.className = 'absolute inset-0 rounded-full flex items-center justify-center';
-                overlay.innerHTML = '<label for="fotoPerfil" class="cursor-pointer"><i class="fa-solid fa-camera text-4xl text-white drop-shadow-lg"></i></label>';
+                // Ajustar estilos de la imagen
+                previewImg.className = 'w-60 h-60 rounded-full object-cover border-8 border-white dark:border-gray-600 shadow-2xl brightness-100';
 
-                const parent = previewImg.parentNode;
-                container.appendChild(previewImg);
-                container.appendChild(overlay);
-                parent.innerHTML = '';
-                parent.appendChild(container);
-
-                if (placeholder) {
-                    placeholder.style.display = 'none';
+                // Opcional: agregar overlay si quieres efecto visual
+                let overlay = previewImg.parentNode.querySelector('.overlay-preview');
+                if (!overlay) {
+                    overlay = document.createElement('div');
+                    overlay.className = 'overlay-preview absolute inset-0 rounded-full flex items-center justify-center';
+                    previewImg.parentNode.appendChild(overlay);
                 }
             };
             reader.readAsDataURL(file);
         }
     });
+
 
     document.getElementById('biografiaInput').addEventListener('input', function () {
         this.style.height = 'auto';

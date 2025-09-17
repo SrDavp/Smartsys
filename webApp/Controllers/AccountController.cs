@@ -1,10 +1,12 @@
-﻿using SmartSys.Models;
+﻿using Google.Apis.Auth;
+using SmartSys.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Newtonsoft.Json;
 
 namespace SmartSys.Controllers
 {
@@ -22,7 +24,8 @@ namespace SmartSys.Controllers
         public ActionResult Registro(Usuario u, HttpPostedFileBase FotoPerfil)
         {
             //Validar contraseña
-            if (string.IsNullOrEmpty(u.Contrasena) || u.Contrasena.Length < 8) {
+            if (string.IsNullOrEmpty(u.Contrasena) || u.Contrasena.Length < 8)
+            {
                 ViewBag.Error = "La contraseña debe tener almenos 8 caracteres";
                 return View(u);
             }
@@ -34,7 +37,7 @@ namespace SmartSys.Controllers
                 return View(u);
             }
             //Validar el telefono
-            if (string.IsNullOrEmpty(u.Telefono) || u.Telefono.Length < 9 )
+            if (string.IsNullOrEmpty(u.Telefono) || u.Telefono.Length < 9)
             {
                 ViewBag.Error = "El número de teléfono tiene que tener 8 números y separado por un - ";
                 return View(u);
@@ -209,6 +212,74 @@ namespace SmartSys.Controllers
                 return RedirectToAction("Perfil");
             }
             return View(u);
+        }
+
+        [HttpPost]
+        [Route("api/auth/google")]
+        public ActionResult GoogleLogin()
+        {
+            // Leer el cuerpo de la petición
+            string json;
+            using (var reader = new StreamReader(Request.InputStream))
+            {
+                json = reader.ReadToEnd();
+            }
+
+            // Deserializar
+            var model = JsonConvert.DeserializeObject<GoogleTokenModel>(json);
+
+            // Validar token de Google
+            var payload = Google.Apis.Auth.GoogleJsonWebSignature.ValidateAsync(model.token).Result;
+
+            // Buscar usuario
+            var user = db.Usuario.FirstOrDefault(u => u.CorreoElectronico == payload.Email);
+
+            string iniciales = "";
+            if (!string.IsNullOrEmpty(payload.GivenName)) iniciales += payload.GivenName[0];
+            if (!string.IsNullOrEmpty(payload.FamilyName)) iniciales += payload.FamilyName[0];
+            iniciales = iniciales.ToUpper();
+
+            // Generar bytes aleatorios en HEX
+            byte[] randomBytes = new byte[2];
+            using (var rng = System.Security.Cryptography.RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(randomBytes);
+            }
+            string randomCode = BitConverter.ToString(randomBytes).Replace("-", "");
+
+            if (user == null)
+            {
+                user = new Usuario
+                {
+                    Nombre = payload.GivenName,
+                    Apellido = payload.FamilyName,
+                    CorreoElectronico = payload.Email,
+                    Contrasena = "$2b$10$lwPRx5ra64uYXruhYvpf0uVfhh3ULFEjSI5ruRBusA02BO77nPV5i",
+                    TipoUsuario = "Usuario",
+                    EstadoCuenta = "Activo",
+                    CodigoUnico = iniciales + randomCode
+            }
+            ;
+                db.Usuario.Add(user);
+                db.SaveChanges();
+            }
+
+            if (user.EstadoCuenta == "Inactivo")
+            {
+                return Json(new { success = false, message = "Tu cuenta ha sido desactivada." });
+            }
+
+            // Guardar sesión
+            Session["UsuarioID"] = user.IdUsuario;
+            Session["Nombre"] = user.Nombre;
+            Session["Tipo"] = user.TipoUsuario;
+
+            return Json(new { success = true, message = "Autenticación exitosa" });
+        }
+
+        public class GoogleTokenModel
+        {
+            public string token { get; set; }
         }
 
     }

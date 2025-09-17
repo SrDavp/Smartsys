@@ -1,9 +1,7 @@
 ﻿function handleCredentialResponse(response) {
-    // JWT de Google
     const token = response.credential;
 
-    // Mandamos al backend
-    fetch("http://localhost:3000/api/auth/google", {
+    fetch("/Account/GoogleLogin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token })
@@ -11,9 +9,7 @@
         .then(res => res.json())
         .then(data => {
             if (data.success) {
-                console.log("Usuario autenticado:", data);
-                // Guardar token en localStorage o cookie y redirigir
-                localStorage.setItem('token', data.token);
+                // Sesión creada en backend, ahora redirigimos
                 window.location.href = "/Home/Index";
             } else {
                 alert(data.message || "Error al iniciar sesión");

@@ -44,6 +44,5 @@ namespace SmartSys.Models
         public string Biografia { get; set; }
         [Display(Name = "Código")]
         public string CodigoUnico { get; set; }
-
     }
 }
