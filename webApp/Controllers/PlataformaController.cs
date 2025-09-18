@@ -380,6 +380,22 @@ namespace SmartSys.Controllers
         //Publicaciones Plataformas
         public ActionResult Publicaciones(long id)
         {
+            if (Session["UsuarioID"] == null)
+                return RedirectToAction("Login", "Account");
+
+            long usuarioId = Convert.ToInt64(Session["UsuarioID"]);
+
+            // ✅ Validar que el usuario pertenece a la plataforma
+            var pertenece = db.usuario_plataforma
+                              .Any(up => up.idUsuario4 == usuarioId && up.idPlataforma1 == id);
+
+            if (!pertenece)
+            {
+                // Redirige a MisPlataformas o Explorar si no pertenece
+                TempData["Error"] = "No tienes acceso a esta plataforma.";
+                return RedirectToAction("MisPlataformas");
+            }
+
             // Traer publicaciones de la plataforma junto con el rol del usuario que las publicó
             var publicacionesConRol = (from pub in db.Publicaciones
                                        join rel in db.plataforma_publicacion
@@ -407,20 +423,19 @@ namespace SmartSys.Controllers
                           .GroupBy(x => x.Publicacion.idPublicacion)
                           .ToDictionary(g => g.Key, g => g.Select(x => x.RolUsuario).FirstOrDefault());
 
-            long usuarioId = Convert.ToInt64(Session["UsuarioID"]);// o como tengas guardado el usuario logueado
             var rolUsuarioActual = db.usuario_plataforma
                                      .Where(up => up.idUsuario4 == usuarioId && up.idPlataforma1 == id)
                                      .Select(up => up.rolUsuarioPlataforma)
                                      .FirstOrDefault();
 
             ViewBag.RolUsuarioActual = rolUsuarioActual;
-
             ViewBag.PlataformaId = id;
             ViewBag.Autores = autores;
-            ViewBag.Roles = roles; // roles de cada publicación
+            ViewBag.Roles = roles;
 
             return View(publicaciones);
         }
+
 
 
 
@@ -666,7 +681,7 @@ namespace SmartSys.Controllers
                                 .Select(p => p.idPlataforma2)
                                 .FirstOrDefault();
 
-            return RedirectToAction("Contenido", new { id = plataformaId });
+            return RedirectToAction("Publicaciones", new { id = plataformaId });
         }
         //Ver Entregas
         public ActionResult VerEntregasTarea(long idPublicacion)
