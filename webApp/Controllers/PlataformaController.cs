@@ -443,6 +443,23 @@ namespace SmartSys.Controllers
         // Listado de publicaciones
         public ActionResult Contenido(long id)
         {
+
+            if (Session["UsuarioID"] == null)
+                return RedirectToAction("Login", "Account");
+
+            long usuarioId = Convert.ToInt64(Session["UsuarioID"]);
+
+            // ✅ Validar que el usuario pertenece a la plataforma
+            var pertenece = db.usuario_plataforma
+                              .Any(up => up.idUsuario4 == usuarioId && up.idPlataforma1 == id);
+
+            if (!pertenece)
+            {
+                // Redirige a MisPlataformas o Explorar si no pertenece
+                TempData["Error"] = "No tienes acceso a esta plataforma.";
+                return RedirectToAction("MisPlataformas");
+            }
+
             var publicaciones = (from pub in db.Publicaciones
                                  join rel in db.plataforma_publicacion on pub.idPublicacion equals rel.idPublicacion2
                                  where rel.idPlataforma2 == id && pub.estado == "Activo"
