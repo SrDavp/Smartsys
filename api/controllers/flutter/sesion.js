@@ -79,8 +79,8 @@ async function resetpassword(req, res) {
     const pool = await poolPromise;
     await pool.request()
       .input('correo', sql.NVarChar, newCorreo)
-      .input('contraseña', sql.NVarChar, hashedPassword)
-      .query(`UPDATE Usuarios SET contraseña = @contraseña WHERE correoElectronico = @correo`);
+      .input('contrasena', sql.NVarChar, hashedPassword)
+      .query(`UPDATE Usuarios SET contrasena = @contrasena WHERE correoElectronico = @correo`);
 
     return res.json({ success: true, message: "Contraseña actualizada correctamente" });
   } catch (error) {

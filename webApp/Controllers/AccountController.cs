@@ -85,6 +85,7 @@ namespace SmartSys.Controllers
 
                 // Fecha de creación
                 u.FechaCreacion = DateTime.Now;
+                u.EstadoCuenta = "Activo";
 
                 db.Usuario.Add(u);
                 db.SaveChanges();

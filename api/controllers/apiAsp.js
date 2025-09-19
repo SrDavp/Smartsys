@@ -477,7 +477,7 @@ async function actualizarContrasena(req, res) {
         await pool.request()
             .input('correo', sql.NVarChar, correo)
             .input('contraseña', sql.NVarChar, hashedPassword)
-            .query(`UPDATE Usuarios SET contraseña = @contraseña WHERE correoElectronico = @correo`);
+            .query(`UPDATE Usuarios SET contrasena = @contraseña WHERE correoElectronico = @correo`);
 
         return res.json({ success: true, message: "Contraseña actualizada correctamente" });
     } catch (error) {
